@@ -1,0 +1,11 @@
+.navlink {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   padding: 8px;
+   gap: 8px;
+
+   &:hover {
+      text-decoration: none;
+   }
+}
