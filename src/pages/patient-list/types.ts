@@ -1,25 +1,37 @@
 export interface IPatient {
-   id: number;
+   patient_id: string;
    status: IPatientStatus;
-   firstName: string;
-   lastName: string;
-   dateBirth: string;
+   first_name: string;
+   last_name: string;
+   date_of_birth: string;
    gender: IPatientGender;
-   contactInfo: IPatientContactInfo;
+   contact_info: IPatientContactInfo;
    doctor: IPatientDoctor;
-   history?: string;
+   email: string;
 }
 
 type IPatientStatus = 'ill' | 'wealth' | 'examination';
-type IPatientGender = 'male' | 'female';
+type IPatientGender = 'Male' | 'Female';
 type IPatientContactInfo = {
    mobile: string;
    city: string;
    address: string;
 };
 type IPatientDoctor = {
-   name: string;
+   last_name: string;
+   first_name: string;
    specialization: IDoctorSpecialization;
+   doctor_id: string;
 };
 
-type IDoctorSpecialization = 'surgeon' | 'therapist' | 'psychiatrist' | 'cardiologist';
+type IDoctorSpecialization =
+   | 'Cardiology'
+   | 'Dermatology'
+   | 'Neurology'
+   | 'Pediatrics'
+   | 'Oncology'
+   | 'Orthopedics'
+   | 'Psychiatry'
+   | 'Urology'
+   | 'Gastroenterology'
+   | 'Endocrinology';
