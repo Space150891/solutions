@@ -1,4 +1,4 @@
-import { type IPatient } from './types';
+import { IDoctorSpecialization, type IPatient } from './types';
 
 export const patients: IPatient[] = [
    {
@@ -241,4 +241,17 @@ export const patients: IPatient[] = [
       },
       contact_info: { address: '1 Duke Lane', mobile: '+380185176849', city: 'Guadalupe' },
    },
+];
+
+export const specializations: IDoctorSpecialization[] = [
+   'Cardiology',
+   'Dermatology',
+   'Neurology',
+   'Pediatrics',
+   'Oncology',
+   'Orthopedics',
+   'Psychiatry',
+   'Urology',
+   'Gastroenterology',
+   'Endocrinology',
 ];

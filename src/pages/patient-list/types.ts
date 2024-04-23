@@ -24,7 +24,7 @@ type IPatientDoctor = {
    doctor_id: string;
 };
 
-type IDoctorSpecialization =
+export type IDoctorSpecialization =
    | 'Cardiology'
    | 'Dermatology'
    | 'Neurology'

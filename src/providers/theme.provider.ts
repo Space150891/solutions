@@ -27,6 +27,15 @@ export const theme = createTheme({
             },
          },
       },
+      MuiAutocomplete: {
+         styleOverrides: {
+            root: {
+               '& .MuiInputBase-root': {
+                  height: 'initial !important',
+               },
+            },
+         },
+      },
    },
    palette: {
       primary: {
