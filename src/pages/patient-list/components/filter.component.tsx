@@ -14,7 +14,7 @@ import {
    Typography,
    styled,
 } from '@mui/material';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { specializations } from '../mock';
 import { Filter1, FilterBAndW, FilterList, Telegram } from '@mui/icons-material';
 
@@ -26,10 +26,19 @@ const Item = styled(`div`)(({ theme }) => ({
    color: theme.palette.text.secondary,
 }));
 
-export default function Filter() {
+export type FilterProps = {
+   setFilters: React.Dispatch<React.SetStateAction<object>>;
+};
+
+export default function Filter({ setFilters }: FilterProps) {
    const [filter, setFilter] = useState({});
    const [isOpen, setIsOpen] = useState(false);
    console.log('filter:', filter);
+
+   function onSaveHandle() {
+      setFilters(filter);
+      setIsOpen(false);
+   }
 
    return (
       <Card>
@@ -166,7 +175,10 @@ export default function Filter() {
                   </Item>
                </Grid>
             </Grid>
-            <Button variant='text' onClick={() => setIsOpen(false)}>
+            <Button variant='text' onClick={onSaveHandle}>
+               Save
+            </Button>
+            <Button variant='text' color='error' onClick={() => setIsOpen(false)}>
                Close
             </Button>
          </SwipeableDrawer>

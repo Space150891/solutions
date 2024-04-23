@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { patients } from '../mock';
+// import { patients } from '../mock';
 import { IPatient } from '../types';
 import { useState } from 'react';
 import { TablePagination, TableSortLabel } from '@mui/material';
@@ -75,7 +75,7 @@ function Row(props: { row: IPatient }) {
    );
 }
 
-export default function PatientListTable() {
+export default function PatientListTable({ patients }) {
    const [order, setOrder] = useState('asc');
    const [orderBy, setOrderBy] = useState('first_name');
    const [page, setPage] = useState(0);
