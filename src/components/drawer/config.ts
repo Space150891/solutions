@@ -1,5 +1,6 @@
 import { paths } from '../../routes/paths';
 import { IPages } from '../../types/common.types';
+import PatientAppointment from '../../pages/patient-appointment/patient-appointment.page';
 
 export const config = [
    {
@@ -17,5 +18,10 @@ export const config = [
       id: 2,
       path: paths.patientList,
       name: IPages.PATIENT_LIST,
+   },
+   {
+      id: 4,
+      path: paths.patientAppointment,
+      name: IPages.PATIENT_APPOINTMENT,
    },
 ];

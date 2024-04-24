@@ -5,4 +5,6 @@ export const paths = Object.freeze({
    cubex: '/cubex',
    multistepForm: '/cubex/multistep-form',
    patientList: '/cubex/patient-list',
+   patientAppointment: '/cubex/patient-appointment',
+   hospitalAppointment: '/cubex/hospital-appointment',
 });
