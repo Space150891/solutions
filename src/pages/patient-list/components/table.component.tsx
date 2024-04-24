@@ -11,10 +11,10 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-// import { patients } from '../mock';
-import { IPatient } from '../types';
+
 import { useState } from 'react';
 import { TablePagination, TableSortLabel } from '@mui/material';
+import { IPatient, IPatientDoctor } from '../types';
 
 function Row(props: { row: IPatient }) {
    const { row } = props;
@@ -75,24 +75,28 @@ function Row(props: { row: IPatient }) {
    );
 }
 
-export default function PatientListTable({ patients }) {
-   const [order, setOrder] = useState('asc');
-   const [orderBy, setOrderBy] = useState('first_name');
-   const [page, setPage] = useState(0);
-   const [rowsPerPage, setRowsPerPage] = useState(5);
+export type PatientListProps = {
+   patients: IPatient[];
+};
 
-   const handleSort = (property) => (event) => {
+export default function PatientListTable({ patients }: PatientListProps) {
+   const [order, setOrder] = useState<string>('asc');
+   const [orderBy, setOrderBy] = useState<keyof IPatient>('first_name');
+   const [page, setPage] = useState<number>(0);
+   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
+
+   const handleSort = (property: any) => (event: React.MouseEvent<unknown>) => {
       console.log(property, event);
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
    };
 
-   const handleChangePage = (event, newPage) => {
+   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPage(newPage);
    };
 
-   const handleChangeRowsPerPage = (event) => {
+   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
    };
@@ -108,13 +112,14 @@ export default function PatientListTable({ patients }) {
 
          return isAsc ? dateA - dateB : dateB - dateA;
       } else if (orderBy.includes('doctor.')) {
-         const doctorProp = orderBy.split('.')[1];
+         const doctorProp: keyof IPatientDoctor = orderBy.split('.')[1] as keyof IPatientDoctor;
          if (a.doctor[doctorProp] < b.doctor[doctorProp]) {
             return isAsc ? -1 : 1;
          }
          if (a.doctor[doctorProp] > b.doctor[doctorProp]) {
             return isAsc ? 1 : -1;
          }
+
          return 0;
       } else {
          if (a[orderBy] < b[orderBy]) {
@@ -183,8 +188,10 @@ export default function PatientListTable({ patients }) {
                   </TableCell>
                   <TableCell align='right'>
                      <TableSortLabel
-                        active={orderBy === 'doctor.first_name'}
-                        direction={orderBy === 'doctor.first_name' ? (order as 'asc' | 'desc') : 'asc'}
+                        active={(orderBy as string) === 'doctor.first_name'}
+                        direction={
+                           (orderBy as string) === 'doctor.first_name' ? (order as 'asc' | 'desc') : 'asc'
+                        }
                         onClick={handleSort('doctor.first_name')}
                      >
                         Doctor's First Name
@@ -192,8 +199,10 @@ export default function PatientListTable({ patients }) {
                   </TableCell>
                   <TableCell align='right'>
                      <TableSortLabel
-                        active={orderBy === 'doctor.last_name'}
-                        direction={orderBy === 'doctor.last_name' ? (order as 'asc' | 'desc') : 'asc'}
+                        active={(orderBy as string) === 'doctor.last_name'}
+                        direction={
+                           (orderBy as string) === 'doctor.last_name' ? (order as 'asc' | 'desc') : 'asc'
+                        }
                         onClick={handleSort('doctor.last_name')}
                      >
                         Doctor's Last Name
@@ -201,8 +210,10 @@ export default function PatientListTable({ patients }) {
                   </TableCell>
                   <TableCell align='right'>
                      <TableSortLabel
-                        active={orderBy === 'doctor.specialization'}
-                        direction={orderBy === 'doctor.specialization' ? (order as 'asc' | 'desc') : 'asc'}
+                        active={(orderBy as string) === 'doctor.specialization'}
+                        direction={
+                           (orderBy as string) === 'doctor.specialization' ? (order as 'asc' | 'desc') : 'asc'
+                        }
                         onClick={handleSort('doctor.specialization')}
                      >
                         Specialization

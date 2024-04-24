@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
-import Filter from './components/filter.component';
+import Filter, { FilterCriteria } from './components/filter.component';
 import PatientListTable from './components/table.component';
 import { patients } from './mock';
 import { IPatient } from './types';
 
 export default function PatientListPage() {
-   interface FilterCriteria {
-      [key: string]: any;
-   }
+   const [filteredList, setFilteredList] = useState<IPatient[]>([]);
+   const [filters, setFilters] = useState<FilterCriteria>({});
+
    const applyFilters = useCallback((array: IPatient[], filters: FilterCriteria): IPatient[] => {
       return array.filter((item) => {
-         return Object.keys(filters).every((key) => {
+         return Object.keys(filters).every((k) => {
+            const key = k as keyof IPatient;
             const filterValue = filters[key];
-            const itemValue = item[key];
+            const itemValue: unknown = item[key];
 
             // Check if the filter value is an array
             if (Array.isArray(filterValue) && filterValue !== null) {
@@ -26,7 +27,7 @@ export default function PatientListPage() {
                // Recursively apply filters to nested objects
                console.log('filterValue:', filterValue);
 
-               return applyFilters([itemValue], filterValue).length > 0;
+               return applyFilters([itemValue as IPatient], filterValue).length > 0;
             }
 
             // Apply your filter logic here. This example checks for strict equality.
@@ -34,9 +35,6 @@ export default function PatientListPage() {
          });
       });
    }, []);
-
-   const [filteredList, setFilteredList] = useState<IPatient[]>([]);
-   const [filters, setFilters] = useState<FilterCriteria>({});
 
    useEffect(() => {
       if (patients) setFilteredList(patients);

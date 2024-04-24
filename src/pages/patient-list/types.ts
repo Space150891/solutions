@@ -10,14 +10,14 @@ export interface IPatient {
    email: string;
 }
 
-type IPatientStatus = 'ill' | 'wealth' | 'examination';
-type IPatientGender = 'Male' | 'Female';
-type IPatientContactInfo = {
+export type IPatientStatus = 'ill' | 'wealth' | 'examination';
+export type IPatientGender = 'Male' | 'Female';
+export type IPatientContactInfo = {
    mobile: string;
    city: string;
    address: string;
 };
-type IPatientDoctor = {
+export type IPatientDoctor = {
    last_name: string;
    first_name: string;
    specialization: IDoctorSpecialization;

@@ -7,16 +7,18 @@ import {
    Grid,
    InputLabel,
    MenuItem,
-   Paper,
    Select,
    SwipeableDrawer,
    TextField,
    Typography,
    styled,
 } from '@mui/material';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { specializations } from '../mock';
-import { Filter1, FilterBAndW, FilterList, Telegram } from '@mui/icons-material';
+import { FilterList } from '@mui/icons-material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 const Item = styled(`div`)(({ theme }) => ({
    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -29,10 +31,14 @@ const Item = styled(`div`)(({ theme }) => ({
 export type FilterProps = {
    setFilters: React.Dispatch<React.SetStateAction<object>>;
 };
+export interface FilterCriteria {
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   [key: string]: any;
+}
 
 export default function Filter({ setFilters }: FilterProps) {
-   const [filter, setFilter] = useState({});
-   const [isOpen, setIsOpen] = useState(false);
+   const [filter, setFilter] = useState<FilterCriteria>({});
+   const [isOpen, setIsOpen] = useState<boolean>(false);
    console.log('filter:', filter);
 
    function onSaveHandle() {
@@ -66,7 +72,7 @@ export default function Filter({ setFilters }: FilterProps) {
                         label='First Name'
                         fullWidth
                         value={filter.first_name}
-                        onChange={(e) => setFilter({ ...filter, first_name: e.target.value })}
+                        onChange={(e) => setFilter((prev) => ({ ...prev, first_name: e.target.value }))}
                      />
                   </Item>
                </Grid>
@@ -77,7 +83,7 @@ export default function Filter({ setFilters }: FilterProps) {
                         label='Last Name'
                         fullWidth
                         value={filter.last_name}
-                        onChange={(e) => setFilter({ ...filter, last_name: e.target.value })}
+                        onChange={(e) => setFilter((prev) => ({ ...prev, last_name: e.target.value }))}
                      />
                   </Item>
                </Grid>
@@ -88,7 +94,7 @@ export default function Filter({ setFilters }: FilterProps) {
                         <Select
                            labelId='status'
                            value={filter.status}
-                           onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+                           onChange={(e) => setFilter((prev) => ({ ...prev, status: e.target.value }))}
                            fullWidth
                            label='Status'
                         >
@@ -109,7 +115,7 @@ export default function Filter({ setFilters }: FilterProps) {
                         <Select
                            labelId='gender'
                            value={filter.gender}
-                           onChange={(e) => setFilter({ ...filter, gender: e.target.value })}
+                           onChange={(e) => setFilter((prev) => ({ ...prev, gender: e.target.value }))}
                            fullWidth
                            label='Gender'
                         >
@@ -172,6 +178,50 @@ export default function Filter({ setFilters }: FilterProps) {
                            }))
                         }
                      />
+                  </Item>
+               </Grid>
+               <Grid item xs={2}>
+                  <Item>
+                     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                           value={dayjs(filter.date_of_birth?.from)}
+                           label='Born from'
+                           slotProps={{ textField: { fullWidth: true } }}
+                           onChange={(value) => {
+                              console.log(value);
+
+                              return setFilter((prev) => ({
+                                 ...prev,
+                                 date_of_birth: {
+                                    ...prev.date_of_birth,
+                                    from: dayjs(value).format('DD/MM/YYYY'),
+                                 },
+                              }));
+                           }}
+                        />
+                     </LocalizationProvider>
+                  </Item>
+               </Grid>
+               <Grid item xs={2}>
+                  <Item>
+                     <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                           value={dayjs(filter.date_of_birth?.to)}
+                           label='Born untill'
+                           slotProps={{ textField: { fullWidth: true } }}
+                           onChange={(value) => {
+                              console.log(value);
+
+                              return setFilter((prev) => ({
+                                 ...prev,
+                                 date_of_birth: {
+                                    ...prev.date_of_birth,
+                                    to: dayjs(value).format('DD/MM/YYYY'),
+                                 },
+                              }));
+                           }}
+                        />
+                     </LocalizationProvider>
                   </Item>
                </Grid>
             </Grid>
