@@ -40,8 +40,6 @@ export default function PatientAppointment() {
 
    const listOfDoctorNames = doctors.map((doc) => `${doc.first_name} ${doc.last_name}`);
 
-   console.log('specialization:', specialization);
-
    return (
       <Box component='section' padding={1.25}>
          <Box sx={{ mb: 2.25 }}>

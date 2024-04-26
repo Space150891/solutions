@@ -39,7 +39,6 @@ export interface FilterCriteria {
 export default function Filter({ setFilters }: FilterProps) {
    const [filter, setFilter] = useState<FilterCriteria>({});
    const [isOpen, setIsOpen] = useState<boolean>(false);
-   console.log('filter:', filter);
 
    function onSaveHandle() {
       setFilters(filter);
@@ -188,8 +187,6 @@ export default function Filter({ setFilters }: FilterProps) {
                            label='Born from'
                            slotProps={{ textField: { fullWidth: true } }}
                            onChange={(value) => {
-                              console.log(value);
-
                               return setFilter((prev) => ({
                                  ...prev,
                                  date_of_birth: {
@@ -210,8 +207,6 @@ export default function Filter({ setFilters }: FilterProps) {
                            label='Born untill'
                            slotProps={{ textField: { fullWidth: true } }}
                            onChange={(value) => {
-                              console.log(value);
-
                               return setFilter((prev) => ({
                                  ...prev,
                                  date_of_birth: {

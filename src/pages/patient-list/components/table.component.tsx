@@ -86,7 +86,6 @@ export default function PatientListTable({ patients }: PatientListProps) {
    const [rowsPerPage, setRowsPerPage] = useState<number>(5);
 
    const handleSort = (property: any) => (event: React.MouseEvent<unknown>) => {
-      console.log(property, event);
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
@@ -107,8 +106,6 @@ export default function PatientListTable({ patients }: PatientListProps) {
          // Convert date strings to Date objects for comparison
          const dateA = new Date(a[orderBy]).getTime();
          const dateB = new Date(b[orderBy]).getTime();
-
-         console.log('date:', dateA, dateB);
 
          return isAsc ? dateA - dateB : dateB - dateA;
       } else if (orderBy.includes('doctor.')) {

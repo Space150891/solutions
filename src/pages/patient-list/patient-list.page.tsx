@@ -17,16 +17,11 @@ export default function PatientListPage() {
 
             // Check if the filter value is an array
             if (Array.isArray(filterValue) && filterValue !== null) {
-               console.log('ArrayFilter:', filterValue);
-
                return filterValue.indexOf(itemValue) !== -1;
             }
 
             // Check if the filter value is an object, indicating a nested filter
             if (typeof filterValue === 'object' && filterValue !== null) {
-               // Recursively apply filters to nested objects
-               console.log('filterValue:', filterValue);
-
                return applyFilters([itemValue as IPatient], filterValue).length > 0;
             }
 
@@ -44,7 +39,6 @@ export default function PatientListPage() {
       setFilteredList(applyFilters(patients, filters));
    }, [applyFilters, filters]);
 
-   console.log('filteredList:', filteredList);
    return (
       <>
          <Filter setFilters={setFilters} />

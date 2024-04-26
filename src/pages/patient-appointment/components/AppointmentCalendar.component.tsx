@@ -33,7 +33,6 @@ export default function AppointmentCalendar({ doctor }) {
             },
          },
       });
-   console.log('date:', date);
 
    return (
       <>
@@ -46,7 +45,6 @@ export default function AppointmentCalendar({ doctor }) {
                   displayStaticWrapperAs='desktop'
                   onAccept={(value) => {
                      setOpen(true);
-                     console.log('click:', value);
                      setDate(value);
                   }}
                />
