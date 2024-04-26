@@ -4,14 +4,14 @@ export interface IPatient {
    first_name: string;
    last_name: string;
    date_of_birth: string;
-   gender: IPatientGender;
+   gender: IGender;
    contact_info: IPatientContactInfo;
    doctor: IPatientDoctor;
    email: string;
 }
 
 export type IPatientStatus = 'ill' | 'wealth' | 'examination';
-export type IPatientGender = 'Male' | 'Female';
+export type IGender = 'Male' | 'Female';
 export type IPatientContactInfo = {
    mobile: string;
    city: string;
@@ -22,6 +22,8 @@ export type IPatientDoctor = {
    first_name: string;
    specialization: IDoctorSpecialization;
    doctor_id: string;
+   gender?: IGender;
+   locations?: string[];
 };
 
 export type IDoctorSpecialization =

@@ -1,6 +1,5 @@
 import { paths } from '../../routes/paths';
 import { IPages } from '../../types/common.types';
-import PatientAppointment from '../../pages/patient-appointment/patient-appointment.page';
 
 export const config = [
    {
