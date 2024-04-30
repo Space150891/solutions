@@ -92,7 +92,7 @@ export default function PatientAppointment() {
                               }}
                            >
                               <img
-                                 src={`/public/assets/doctor${doctor.gender === 'Male' ? '_m' : '_f'}.png`}
+                                 src={`/assets/doctor${doctor.gender === 'Male' ? '_m' : '_f'}.png`}
                                  alt='doc'
                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                               />
