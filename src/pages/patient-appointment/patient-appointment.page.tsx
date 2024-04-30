@@ -82,14 +82,34 @@ export default function PatientAppointment() {
                return (
                   <Card sx={{ padding: '10px' }}>
                      <Grid container spacing={2}>
-                        <Grid item xs={7}>
-                           <Box sx={{ mb: 1.25 }}>
+                        <Grid item xs={7} sx={{ display: 'flex' }}>
+                           <Box
+                              sx={{
+                                 height: '80%',
+                                 aspectRatio: 1,
+                                 padding: '10px',
+                                 maxHeight: '100%',
+                              }}
+                           >
+                              <img
+                                 src={`/public/assets/doctor${doctor.gender === 'Male' ? '_m' : '_f'}.png`}
+                                 alt='doc'
+                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                              />
+                           </Box>
+                           <Box>
                               <Typography variant='caption'>{doctor.specialization}</Typography>
                               <Typography variant='h6'>
                                  {doctor.first_name} {doctor.last_name}
                               </Typography>
                               <Typography variant='caption' fontWeight={100}>
                                  {doctor.gender}
+                              </Typography>
+                              <Typography variant='body1' fontWeight={500}>
+                                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore vero esse
+                                 eligendi quasi beatae accusantium aspernatur. Reprehenderit magnam ipsam
+                                 soluta facere labore. Quidem quasi distinctio necessitatibus aliquid vel esse
+                                 ullam!
                               </Typography>
                            </Box>
                         </Grid>
