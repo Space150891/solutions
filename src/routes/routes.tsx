@@ -9,6 +9,7 @@ import DashboardPage from '../pages/dashboard/dashboard.page';
 import MultistepFormPage from '../pages/multistep-form/multistep-form.page';
 import PatientListPage from '../pages/patient-list/patient-list.page';
 import PatientAppointment from '../pages/patient-appointment/patient-appointment.page';
+import HospitalAppointment from '../pages/hospital-appointment/hospital-appointment.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -50,6 +51,11 @@ export const routesData: RouteObject[] = [
             id: '14-patientAppointment',
             path: paths.patientAppointment,
             element: <PatientAppointment />,
+         },
+         {
+            id: '15-hospitalAppointment',
+            path: paths.hospitalAppointment,
+            element: <HospitalAppointment />,
          },
       ],
    },

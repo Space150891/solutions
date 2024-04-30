@@ -14,7 +14,7 @@ export const config = [
       name: IPages.MULTISTEP_FORM,
    },
    {
-      id: 2,
+      id: 3,
       path: paths.patientList,
       name: IPages.PATIENT_LIST,
    },
@@ -22,5 +22,10 @@ export const config = [
       id: 4,
       path: paths.patientAppointment,
       name: IPages.PATIENT_APPOINTMENT,
+   },
+   {
+      id: 5,
+      path: paths.hospitalAppointment,
+      name: IPages.Hospital_APPOINTMENT,
    },
 ];
