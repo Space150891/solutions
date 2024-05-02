@@ -1,3 +1,14 @@
+export type IEvent = {
+   event_id: number | string;
+   title: string;
+   start: Date;
+   end: Date;
+   location?: any;
+   phone_number?: any;
+   first_name?: any;
+   last_name?: any;
+   addition_info?: any;
+};
 import { IPatientDoctor } from '../patient-list/types';
 
 export const doctors: IPatientDoctor[] = [
@@ -120,5 +131,20 @@ export const doctors: IPatientDoctor[] = [
       gender: 'Female',
       specialization: 'Oncology',
       locations: ['1st', 'Gerald', '2nd'],
+   },
+];
+
+export const MOCK_EVENTS: IEvent[] = [
+   {
+      event_id: 1,
+      title: 'Event 1',
+      start: new Date('2024/5/2 09:30'),
+      end: new Date('2024/5/2 10:30'),
+   },
+   {
+      event_id: 2,
+      title: 'Event 2',
+      start: new Date('2024/5/4 10:00'),
+      end: new Date('2024/5/4 11:00'),
    },
 ];

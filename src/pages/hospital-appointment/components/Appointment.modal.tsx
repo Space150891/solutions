@@ -3,19 +3,22 @@ import {
    Backdrop,
    Box,
    Button,
+   DialogActions,
    Fade,
    Grid,
    Modal,
    TextField,
    Typography,
-   outlinedInputClasses,
    styled,
 } from '@mui/material';
-import { LocalizationProvider, StaticTimePicker, TimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { specializations } from '../../patient-list/mock';
 import { IPatientDoctor } from '../../patient-list/types';
 import { CloseOutlined } from '@mui/icons-material';
+import { ProcessedEvent, SchedulerHelpers } from '@aldabil/react-scheduler/types';
+import { useState } from 'react';
+import dayjs, { Dayjs } from 'dayjs';
+import { IEvent } from '../mock';
 
 const style = {
    position: 'absolute' as const,
@@ -42,10 +45,94 @@ export type AppointmentModalProps = {
    open: boolean;
    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
    doctor: IPatientDoctor;
+   scheduler: SchedulerHelpers;
+   setEvents: React.Dispatch<React.SetStateAction<IEvent[]>>;
 };
 
-export default function AppointmentModal({ open = true, setOpen, doctor }: AppointmentModalProps) {
+export default function AppointmentModal({
+   open = true,
+   setOpen,
+   doctor,
+   scheduler,
+   setEvents,
+}: AppointmentModalProps) {
+   const event = scheduler?.edited;
+   const [state, setState] = useState({
+      start: event?.start || null,
+      end: event?.end || null,
+      location: event?.location || '',
+      phone_number: event?.phone_number || '',
+      first_name: event?.first_name || '',
+      last_name: event?.last_name || '',
+      addition_info: event?.addition_info || '',
+   });
+   const [error, setError] = useState('');
+
+   const handleChange = (value: string | Dayjs | null, name: string) => {
+      console.log('change', name, value instanceof dayjs, value);
+      let val: string | Date | null;
+      if (value instanceof dayjs) {
+         val = dayjs(scheduler.state[name].value)
+            .set('hour', value.get('hour'))
+            .set('minute', value.get('minute'))
+            .toDate();
+
+         console.log('val::', val);
+         setState((prev) => ({
+            ...prev,
+            [name]: val,
+         }));
+      } else {
+         setState((prev) => ({
+            ...prev,
+            [name]: value,
+         }));
+      }
+   };
+
+   const handleSubmit = async () => {
+      if (!state.start) {
+         return setError('Time should be selected');
+      }
+      try {
+         scheduler.loading(true);
+
+         const addedUpdatedEvent = (await new Promise((res) => {
+            const result: IEvent = {
+               event_id: event?.event_id || Math.random(),
+               title: `${state.first_name || 'no'} ${state.last_name || 'name'}`,
+               start: state.start || scheduler.state.start.value,
+               end: state.end || scheduler.state.end.value,
+               location: state?.location || '',
+               phone_number: state?.phone_number || '',
+               first_name: state?.first_name || '',
+               last_name: state?.last_name || '',
+               addition_info: state?.addition_info || '',
+            };
+            setTimeout(() => {
+               if (!event) {
+                  setEvents((prev) => [...prev, result]);
+               } else {
+                  setEvents((prev) =>
+                     prev.map((eve) => (eve.event_id === event.event_id ? { ...eve, ...result } : eve)),
+                  );
+               }
+
+               res(result);
+            }, 3000);
+         })) as ProcessedEvent;
+
+         scheduler.onConfirm(addedUpdatedEvent, event ? 'edit' : 'create');
+         scheduler.close();
+      } finally {
+         scheduler.loading(false);
+      }
+   };
+
    const handleClose = () => setOpen(false);
+   console.log('error::', error);
+   console.log('event::', event);
+   console.log('state::', state);
 
    return (
       <Modal
@@ -93,6 +180,39 @@ export default function AppointmentModal({ open = true, setOpen, doctor }: Appoi
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                            <TimePicker
                               ampm={false}
+                              label='Start'
+                              value={state.start ? dayjs(state.start) : null}
+                              onAccept={(newValue) => handleChange(newValue, 'start')}
+                              slotProps={{
+                                 layout: {
+                                    sx: {
+                                       ul: {
+                                          '::-webkit-scrollbar': {
+                                             width: '3px',
+                                          },
+                                          '::-webkit-scrollbar-track': {
+                                             '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+                                          },
+                                          '::-webkit-scrollbar-thumb': {
+                                             backgroundColor: 'rgba(0,0,0,.1)',
+                                             borderRadius: '10px',
+                                          },
+                                       },
+                                    },
+                                 },
+                              }}
+                           />
+                        </LocalizationProvider>
+                     </Item>
+                  </Grid>
+                  <Grid item xs='auto'>
+                     <Item>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                           <TimePicker
+                              ampm={false}
+                              label='End'
+                              value={state.end ? dayjs(state.end) : null}
+                              onAccept={(newValue) => handleChange(newValue, 'end')}
                               slotProps={{
                                  layout: {
                                     sx: {
@@ -125,12 +245,8 @@ export default function AppointmentModal({ open = true, setOpen, doctor }: Appoi
                            sx={{
                               '& .MuiInputBase-root': { height: '45px !important' },
                            }}
-                           //    onChange={(e, values) =>
-                           //       setFilter((prev) => ({
-                           //          ...prev,
-                           //          doctor: { ...prev.doctor, specialization: values },
-                           //       }))
-                           //    }
+                           value={state.location}
+                           onChange={(_, value) => handleChange(value, 'location')}
                            renderInput={(params) => (
                               <TextField {...params} variant='outlined' label='Location' />
                            )}
@@ -149,17 +265,35 @@ export default function AppointmentModal({ open = true, setOpen, doctor }: Appoi
                   </Grid>
                   <Grid item xs={4}>
                      <Item>
-                        <TextField variant='outlined' label='First Name' fullWidth />
+                        <TextField
+                           variant='outlined'
+                           label='First Name'
+                           fullWidth
+                           value={state.first_name || ''}
+                           onChange={(e) => handleChange(e.target.value, 'first_name')}
+                        />
                      </Item>
                   </Grid>
                   <Grid item xs={4}>
                      <Item>
-                        <TextField variant='outlined' label='Last Name' fullWidth />
+                        <TextField
+                           variant='outlined'
+                           label='Last Name'
+                           fullWidth
+                           value={state.last_name || ''}
+                           onChange={(e) => handleChange(e.target.value, 'last_name')}
+                        />
                      </Item>
                   </Grid>
                   <Grid item xs={4}>
                      <Item>
-                        <TextField variant='outlined' label='Phone Number' fullWidth />
+                        <TextField
+                           variant='outlined'
+                           label='Phone Number'
+                           fullWidth
+                           value={state.phone_number || ''}
+                           onChange={(e) => handleChange(e.target.value, 'phone_number')}
+                        />
                      </Item>
                   </Grid>
                   <Grid item xs={12} mt={2}>
@@ -180,6 +314,8 @@ export default function AppointmentModal({ open = true, setOpen, doctor }: Appoi
                            fullWidth
                            multiline
                            rows={8}
+                           value={state.addition_info || ''}
+                           onChange={(e) => handleChange(e.target.value, 'addition_info')}
                            sx={{
                               '& .MuiInputBase-root': { height: 'initial !important' },
                            }}
@@ -188,7 +324,7 @@ export default function AppointmentModal({ open = true, setOpen, doctor }: Appoi
                   </Grid>
                </Grid>
                <Box>
-                  <Button variant='contained' onClick={handleClose} fullWidth>
+                  <Button variant='contained' onClick={handleSubmit} fullWidth>
                      Send
                   </Button>
                </Box>
