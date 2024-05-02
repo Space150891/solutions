@@ -181,6 +181,9 @@ export default function AppointmentModal({
                            <TimePicker
                               ampm={false}
                               label='Start'
+                              minTime={dayjs(new Date(0, 0, 0, 9, 0))}
+                              maxTime={dayjs(new Date(0, 0, 0, 17, 0))}
+                              skipDisabled
                               value={state.start ? dayjs(state.start) : null}
                               onAccept={(newValue) => handleChange(newValue, 'start')}
                               slotProps={{
@@ -211,6 +214,9 @@ export default function AppointmentModal({
                            <TimePicker
                               ampm={false}
                               label='End'
+                              minTime={dayjs(new Date(0, 0, 0, 9, 0))}
+                              maxTime={dayjs(new Date(0, 0, 0, 17, 0))}
+                              skipDisabled
                               value={state.end ? dayjs(state.end) : null}
                               onAccept={(newValue) => handleChange(newValue, 'end')}
                               slotProps={{

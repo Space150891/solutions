@@ -1,17 +1,33 @@
 import { useState } from 'react';
 import AppointmentModal from './Appointment.modal';
-import { Dayjs } from 'dayjs';
 import { Scheduler } from '@aldabil/react-scheduler';
 import { IEvent, MOCK_EVENTS } from '../mock';
+import { IPatientDoctor } from '../../patient-list/types';
+import { Button, ButtonGroup } from '@mui/material';
 
-export default function AppointmentScheduler({ doctor }) {
-   const [date, setDate] = useState<Dayjs | null>(null);
+export default function AppointmentScheduler({ doctors }: { doctors: IPatientDoctor[] }) {
    const [open, setOpen] = useState<boolean>(false);
    const [events, setEvents] = useState<IEvent[]>(MOCK_EVENTS);
-   console.log('doctor:', doctor);
+   const [selectedDoctor, setSelectedDoctor] = useState<IPatientDoctor>(doctors[0]);
+
+   console.log('doctor:', doctors);
 
    return (
       <>
+         <ButtonGroup variant='text' aria-label='Basic button group'>
+            {doctors.map((doctor) => {
+               return (
+                  <Button
+                     onClick={() => {
+                        setSelectedDoctor(doctor);
+                     }}
+                     {...(selectedDoctor.doctor_id === doctor.doctor_id ? { variant: 'contained' } : {})}
+                  >
+                     {doctor.first_name} {doctor.last_name}
+                  </Button>
+               );
+            })}
+         </ButtonGroup>
          <Scheduler
             onCellClick={() => setOpen(true)}
             customEditor={(scheduler) => (
@@ -19,13 +35,11 @@ export default function AppointmentScheduler({ doctor }) {
                   scheduler={scheduler}
                   open={open}
                   setOpen={setOpen}
-                  doctor={doctor}
+                  doctor={selectedDoctor}
                   setEvents={setEvents}
                />
             )}
             viewerExtraComponent={(fields, event: IEvent) => {
-               console.log('field', fields);
-
                return (
                   <div>
                      <p>Appointment</p>
@@ -40,7 +54,6 @@ export default function AppointmentScheduler({ doctor }) {
             }}
             events={events}
          />
-         {/* <AppointmentModal open={open} setOpen={setOpen} doctor={doctor} /> */}
       </>
    );
 }

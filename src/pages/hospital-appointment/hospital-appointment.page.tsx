@@ -32,5 +32,5 @@ export default function HospitalAppointment() {
 
    const listOfDoctorNames = doctors.map((doc) => `${doc.first_name} ${doc.last_name}`);
 
-   return <AppointmentScheduler doctor={doctors[0]} />;
+   return <AppointmentScheduler doctors={doctors} />;
 }
