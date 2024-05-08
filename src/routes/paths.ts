@@ -7,4 +7,5 @@ export const paths = Object.freeze({
    patientList: '/cubex/patient-list',
    patientAppointment: '/cubex/patient-appointment',
    hospitalAppointment: '/cubex/hospital-appointment',
+   patientManagement: '/cubex/patient-management',
 });

@@ -26,6 +26,11 @@ export const config = [
    {
       id: 5,
       path: paths.hospitalAppointment,
-      name: IPages.Hospital_APPOINTMENT,
+      name: IPages.HOSPITAL_APPOINTMENT,
+   },
+   {
+      id: 6,
+      path: paths.patientManagement,
+      name: IPages.PATIENT_MANAGEMENT,
    },
 ];

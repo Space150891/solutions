@@ -10,6 +10,7 @@ import MultistepFormPage from '../pages/multistep-form/multistep-form.page';
 import PatientListPage from '../pages/patient-list/patient-list.page';
 import PatientAppointment from '../pages/patient-appointment/patient-appointment.page';
 import HospitalAppointment from '../pages/hospital-appointment/hospital-appointment.page';
+import PatientManagement from '../pages/patient-management/patient-management.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -56,6 +57,11 @@ export const routesData: RouteObject[] = [
             id: '15-hospitalAppointment',
             path: paths.hospitalAppointment,
             element: <HospitalAppointment />,
+         },
+         {
+            id: '16-patientManagement',
+            path: paths.patientManagement,
+            element: <PatientManagement />,
          },
       ],
    },
