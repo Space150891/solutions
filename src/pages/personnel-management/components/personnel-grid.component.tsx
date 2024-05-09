@@ -1,7 +1,5 @@
 import {
    Box,
-   Button,
-   ButtonGroup,
    Card,
    CardActions,
    CardContent,
@@ -12,13 +10,11 @@ import {
    ToggleButtonGroup,
    Typography,
    styled,
-   useTheme,
 } from '@mui/material';
 import { IManagedDoctor, IManagedNurse, IManagedOther } from '../mock';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import { specializations } from '../../patient-list/mock';
 
 type PersonnelGridProps = {
    doctors: IManagedDoctor[];
@@ -42,7 +38,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGridProps) {
    const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
    const [display, setDisplay] = useState('doctors');
-   const theme = useTheme();
 
    const handleExpandClick = (id: string | number) => {
       setExpanded((prevState) => ({
