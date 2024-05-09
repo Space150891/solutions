@@ -11,6 +11,7 @@ import PatientListPage from '../pages/patient-list/patient-list.page';
 import PatientAppointment from '../pages/patient-appointment/patient-appointment.page';
 import HospitalAppointment from '../pages/hospital-appointment/hospital-appointment.page';
 import PatientManagement from '../pages/patient-management/patient-management.page';
+import PersonnelManagement from '../pages/personnel-management/personnel-management.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -61,6 +62,16 @@ export const routesData: RouteObject[] = [
          {
             id: '16-patientManagement',
             path: paths.patientManagement,
+            element: <PatientManagement />,
+         },
+         {
+            id: '17-personnelManagement',
+            path: paths.personnelManagement,
+            element: <PersonnelManagement />,
+         },
+         {
+            id: '18-insuranceInformation',
+            path: paths.insuranceInformation,
             element: <PatientManagement />,
          },
       ],

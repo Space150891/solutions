@@ -33,4 +33,14 @@ export const config = [
       path: paths.patientManagement,
       name: IPages.PATIENT_MANAGEMENT,
    },
+   {
+      id: 7,
+      path: paths.personnelManagement,
+      name: IPages.PERSONNEL_MANAGEMENT,
+   },
+   {
+      id: 8,
+      path: paths.insuranceInformation,
+      name: IPages.INSURANCE_INFORMATION,
+   },
 ];

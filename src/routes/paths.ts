@@ -8,4 +8,6 @@ export const paths = Object.freeze({
    patientAppointment: '/cubex/patient-appointment',
    hospitalAppointment: '/cubex/hospital-appointment',
    patientManagement: '/cubex/patient-management',
+   personnelManagement: '/cubex/personnel-management',
+   insuranceInformation: '/cubex/insurance-information',
 });
