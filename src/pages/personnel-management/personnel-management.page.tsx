@@ -35,6 +35,7 @@ export default function PersonnelManagement() {
       } else if (position === 'other') {
          addOther(employee as IManagedOther);
       }
+      setOpen(false);
    };
 
    const toggleOpen = () => {
