@@ -48,7 +48,7 @@ export default function PersonnelManagement() {
                {open ? 'Back' : 'Add new patient'}
             </Button>
          </Box>
-         {/* {open && <AddPersonnel addPersonnel={addPersonnel} />} */}
+         {open && <AddPersonnel addPersonnel={addPersonnel} />}
          {!open && <PersonnelGrid doctors={doctors} nurses={nurses} others={others} />}
       </Box>
    );

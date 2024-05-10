@@ -52,7 +52,7 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
 
    return (
       <Box>
-         <Box>
+         <Box paddingLeft={3}>
             <ToggleButtonGroup exclusive value={display} onChange={handleChange} color='primary'>
                <ToggleButton value='doctors'>Doctors</ToggleButton>
                <ToggleButton value='nurses'>Nurses</ToggleButton>
