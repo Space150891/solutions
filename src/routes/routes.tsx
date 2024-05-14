@@ -12,6 +12,7 @@ import PatientAppointment from '../pages/patient-appointment/patient-appointment
 import HospitalAppointment from '../pages/hospital-appointment/hospital-appointment.page';
 import PatientManagement from '../pages/patient-management/patient-management.page';
 import PersonnelManagement from '../pages/personnel-management/personnel-management.page';
+import InsuranceInformation from '../pages/insurance-information/insurance-information.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -72,7 +73,7 @@ export const routesData: RouteObject[] = [
          {
             id: '18-insuranceInformation',
             path: paths.insuranceInformation,
-            element: <PatientManagement />,
+            element: <InsuranceInformation />,
          },
       ],
    },
