@@ -43,4 +43,9 @@ export const config = [
       path: paths.insuranceInformation,
       name: IPages.INSURANCE_INFORMATION,
    },
+   {
+      id: 9,
+      path: paths.patientDashboard,
+      name: IPages.PATIENT_DASHBOARD,
+   },
 ];

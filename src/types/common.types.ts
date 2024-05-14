@@ -6,5 +6,6 @@ export enum IPages {
    HOSPITAL_APPOINTMENT = 'Hospital Appointment',
    PATIENT_MANAGEMENT = 'Patient Management',
    PERSONNEL_MANAGEMENT = 'Personnel Management',
-   INSURANCE_INFORMATION = 'Insurance  Information',
+   INSURANCE_INFORMATION = 'Insurance Information',
+   PATIENT_DASHBOARD = 'Patient Dashboard',
 }
