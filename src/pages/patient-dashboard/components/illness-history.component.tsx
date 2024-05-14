@@ -1,13 +1,4 @@
-import {
-   Avatar,
-   Box,
-   Divider,
-   List,
-   ListItem,
-   ListItemAvatar,
-   ListItemText,
-   Typography,
-} from '@mui/material';
+import { Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { MainCard } from '../../../components/cards/main-card.component';
 
 const patientIllnessHistory = [
