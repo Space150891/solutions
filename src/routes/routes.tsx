@@ -14,6 +14,7 @@ import PatientManagement from '../pages/patient-management/patient-management.pa
 import PersonnelManagement from '../pages/personnel-management/personnel-management.page';
 import InsuranceInformation from '../pages/insurance-information/insurance-information.page';
 import PatientDashboard from '../pages/patient-dashboard/patient-dashboard.page';
+import WaitingBoard from '../pages/waiting-board/waiting-board.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -80,6 +81,11 @@ export const routesData: RouteObject[] = [
             id: '19-patientDashboard',
             path: paths.patientDashboard,
             element: <PatientDashboard />,
+         },
+         {
+            id: '20-waitingBoard',
+            path: paths.waitingBoard,
+            element: <WaitingBoard />,
          },
       ],
    },

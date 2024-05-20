@@ -11,4 +11,5 @@ export const paths = Object.freeze({
    personnelManagement: '/cubex/personnel-management',
    insuranceInformation: '/cubex/insurance-information',
    patientDashboard: '/cubex/patient-dashboard',
+   waitingBoard: '/cubex/waiting-board',
 });

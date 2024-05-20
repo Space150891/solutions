@@ -48,4 +48,9 @@ export const config = [
       path: paths.patientDashboard,
       name: IPages.PATIENT_DASHBOARD,
    },
+   {
+      id: 10,
+      path: paths.waitingBoard,
+      name: IPages.WAITING_BOARD,
+   },
 ];
