@@ -1,21 +1,31 @@
 import { TextField } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import InsuranceForm from './components/insurance-form.component';
+import { useState } from 'react';
+import { CountryType } from './mock';
+import InsuranceView from './components/insurance-view.component';
 
 export default function InsuranceInformation() {
+   const [country, setCountry] = useState<CountryType | null>(null);
+   const [ssn, setSsn] = useState('');
+   const [open, setOpen] = useState(false);
+
+   const toggleOpen = () => {
+      setOpen((prev) => !prev);
+   };
+
    return (
-      <Grid2 container columnSpacing={1} columns={12} rowSpacing={2}>
-         <Grid2 xs={6}>
-            <TextField label='Insurance Name' variant='filled' fullWidth />
-         </Grid2>
-         <Grid2 xs={6}>
-            <TextField label='Type' variant='filled' fullWidth />
-         </Grid2>
-         <Grid2 xs={6}>
-            <TextField label='Address' variant='filled' fullWidth />
-         </Grid2>
-         <Grid2 xs={6}>
-            <TextField label='Social Security Number' variant='filled' fullWidth />
-         </Grid2>
-      </Grid2>
+      <>
+         {!open && (
+            <InsuranceForm
+               setCountry={setCountry}
+               country={country}
+               ssn={ssn}
+               setSsn={setSsn}
+               toggleOpen={toggleOpen}
+            />
+         )}
+         {open && <InsuranceView ssn={ssn} toggleOpen={toggleOpen} country={country} />}
+      </>
    );
 }
