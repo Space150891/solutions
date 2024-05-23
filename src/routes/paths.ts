@@ -12,4 +12,5 @@ export const paths = Object.freeze({
    insuranceInformation: '/cubex/insurance-information',
    patientDashboard: '/cubex/patient-dashboard',
    waitingBoard: '/cubex/waiting-board',
+   agenda: '/cubex/agenda',
 });

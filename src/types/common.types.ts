@@ -9,4 +9,5 @@ export enum IPages {
    INSURANCE_INFORMATION = 'Insurance Information',
    PATIENT_DASHBOARD = 'Patient Dashboard',
    WAITING_BOARD = 'Waiting Board',
+   AGENDA = 'Agenda',
 }

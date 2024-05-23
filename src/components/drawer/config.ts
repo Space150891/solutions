@@ -53,4 +53,9 @@ export const config = [
       path: paths.waitingBoard,
       name: IPages.WAITING_BOARD,
    },
+   {
+      id: 11,
+      path: paths.agenda,
+      name: IPages.AGENDA,
+   },
 ];
