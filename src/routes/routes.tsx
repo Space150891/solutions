@@ -16,6 +16,7 @@ import InsuranceInformation from '../pages/insurance-information/insurance-infor
 import PatientDashboard from '../pages/patient-dashboard/patient-dashboard.page';
 import WaitingBoard from '../pages/waiting-board/waiting-board.page';
 import Agenda from '../pages/agenda/agenda.page';
+import LaboratoryAnalysis from '../pages/laboratory-analysis/laboratory-analysis.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -92,6 +93,11 @@ export const routesData: RouteObject[] = [
             id: '21-agenda',
             path: paths.agenda,
             element: <Agenda />,
+         },
+         {
+            id: '22-laboratoryAnalysis',
+            path: paths.laboratoryAnalysis,
+            element: <LaboratoryAnalysis />,
          },
       ],
    },

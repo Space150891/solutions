@@ -58,4 +58,9 @@ export const config = [
       path: paths.agenda,
       name: IPages.AGENDA,
    },
+   {
+      id: 12,
+      path: paths.laboratoryAnalysis,
+      name: IPages.LABORATORY_ANALYSIS,
+   },
 ];

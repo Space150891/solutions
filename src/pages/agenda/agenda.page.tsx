@@ -9,7 +9,7 @@ import {
    Typography,
    useTheme,
 } from '@mui/material';
-import { Dayjs } from 'dayjs';
+
 import { agendas } from './mock';
 
 interface Column {
@@ -18,14 +18,6 @@ interface Column {
    minWidth?: number;
    align?: 'right';
    format?: (value: number) => string;
-}
-
-interface Data {
-   time: string;
-   task: string;
-   doctor: string;
-   patient: string;
-   outcome: string;
 }
 
 const columns: readonly Column[] = [
