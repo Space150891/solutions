@@ -11,4 +11,5 @@ export enum IPages {
    WAITING_BOARD = 'Waiting Board',
    AGENDA = 'Agenda',
    LABORATORY_ANALYSIS = 'Laboratory Analysis',
+   TREATMENT_DOCUMENTATION = 'Treatment Documentation',
 }

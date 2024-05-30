@@ -63,4 +63,9 @@ export const config = [
       path: paths.laboratoryAnalysis,
       name: IPages.LABORATORY_ANALYSIS,
    },
+   {
+      id: 13,
+      path: paths.treatmentDocumentation,
+      name: IPages.TREATMENT_DOCUMENTATION,
+   },
 ];

@@ -17,6 +17,7 @@ import PatientDashboard from '../pages/patient-dashboard/patient-dashboard.page'
 import WaitingBoard from '../pages/waiting-board/waiting-board.page';
 import Agenda from '../pages/agenda/agenda.page';
 import LaboratoryAnalysis from '../pages/laboratory-analysis/laboratory-analysis.page';
+import TreatmentDocumentation from '../pages/treatment-documentation/treatment-documentation.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -98,6 +99,11 @@ export const routesData: RouteObject[] = [
             id: '22-laboratoryAnalysis',
             path: paths.laboratoryAnalysis,
             element: <LaboratoryAnalysis />,
+         },
+         {
+            id: '23-treatmentDocumentation',
+            path: paths.treatmentDocumentation,
+            element: <TreatmentDocumentation />,
          },
       ],
    },

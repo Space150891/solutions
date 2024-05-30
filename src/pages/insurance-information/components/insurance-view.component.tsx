@@ -19,7 +19,6 @@ export default function InsuranceView({
                sx={{
                   backgroundColor: 'white',
                   height: '100%',
-                  //    width: '100%',
                   minWidth: '60%',
                   maxHeight: '40%',
                   borderRadius: '16px',
