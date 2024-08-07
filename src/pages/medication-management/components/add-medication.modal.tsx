@@ -1,7 +1,8 @@
-import { Grid, ModalProps } from '@mui/material';
+import { ModalProps } from '@mui/material';
 import CustomModal from '../../../components/custom-modal/custom-modal';
 import { useAddMedicationModalLogic } from './add-medication.modal.logic';
 import { Medication, newMedicationFields } from '../medication-management.mock';
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 
 type Props = Omit<ModalProps, 'children'> & {
    onClose: () => void;
@@ -25,15 +26,15 @@ const AddMedicationModal = (props: Props) => {
             onClick: handlers.handleAddMedication,
          }}
       >
-         <Grid container gap={1.3}>
+         <Grid2 container spacing={2}>
             {newMedicationFields.map(({ label, field, type }) => {
                return (
-                  <Grid item xs={field === 'name' ? 12 : 5.9} key={field}>
+                  <Grid2 xs={field === 'name' ? 12 : 6} key={field}>
                      {handlers.handleRenderField({ label, field, type })}
-                  </Grid>
+                  </Grid2>
                );
             })}
-         </Grid>
+         </Grid2>
       </CustomModal>
    );
 };
