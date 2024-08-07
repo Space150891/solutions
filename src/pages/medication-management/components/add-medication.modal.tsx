@@ -1,15 +1,16 @@
 import { Grid, ModalProps } from '@mui/material';
 import CustomModal from '../../../components/custom-modal/custom-modal';
 import { useAddMedicationModalLogic } from './add-medication.modal.logic';
-import { newMedicationFields } from '../medication-management.mock';
+import { Medication, newMedicationFields } from '../medication-management.mock';
 
 type Props = Omit<ModalProps, 'children'> & {
    onClose: () => void;
+   onAddMedication: (newMed: Medication) => void;
 };
 
 const AddMedicationModal = (props: Props) => {
    const { open } = props;
-   const { handlers } = useAddMedicationModalLogic(props);
+   const { data, state, handlers } = useAddMedicationModalLogic(props);
 
    return (
       <CustomModal
@@ -18,11 +19,11 @@ const AddMedicationModal = (props: Props) => {
          heading={'Add new medication'}
          additionalStyles={{ maxWidth: '700px' }}
          cancelButtonProps={{ onClick: handlers.handleClose }}
-         //  confirmButtonProps={{
-         //     disabled: !state.link,
-         //     loading: state.isLoading,
-         //     onClick: handlers.handleUpdateUserLink,
-         //  }}
+         confirmButtonProps={{
+            disabled: data.isDisabledConfirmButton,
+            loading: state.isAdding,
+            onClick: handlers.handleAddMedication,
+         }}
       >
          <Grid container gap={1.3}>
             {newMedicationFields.map(({ label, field, type }) => {

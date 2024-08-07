@@ -2,6 +2,7 @@ import { capitalize, FormControl, InputLabel, MenuItem, ModalProps, Select, Text
 import { useState } from 'react';
 import {
    initialMedicationData,
+   Medication,
    medicationFormOptions,
    newMedicationFields,
 } from '../medication-management.mock';
@@ -11,16 +12,25 @@ import dayjs from 'dayjs';
 
 type Props = Omit<ModalProps, 'children'> & {
    onClose: () => void;
+   onAddMedication: (newMed: Medication) => void;
 };
 
 export const useAddMedicationModalLogic = (props: Props) => {
-   const { onClose } = props;
+   const { onClose, onAddMedication } = props;
 
    const [medication, setMedication] = useState(initialMedicationData);
+   const [isAdding, setIsAdding] = useState(false);
+
+   const isDisabledConfirmButton = Object.entries(medication).some(([key, val]) => key !== 'id' && !val);
 
    const handleClose = () => {
       setMedication(initialMedicationData);
       onClose();
+   };
+
+   const handleAddMedication = () => {
+      onAddMedication(medication);
+      handleClose();
    };
 
    const handleRenderField = ({ field, label, type }: (typeof newMedicationFields)[0]) => {
@@ -77,9 +87,9 @@ export const useAddMedicationModalLogic = (props: Props) => {
    };
 
    return {
-      data: {},
-      state: { medication },
-      setState: { setMedication },
-      handlers: { handleClose, handleRenderField },
+      data: { isDisabledConfirmButton },
+      state: { medication, isAdding },
+      setState: { setMedication, setIsAdding },
+      handlers: { handleClose, handleRenderField, handleAddMedication },
    };
 };

@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { IPages } from '../../types/common.types';
 
 import { medicationManagementColumnsConfig } from './medication-management.columns';
-import { medicationManagementMock } from './medication-management.mock';
+
 import CustomDataGrid from '../../components/custom-data-grid/custom-data-grid.component';
 import { useMedicationMaganementStyle } from './meidcation-management.style';
 import { useMedicationManagementLogic } from './medication-management.logic';
@@ -15,7 +15,11 @@ export default function MedicationManagementPage() {
 
    return (
       <>
-         <AddMedicationModal open={state.isShownModal} onClose={handlers.handleCloseModal} />
+         <AddMedicationModal
+            open={state.isShownModal}
+            onClose={handlers.handleCloseModal}
+            onAddMedication={handlers.handleAddMedication}
+         />
 
          <Card>
             <CardContent sx={sx.cardContent}>
@@ -26,7 +30,7 @@ export default function MedicationManagementPage() {
                   </Button>
                </Box>
 
-               <CustomDataGrid columns={columns} rows={medicationManagementMock} />
+               <CustomDataGrid columns={columns} rows={state.rows} />
             </CardContent>
          </Card>
       </>

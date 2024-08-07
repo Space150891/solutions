@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 export type Medication = {
-   id: number | string;
+   id: number;
    name: string;
    startDate: string;
    stopDate: string;
