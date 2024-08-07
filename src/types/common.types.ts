@@ -12,4 +12,5 @@ export enum IPages {
    AGENDA = 'Agenda',
    LABORATORY_ANALYSIS = 'Laboratory Analysis',
    TREATMENT_DOCUMENTATION = 'Treatment Documentation',
+   MEDICATION_MANAGEMENT = 'Medication Management',
 }
