@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export type Medication = {
    id: number | string;
    name: string;
@@ -8,6 +10,33 @@ export type Medication = {
    frequency: string;
    duration: string;
 };
+
+export const initialMedicationData: Medication = {
+   id: 0,
+   name: '',
+   startDate: dayjs(new Date()).toString(),
+   stopDate: dayjs(new Date()).toString(),
+   dosageInstructions: '',
+   form: 'capsule',
+   duration: '',
+   frequency: '',
+};
+
+export const medicationFormOptions: Medication['form'][] = ['capsule', 'drink', 'pill', 'syrup', 'tablet'];
+
+export const newMedicationFields: {
+   label: string;
+   field: keyof Medication;
+   type: 'input' | 'select' | 'date';
+}[] = [
+   { label: 'Name', field: 'name', type: 'input' },
+   { label: 'Start date', field: 'startDate', type: 'date' },
+   { label: 'Stop date', field: 'stopDate', type: 'date' },
+   { label: 'Dosage Instructions', field: 'dosageInstructions', type: 'input' },
+   { label: 'Form', field: 'form', type: 'select' },
+   { label: 'Duration', field: 'duration', type: 'input' },
+   { label: 'Frequency', field: 'frequency', type: 'input' },
+];
 
 export const medicationManagementMock: Medication[] = [
    {

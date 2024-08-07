@@ -5,21 +5,30 @@ import { medicationManagementColumnsConfig } from './medication-management.colum
 import { medicationManagementMock } from './medication-management.mock';
 import CustomDataGrid from '../../components/custom-data-grid/custom-data-grid.component';
 import { useMedicationMaganementStyle } from './meidcation-management.style';
+import { useMedicationManagementLogic } from './medication-management.logic';
+import AddMedicationModal from './components/add-medication.modal';
 
 export default function MedicationManagementPage() {
-   const columns = medicationManagementColumnsConfig();
    const sx = useMedicationMaganementStyle();
+   const columns = medicationManagementColumnsConfig();
+   const { state, setState, handlers } = useMedicationManagementLogic();
 
    return (
-      <Card>
-         <CardContent sx={sx.cardContent}>
-            <Box sx={sx.header}>
-               <Typography variant='h5'>{IPages.MEDICATION_MANAGEMENT.toUpperCase()}</Typography>
-               <Button variant='contained'>Add new medication</Button>
-            </Box>
+      <>
+         <AddMedicationModal open={state.isShownModal} onClose={handlers.handleCloseModal} />
 
-            <CustomDataGrid columns={columns} rows={medicationManagementMock} />
-         </CardContent>
-      </Card>
+         <Card>
+            <CardContent sx={sx.cardContent}>
+               <Box sx={sx.header}>
+                  <Typography variant='h5'>{IPages.MEDICATION_MANAGEMENT.toUpperCase()}</Typography>
+                  <Button onClick={() => setState.setIsShownModal((prev) => !prev)} variant='contained'>
+                     Add New Medication
+                  </Button>
+               </Box>
+
+               <CustomDataGrid columns={columns} rows={medicationManagementMock} />
+            </CardContent>
+         </Card>
+      </>
    );
 }
