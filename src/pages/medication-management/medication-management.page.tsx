@@ -47,7 +47,7 @@ export default function MedicationManagementPage() {
                   }}
                />
 
-               <CustomDataGrid disableRowSelectionOnClick columns={data.columns} rows={data.filteredList} />
+               <CustomDataGrid columns={data.columns} rows={data.filteredList} />
             </CardContent>
          </Card>
       </>
