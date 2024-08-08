@@ -11,5 +11,9 @@ export const useMedicationMaganementStyle = () => {
       justifyContent: 'space-between',
    };
 
-   return { cardContent, header };
+   const searchInput: SxProps = {
+      my: 3,
+   };
+
+   return { cardContent, header, searchInput };
 };

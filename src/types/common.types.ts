@@ -14,3 +14,5 @@ export enum IPages {
    TREATMENT_DOCUMENTATION = 'Treatment Documentation',
    MEDICATION_MANAGEMENT = 'Medication Management',
 }
+
+export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;

@@ -2,24 +2,24 @@ import { Box, Button, Card, CardContent, InputAdornment, TextField, Typography }
 import { IPages } from '../../types/common.types';
 import { Search as SearchIcon } from '@mui/icons-material';
 
-import { medicationManagementColumnsConfig } from './medication-management.columns';
-
 import CustomDataGrid from '../../components/custom-data-grid/custom-data-grid.component';
 import { useMedicationMaganementStyle } from './meidcation-management.style';
 import { useMedicationManagementLogic } from './medication-management.logic';
-import AddMedicationModal from './components/add-medication.modal';
+import CreateOrEditMedicationModal from './components/create-or-edit-medication.modal';
 
 export default function MedicationManagementPage() {
    const sx = useMedicationMaganementStyle();
-   const columns = medicationManagementColumnsConfig();
    const { data, state, setState, handlers } = useMedicationManagementLogic();
 
    return (
       <>
-         <AddMedicationModal
-            open={state.isShownModal}
+         <CreateOrEditMedicationModal
+            open={data.isOpenModal}
+            selectedMedication={state.selectedMedication}
             onClose={handlers.handleCloseModal}
-            onAddMedication={handlers.handleAddMedication}
+            onConfirm={
+               state.selectedMedication ? handlers.handleEditMedication : handlers.handleCreateMedication
+            }
          />
 
          <Card>
@@ -32,7 +32,8 @@ export default function MedicationManagementPage() {
                </Box>
 
                <TextField
-                  sx={{ my: 3 }}
+                  sx={sx.searchInput}
+                  name='search_medication'
                   fullWidth
                   value={state.searchKeyword}
                   onChange={(e) => setState.setSearchKeyword(e.target.value)}
@@ -46,7 +47,7 @@ export default function MedicationManagementPage() {
                   }}
                />
 
-               <CustomDataGrid columns={columns} rows={data.filteredList} />
+               <CustomDataGrid disableRowSelectionOnClick columns={data.columns} rows={data.filteredList} />
             </CardContent>
          </Card>
       </>

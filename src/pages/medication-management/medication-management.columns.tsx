@@ -1,9 +1,11 @@
-import { Typography } from '@mui/material';
 import { Medication } from './medication-management.mock';
-import type { GridColDef } from '@mui/x-data-grid';
 import { formatDate } from '../../utils/format-date.util';
+import { IconButton, Typography } from '@mui/material';
+import type { GridColDef } from '@mui/x-data-grid';
+import EditIcon from '@mui/icons-material/Edit';
+import { SetState } from '../../types/common.types';
 
-export const medicationManagementColumnsConfig = () => {
+export const medicationManagementColumnsConfig = (setSelectedMedication: SetState<Medication | null>) => {
    const columns: GridColDef<Medication>[] = [
       {
          field: 'id',
@@ -47,6 +49,21 @@ export const medicationManagementColumnsConfig = () => {
          field: 'duration',
          headerName: 'Duration',
          flex: 1,
+      },
+      {
+         field: 'edit',
+         headerName: 'Edit',
+         flex: 1,
+
+         sortable: false,
+         filterable: false,
+         renderCell: ({ row }) => {
+            return (
+               <IconButton onClick={() => setSelectedMedication(row)}>
+                  <EditIcon />
+               </IconButton>
+            );
+         },
       },
    ];
 
