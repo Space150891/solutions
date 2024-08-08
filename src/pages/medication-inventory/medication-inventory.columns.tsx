@@ -1,15 +1,18 @@
-import { Typography } from '@mui/material';
+import { IconButton } from '@mui/material';
 import type { GridColDef } from '@mui/x-data-grid';
+import EditIcon from '@mui/icons-material/Edit';
 
-import { MedicationInventory } from './medication-inventory.mock';
+import { MedicationInventoryItem } from './medication-inventory.mock';
+import { SetState } from '../../types/common.types';
 
-export const medicationInventoryColumnsConfig = () => {
-   const columns: GridColDef<MedicationInventory>[] = [
+export const medicationInventoryColumnsConfig = (
+   setSelectedItem: SetState<MedicationInventoryItem | null>,
+) => {
+   const columns: GridColDef<MedicationInventoryItem>[] = [
       {
          field: 'id',
          headerName: 'ID',
          flex: 1,
-         renderCell: ({ row }) => <Typography>{row.id}</Typography>,
       },
       {
          field: 'name',
@@ -43,21 +46,21 @@ export const medicationInventoryColumnsConfig = () => {
          flex: 1,
       },
 
-      // {
-      //    field: 'edit',
-      //    headerName: 'Edit',
-      //    flex: 1,
+      {
+         field: 'edit',
+         headerName: 'Edit',
+         flex: 1,
 
-      //    sortable: false,
-      //    filterable: false,
-      //    renderCell: ({ row }) => {
-      //       return (
-      //          <IconButton onClick={() => setSelectedMedication(row)}>
-      //             <EditIcon />
-      //          </IconButton>
-      //       );
-      //    },
-      // },
+         sortable: false,
+         filterable: false,
+         renderCell: ({ row }) => {
+            return (
+               <IconButton onClick={() => setSelectedItem(row)}>
+                  <EditIcon />
+               </IconButton>
+            );
+         },
+      },
    ];
 
    return columns;

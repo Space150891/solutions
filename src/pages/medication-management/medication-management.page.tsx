@@ -26,8 +26,8 @@ export default function MedicationManagementPage() {
             <CardContent sx={sx.cardContent}>
                <Box sx={sx.header}>
                   <Typography variant='h5'>{IPages.MEDICATION_MANAGEMENT.toUpperCase()}</Typography>
-                  <Button onClick={() => setState.setIsShownModal((prev) => !prev)} variant='contained'>
-                     Add New Medication
+                  <Button onClick={() => setState.setIsShownModal(true)} variant='contained'>
+                     Add new medication
                   </Button>
                </Box>
 

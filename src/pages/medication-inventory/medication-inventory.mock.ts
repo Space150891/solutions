@@ -1,4 +1,4 @@
-export type MedicationInventory = {
+export type MedicationInventoryItem = {
    id: number;
    name: string;
    quantity: number;
@@ -7,7 +7,16 @@ export type MedicationInventory = {
    prescription: string;
 };
 
-export const medicationInventoryMock: MedicationInventory[] = [
+export const initialMedicationInventoryItemData: MedicationInventoryItem = {
+   id: 0,
+   name: '',
+   quantity: 0,
+   inDoctorsOffice: false,
+   inProxies: false,
+   prescription: '',
+};
+
+export const medicationInventoryItemsMock: MedicationInventoryItem[] = [
    {
       id: 1,
       name: 'Gerbion',
@@ -16,4 +25,16 @@ export const medicationInventoryMock: MedicationInventory[] = [
       inProxies: true,
       prescription: 'Not necessary',
    },
+];
+
+export const newMedicationInventoryItemFields: {
+   label: string;
+   field: keyof MedicationInventoryItem;
+   type: 'input' | 'radio';
+}[] = [
+   { label: 'Name', field: 'name', type: 'input' },
+   { label: 'Quantity', field: 'quantity', type: 'input' },
+   { label: 'Prescription', field: 'prescription', type: 'input' },
+   { label: 'In doctor`s office', field: 'inDoctorsOffice', type: 'radio' },
+   { label: 'In proxies', field: 'inProxies', type: 'radio' },
 ];

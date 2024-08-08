@@ -22,7 +22,7 @@ export const useCreateOrEditMedicationModalLogic = (props: Props) => {
    const [medication, setMedication] = useState(initialMedicationData);
    const [isAdding, setIsAdding] = useState(false);
 
-   const isDisabledConfirmButton = Object.entries(medication).some(([key, val]) => key !== 'id' && !val);
+   const isDisabledConfirmButton = Object.entries(medication).some(([key, value]) => key !== 'id' && !value);
 
    const handleClose = () => {
       setMedication(initialMedicationData);
