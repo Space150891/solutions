@@ -16,4 +16,5 @@ export const paths = Object.freeze({
    laboratoryAnalysis: '/cubex/laboratory-analysis',
    treatmentDocumentation: '/cubex/treatment-documentation',
    medicationManagement: '/cubex/medication-management',
+   medicationInventory: '/cubex/medication-inventory',
 });

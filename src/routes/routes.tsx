@@ -19,6 +19,7 @@ import Agenda from '../pages/agenda/agenda.page';
 import LaboratoryAnalysis from '../pages/laboratory-analysis/laboratory-analysis.page';
 import TreatmentDocumentation from '../pages/treatment-documentation/treatment-documentation.page';
 import MedicationManagementPage from '../pages/medication-management/medication-management.page';
+import MedicationInventoryPage from '../pages/medication-inventory/medication-inventory.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -110,6 +111,11 @@ export const routesData: RouteObject[] = [
             id: '24-medicationManagement',
             path: paths.medicationManagement,
             element: <MedicationManagementPage />,
+         },
+         {
+            id: '25-medicationInventory',
+            path: paths.medicationInventory,
+            element: <MedicationInventoryPage />,
          },
       ],
    },

@@ -73,4 +73,9 @@ export const config = [
       path: paths.medicationManagement,
       name: IPages.MEDICATION_MANAGEMENT,
    },
+   {
+      id: 15,
+      path: paths.medicationInventory,
+      name: IPages.MEDICATION_INVENTORY,
+   },
 ];

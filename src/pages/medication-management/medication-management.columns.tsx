@@ -11,7 +11,6 @@ export const medicationManagementColumnsConfig = (setSelectedMedication: SetStat
          field: 'id',
          headerName: 'ID',
          flex: 1,
-         renderCell: ({ row }) => <Typography>{row.id}</Typography>,
       },
       {
          field: 'name',
