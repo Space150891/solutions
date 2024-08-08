@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import { Medication, medicationManagementMock } from './medication-management.mock';
+import { medicationManagementColumnsConfig } from './medication-management.columns';
 
 export const useMedicationManagementLogic = () => {
    const [isShownModal, setIsShownModal] = useState(false);
+   const [selectedMedication, setSelectedMedication] = useState<Medication | null>(null);
    const [rows, setRows] = useState(medicationManagementMock);
    const [searchKeyword, setSearchKeyword] = useState('');
 
    const filteredList = rows.filter((med) => med.name.toLowerCase().includes(searchKeyword.toLowerCase()));
+   const isOpenModal = isShownModal || !!selectedMedication;
+   const columns = medicationManagementColumnsConfig(setSelectedMedication);
 
    const handleCloseModal = () => {
       setIsShownModal(false);
+      setSelectedMedication(null);
    };
 
-   const handleAddMedication = (newMed: Medication) => {
+   const handleCreateMedication = (newMed: Medication) => {
       setRows((prev) => {
          const copy: Medication[] = structuredClone(prev);
 
@@ -31,10 +36,21 @@ export const useMedicationManagementLogic = () => {
       });
    };
 
+   const handleEditMedication = (medication: Medication) => {
+      setRows((prev) => {
+         const copy: Medication[] = structuredClone(prev);
+         const index = copy.findIndex((med) => med.id === medication.id);
+
+         copy[index] = medication;
+
+         return copy;
+      });
+   };
+
    return {
-      data: { filteredList },
-      state: { isShownModal, rows, searchKeyword },
+      data: { filteredList, isOpenModal, columns },
+      state: { isShownModal, rows, searchKeyword, selectedMedication },
       setState: { setIsShownModal, setRows, setSearchKeyword },
-      handlers: { handleCloseModal, handleAddMedication },
+      handlers: { handleCloseModal, handleCreateMedication, handleEditMedication },
    };
 };

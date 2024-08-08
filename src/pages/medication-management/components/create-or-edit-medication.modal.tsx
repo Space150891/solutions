@@ -1,17 +1,18 @@
 import { ModalProps } from '@mui/material';
 import CustomModal from '../../../components/custom-modal/custom-modal';
-import { useAddMedicationModalLogic } from './add-medication.modal.logic';
+import { useCreateOrEditMedicationModalLogic } from './create-or-edit-medication.modal.logic';
 import { Medication, newMedicationFields } from '../medication-management.mock';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 
 type Props = Omit<ModalProps, 'children'> & {
+   selectedMedication: Medication | null;
    onClose: () => void;
-   onAddMedication: (newMed: Medication) => void;
+   onConfirm: (medication: Medication) => void;
 };
 
-const AddMedicationModal = (props: Props) => {
+const CreateOrEditMedicationModal = (props: Props) => {
    const { open } = props;
-   const { data, state, handlers } = useAddMedicationModalLogic(props);
+   const { data, state, handlers } = useCreateOrEditMedicationModalLogic(props);
 
    return (
       <CustomModal
@@ -23,7 +24,7 @@ const AddMedicationModal = (props: Props) => {
          confirmButtonProps={{
             disabled: data.isDisabledConfirmButton,
             loading: state.isAdding,
-            onClick: handlers.handleAddMedication,
+            onClick: handlers.handleConfirm,
          }}
       >
          <Grid2 container spacing={2}>
@@ -39,4 +40,4 @@ const AddMedicationModal = (props: Props) => {
    );
 };
 
-export default AddMedicationModal;
+export default CreateOrEditMedicationModal;

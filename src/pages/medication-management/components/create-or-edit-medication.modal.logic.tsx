@@ -1,5 +1,5 @@
 import { capitalize, FormControl, InputLabel, MenuItem, ModalProps, Select, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
    initialMedicationData,
    Medication,
@@ -11,12 +11,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
 type Props = Omit<ModalProps, 'children'> & {
+   selectedMedication: Medication | null;
    onClose: () => void;
-   onAddMedication: (newMed: Medication) => void;
+   onConfirm: (medication: Medication) => void;
 };
 
-export const useAddMedicationModalLogic = (props: Props) => {
-   const { onClose, onAddMedication } = props;
+export const useCreateOrEditMedicationModalLogic = (props: Props) => {
+   const { open, selectedMedication, onClose, onConfirm } = props;
 
    const [medication, setMedication] = useState(initialMedicationData);
    const [isAdding, setIsAdding] = useState(false);
@@ -28,8 +29,8 @@ export const useAddMedicationModalLogic = (props: Props) => {
       onClose();
    };
 
-   const handleAddMedication = () => {
-      onAddMedication(medication);
+   const handleConfirm = () => {
+      onConfirm(medication);
       handleClose();
    };
 
@@ -86,10 +87,16 @@ export const useAddMedicationModalLogic = (props: Props) => {
       }
    };
 
+   useEffect(() => {
+      if (!selectedMedication || !open) return;
+
+      setMedication(selectedMedication);
+   }, [open]);
+
    return {
       data: { isDisabledConfirmButton },
       state: { medication, isAdding },
       setState: { setMedication, setIsAdding },
-      handlers: { handleClose, handleRenderField, handleAddMedication },
+      handlers: { handleClose, handleRenderField, handleConfirm },
    };
 };
