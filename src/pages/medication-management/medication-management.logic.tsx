@@ -4,6 +4,9 @@ import { Medication, medicationManagementMock } from './medication-management.mo
 export const useMedicationManagementLogic = () => {
    const [isShownModal, setIsShownModal] = useState(false);
    const [rows, setRows] = useState(medicationManagementMock);
+   const [searchKeyword, setSearchKeyword] = useState('');
+
+   const filteredList = rows.filter((med) => med.name.toLowerCase().includes(searchKeyword.toLowerCase()));
 
    const handleCloseModal = () => {
       setIsShownModal(false);
@@ -29,9 +32,9 @@ export const useMedicationManagementLogic = () => {
    };
 
    return {
-      data: {},
-      state: { isShownModal, rows },
-      setState: { setIsShownModal, setRows },
+      data: { filteredList },
+      state: { isShownModal, rows, searchKeyword },
+      setState: { setIsShownModal, setRows, setSearchKeyword },
       handlers: { handleCloseModal, handleAddMedication },
    };
 };

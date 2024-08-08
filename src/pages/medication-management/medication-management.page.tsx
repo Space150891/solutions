@@ -1,5 +1,6 @@
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
 import { IPages } from '../../types/common.types';
+import { Search as SearchIcon } from '@mui/icons-material';
 
 import { medicationManagementColumnsConfig } from './medication-management.columns';
 
@@ -11,7 +12,7 @@ import AddMedicationModal from './components/add-medication.modal';
 export default function MedicationManagementPage() {
    const sx = useMedicationMaganementStyle();
    const columns = medicationManagementColumnsConfig();
-   const { state, setState, handlers } = useMedicationManagementLogic();
+   const { data, state, setState, handlers } = useMedicationManagementLogic();
 
    return (
       <>
@@ -30,7 +31,22 @@ export default function MedicationManagementPage() {
                   </Button>
                </Box>
 
-               <CustomDataGrid columns={columns} rows={state.rows} />
+               <TextField
+                  sx={{ my: 3 }}
+                  fullWidth
+                  value={state.searchKeyword}
+                  onChange={(e) => setState.setSearchKeyword(e.target.value)}
+                  label='Search medication'
+                  InputProps={{
+                     startAdornment: (
+                        <InputAdornment position='start'>
+                           <SearchIcon />
+                        </InputAdornment>
+                     ),
+                  }}
+               />
+
+               <CustomDataGrid columns={columns} rows={data.filteredList} />
             </CardContent>
          </Card>
       </>

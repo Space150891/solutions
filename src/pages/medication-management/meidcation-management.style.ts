@@ -6,7 +6,6 @@ export const useMedicationMaganementStyle = () => {
    };
 
    const header: SxProps = {
-      mb: 2.25,
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
