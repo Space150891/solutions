@@ -11,14 +11,14 @@ type Props = Omit<ModalProps, 'children'> & {
 };
 
 const CreateOrEditMedicationModal = (props: Props) => {
-   const { open } = props;
+   const { open, selectedMedication } = props;
    const { data, state, handlers } = useCreateOrEditMedicationModalLogic(props);
 
    return (
       <CustomModal
          open={open}
          onClose={handlers.handleClose}
-         heading={'Add new medication'}
+         heading={selectedMedication ? `Edit medication (ID: ${selectedMedication.id})` : 'Create medication'}
          additionalStyles={{ maxWidth: '700px' }}
          cancelButtonProps={{ onClick: handlers.handleClose }}
          confirmButtonProps={{

@@ -11,14 +11,14 @@ type Props = Omit<ModalProps, 'children'> & {
 };
 
 const CreateOrEditMedicationInventoryModal = (props: Props) => {
-   const { open } = props;
+   const { open, selectedItem } = props;
    const { data, state, handlers } = useCreateOrEditMedicationInventoryModalLogic(props);
 
    return (
       <CustomModal
          open={open}
          onClose={handlers.handleClose}
-         heading={'Add new item to inventory'}
+         heading={selectedItem ? `Edit item (ID: ${selectedItem.id})` : 'Create item'}
          additionalStyles={{ maxWidth: '700px' }}
          cancelButtonProps={{ onClick: handlers.handleClose }}
          confirmButtonProps={{
