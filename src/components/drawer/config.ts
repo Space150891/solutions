@@ -78,4 +78,9 @@ export const config = [
       path: paths.medicationInventory,
       name: IPages.MEDICATION_INVENTORY,
    },
+   {
+      id: 16,
+      path: paths.taskManagement,
+      name: IPages.TASK_MANAGEMENT,
+   },
 ];

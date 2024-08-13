@@ -11,6 +11,19 @@ export type Medication = {
    duration: string;
 };
 
+export const medicationManagementMock: Medication[] = [
+   {
+      id: 1,
+      name: 'Gerbion',
+      startDate: '2010-07-29T02:11:46Z',
+      stopDate: '2010-08-29T02:11:46Z',
+      dosageInstructions: 'icelandic moss: 6 mg/ml',
+      form: 'syrup',
+      frequency: '1 time per day',
+      duration: '30 mins',
+   },
+];
+
 export const initialMedicationData: Medication = {
    id: 0,
    name: '',
@@ -36,17 +49,4 @@ export const newMedicationFields: {
    { label: 'Form', field: 'form', type: 'select' },
    { label: 'Duration', field: 'duration', type: 'input' },
    { label: 'Frequency', field: 'frequency', type: 'input' },
-];
-
-export const medicationManagementMock: Medication[] = [
-   {
-      id: 1,
-      name: 'Gerbion',
-      startDate: '2010-07-29T02:11:46Z',
-      stopDate: '2010-08-29T02:11:46Z',
-      dosageInstructions: 'icelandic moss: 6 mg/ml',
-      form: 'syrup',
-      frequency: '1 time per day',
-      duration: '30 mins',
-   },
 ];

@@ -20,6 +20,7 @@ import LaboratoryAnalysis from '../pages/laboratory-analysis/laboratory-analysis
 import TreatmentDocumentation from '../pages/treatment-documentation/treatment-documentation.page';
 import MedicationManagementPage from '../pages/medication-management/medication-management.page';
 import MedicationInventoryPage from '../pages/medication-inventory/medication-inventory.page';
+import TaskManagementPage from '../pages/task-management/task-management.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -116,6 +117,11 @@ export const routesData: RouteObject[] = [
             id: '25-medicationInventory',
             path: paths.medicationInventory,
             element: <MedicationInventoryPage />,
+         },
+         {
+            id: '26-taskManagement',
+            path: paths.taskManagement,
+            element: <TaskManagementPage />,
          },
       ],
    },
