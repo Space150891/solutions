@@ -1,8 +1,8 @@
 import { Box, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
-import { IPages } from '../../types/common.types';
+import { IPages } from '../../../types/common.types';
 import { Search as SearchIcon } from '@mui/icons-material';
 
-import CustomDataGrid from '../../components/custom-data-grid/custom-data-grid.component';
+import CustomDataGrid from '../../../components/custom-data-grid/custom-data-grid.component';
 import { useMedicationMaganementStyle } from './meidcation-management.style';
 import { useMedicationManagementLogic } from './medication-management.logic';
 import CreateOrEditMedicationModal from './components/create-or-edit-medication.modal';

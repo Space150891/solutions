@@ -43,6 +43,7 @@ export const useCreateOrEditMedicationModalLogic = (props: Props) => {
                      Form
                   </InputLabel>
                   <Select
+                     name={field}
                      variant='standard'
                      labelId='form-select-label'
                      id='form-select'
@@ -63,6 +64,7 @@ export const useCreateOrEditMedicationModalLogic = (props: Props) => {
             return (
                <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
+                     name={field}
                      ampm={false}
                      slotProps={{ textField: { variant: 'standard' } }}
                      format='hh:mm DD.MM.YYYY'
@@ -76,6 +78,7 @@ export const useCreateOrEditMedicationModalLogic = (props: Props) => {
          default:
             return (
                <TextField
+                  name={field}
                   sx={{ mb: 1 }}
                   label={label}
                   variant='standard'

@@ -3,7 +3,7 @@ import type { GridColDef } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 
 import { MedicationInventoryItem } from './medication-inventory.mock';
-import { SetState } from '../../types/common.types';
+import { SetState } from '../../../types/common.types';
 
 export const medicationInventoryColumnsConfig = (
    setSelectedItem: SetState<MedicationInventoryItem | null>,

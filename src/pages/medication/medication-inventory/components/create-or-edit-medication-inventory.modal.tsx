@@ -1,5 +1,5 @@
 import { ModalProps } from '@mui/material';
-import CustomModal from '../../../components/custom-modal/custom-modal';
+import CustomModal from '../../../../components/custom-modal/custom-modal';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import { MedicationInventoryItem, newMedicationInventoryItemFields } from '../medication-inventory.mock';
 import { useCreateOrEditMedicationInventoryModalLogic } from './create-or-edit-medication-inventory.moda..logic';

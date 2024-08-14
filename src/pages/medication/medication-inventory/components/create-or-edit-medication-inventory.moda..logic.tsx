@@ -38,6 +38,7 @@ export const useCreateOrEditMedicationInventoryModalLogic = (props: Props) => {
          case 'radio':
             return (
                <FormControlLabel
+                  name={field}
                   control={
                      <Checkbox
                         checked={!!medication[field] ?? false}
@@ -50,6 +51,7 @@ export const useCreateOrEditMedicationInventoryModalLogic = (props: Props) => {
          default:
             return (
                <TextField
+                  name={field}
                   sx={{ mb: 1 }}
                   label={label}
                   variant='standard'

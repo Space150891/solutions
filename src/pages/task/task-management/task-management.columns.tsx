@@ -1,9 +1,10 @@
 import { Task } from './task-management.mock';
-import { formatDate } from '../../utils/format-date.util';
+import { formatDate } from '../../../utils/format-date.util';
 
 import { IconButton, Typography } from '@mui/material';
 import type { GridColDef } from '@mui/x-data-grid';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Link } from 'react-router-dom';
 
 export const medicationManagementColumnsConfig = () => {
    const columns: GridColDef<Task>[] = [
@@ -44,11 +45,13 @@ export const medicationManagementColumnsConfig = () => {
 
          sortable: false,
          filterable: false,
-         renderCell: () => {
+         renderCell: ({ row }) => {
             return (
-               <IconButton>
-                  <ArrowForwardIcon />
-               </IconButton>
+               <Link to={`${row.id}`}>
+                  <IconButton>
+                     <ArrowForwardIcon />
+                  </IconButton>
+               </Link>
             );
          },
       },

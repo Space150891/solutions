@@ -1,8 +1,8 @@
 import { Card, CardContent, Box, Typography, Button } from '@mui/material';
-import { IPages } from '../../types/common.types';
+import { IPages } from '../../../types/common.types';
 import { useTaskManagementStyle } from './task-management.style';
 import { useTaskManagementLogic } from './task-management.logic';
-import CustomDataGrid from '../../components/custom-data-grid/custom-data-grid.component';
+import CustomDataGrid from '../../../components/custom-data-grid/custom-data-grid.component';
 
 export default function TaskManagementPage() {
    const sx = useTaskManagementStyle();
