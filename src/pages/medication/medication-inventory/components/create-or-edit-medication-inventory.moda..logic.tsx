@@ -29,8 +29,13 @@ export const useCreateOrEditMedicationInventoryModalLogic = (props: Props) => {
    };
 
    const handleConfirm = () => {
-      onConfirm(medication);
-      handleClose();
+      setIsAdding(true);
+
+      setTimeout(() => {
+         onConfirm(medication);
+         handleClose();
+         setIsAdding(false);
+      }, 1500);
    };
 
    const handleRenderField = ({ field, label, type }: (typeof newMedicationInventoryItemFields)[0]) => {
@@ -38,6 +43,7 @@ export const useCreateOrEditMedicationInventoryModalLogic = (props: Props) => {
          case 'radio':
             return (
                <FormControlLabel
+                  name={field}
                   control={
                      <Checkbox
                         checked={!!medication[field] ?? false}
@@ -50,6 +56,7 @@ export const useCreateOrEditMedicationInventoryModalLogic = (props: Props) => {
          default:
             return (
                <TextField
+                  name={field}
                   sx={{ mb: 1 }}
                   label={label}
                   variant='standard'

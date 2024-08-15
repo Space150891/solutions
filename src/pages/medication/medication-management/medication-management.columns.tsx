@@ -1,9 +1,9 @@
 import { Medication } from './medication-management.mock';
-import { formatDate } from '../../utils/format-date.util';
+import { formatDate } from '../../../utils/format-date.util';
 import { IconButton, Typography } from '@mui/material';
 import type { GridColDef } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
-import { SetState } from '../../types/common.types';
+import { SetState } from '../../../types/common.types';
 
 export const medicationManagementColumnsConfig = (setSelectedMedication: SetState<Medication | null>) => {
    const columns: GridColDef<Medication>[] = [

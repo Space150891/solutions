@@ -18,4 +18,6 @@ export const paths = Object.freeze({
    medicationManagement: '/cubex/medication-management',
    medicationInventory: '/cubex/medication-inventory',
    taskManagement: '/cubex/task-management',
+   taskView: '/cubex/task-management/view/:task_id',
+   taskCreate: '/cubex/task-management/create',
 });

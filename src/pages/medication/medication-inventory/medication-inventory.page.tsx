@@ -1,6 +1,6 @@
 import { Card, CardContent, Box, Typography, TextField, InputAdornment, Button } from '@mui/material';
-import CustomDataGrid from '../../components/custom-data-grid/custom-data-grid.component';
-import { IPages } from '../../types/common.types';
+import CustomDataGrid from '../../../components/custom-data-grid/custom-data-grid.component';
+import { IPages } from '../../../types/common.types';
 import { useMedicationInventoryStyle } from './medication-inventory.style';
 import { useMedicationInventoryLogic } from './medication-inventory.logic';
 import { Search as SearchIcon } from '@mui/icons-material';
