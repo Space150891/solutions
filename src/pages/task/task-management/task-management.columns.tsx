@@ -47,7 +47,7 @@ export const medicationManagementColumnsConfig = () => {
          filterable: false,
          renderCell: ({ row }) => {
             return (
-               <Link to={`${row.id}`}>
+               <Link to={`view/${row.id}`}>
                   <IconButton>
                      <ArrowForwardIcon />
                   </IconButton>

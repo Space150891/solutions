@@ -29,8 +29,13 @@ export const useCreateOrEditMedicationInventoryModalLogic = (props: Props) => {
    };
 
    const handleConfirm = () => {
-      onConfirm(medication);
-      handleClose();
+      setIsAdding(true);
+
+      setTimeout(() => {
+         onConfirm(medication);
+         handleClose();
+         setIsAdding(false);
+      }, 1500);
    };
 
    const handleRenderField = ({ field, label, type }: (typeof newMedicationInventoryItemFields)[0]) => {

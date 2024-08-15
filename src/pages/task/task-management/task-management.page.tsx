@@ -3,6 +3,7 @@ import { IPages } from '../../../types/common.types';
 import { useTaskManagementStyle } from './task-management.style';
 import { useTaskManagementLogic } from './task-management.logic';
 import CustomDataGrid from '../../../components/custom-data-grid/custom-data-grid.component';
+import { Link } from 'react-router-dom';
 
 export default function TaskManagementPage() {
    const sx = useTaskManagementStyle();
@@ -13,10 +14,7 @@ export default function TaskManagementPage() {
          <CardContent sx={sx.cardContent}>
             <Box sx={sx.header}>
                <Typography variant='h5'>{IPages.TASK_MANAGEMENT.toUpperCase()}</Typography>
-               <Button
-                  //  onClick={() => setState.setIsShownModal(true)}
-                  variant='contained'
-               >
+               <Button component={Link} to='create' variant='contained'>
                   Create new task
                </Button>
             </Box>

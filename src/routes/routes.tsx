@@ -129,6 +129,11 @@ export const routesData: RouteObject[] = [
             path: paths.taskView,
             element: <TaskViewPage />,
          },
+         {
+            id: '27-taskCreate',
+            path: paths.taskCreate,
+            element: <TaskViewPage />,
+         },
       ],
    },
 ];

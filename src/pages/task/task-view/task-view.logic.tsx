@@ -11,12 +11,22 @@ import dayjs from 'dayjs';
 
 export const useTaskViewLogic = () => {
    const { task_id } = useParams();
-
    const navigate = useNavigate();
+   const pageIsCreate = location.href.includes('create');
 
+   const [isLoading, setIsLoading] = useState(false);
    const [task, setTask] = useState(
       task_id ? taskManagementMock.find((t) => t.id === +task_id) ?? initialTaskData : initialTaskData,
    );
+
+   const handleConfirm = () => {
+      setIsLoading(true);
+
+      setTimeout(() => {
+         setIsLoading(false);
+         navigate(-1);
+      }, 1500);
+   };
 
    const handleRenderField = ({ field, label, type }: (typeof newTaskFields)[0]) => {
       switch (type) {
@@ -68,10 +78,10 @@ export const useTaskViewLogic = () => {
       }
    };
 
-   if (!task_id) {
-      alert('Task not found');
-      navigate(-1);
-   }
-
-   return { data: { navigate }, state: { task }, setState: {}, handlers: { handleRenderField } };
+   return {
+      data: { pageIsCreate, navigate },
+      state: { task, isLoading },
+      setState: {},
+      handlers: { handleRenderField, handleConfirm },
+   };
 };
