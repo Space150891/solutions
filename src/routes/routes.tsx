@@ -22,6 +22,7 @@ import MedicationManagementPage from '../pages/medication/medication-management/
 import MedicationInventoryPage from '../pages/medication/medication-inventory/medication-inventory.page';
 import TaskManagementPage from '../pages/task/task-management/task-management.page';
 import TaskViewPage from '../pages/task/task-view/task-view.page';
+import UserActivityPage from '../pages/user-activity/user-activity.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -130,9 +131,14 @@ export const routesData: RouteObject[] = [
             element: <TaskViewPage />,
          },
          {
-            id: '27-taskCreate',
+            id: '28-taskCreate',
             path: paths.taskCreate,
             element: <TaskViewPage />,
+         },
+         {
+            id: '29-userActivity',
+            path: paths.userActivity,
+            element: <UserActivityPage />,
          },
       ],
    },

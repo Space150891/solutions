@@ -83,4 +83,9 @@ export const config = [
       path: paths.taskManagement,
       name: IPages.TASK_MANAGEMENT,
    },
+   {
+      id: 17,
+      path: paths.userActivity,
+      name: IPages.USER_ACTIVITY,
+   },
 ];
