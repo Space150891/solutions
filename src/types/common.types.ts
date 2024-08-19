@@ -15,6 +15,7 @@ export enum IPages {
    MEDICATION_MANAGEMENT = 'Medication Management',
    MEDICATION_INVENTORY = 'Medication Inventory',
    TASK_MANAGEMENT = 'Task Management',
+   USER_ACTIVITY = 'User Activity',
 }
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;

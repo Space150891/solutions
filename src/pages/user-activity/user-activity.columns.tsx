@@ -1,13 +1,13 @@
-import { Task } from './task-management.mock';
-import { formatDate } from '../../../utils/format-date.util';
-
-import { IconButton, Typography } from '@mui/material';
-import type { GridColDef } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
+import { UserActivity } from './user-activity.mock';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Link } from 'react-router-dom';
 
-export const taskManagementColumnsConfig = () => {
-   const columns: GridColDef<Task>[] = [
+import { Typography, IconButton } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { formatDate } from '../../utils/format-date.util';
+
+export const userActivityColumnsConfig = () => {
+   const columns: GridColDef<UserActivity>[] = [
       {
          field: 'id',
          headerName: 'ID',
@@ -37,7 +37,12 @@ export const taskManagementColumnsConfig = () => {
          flex: 1,
          renderCell: ({ row }) => <Typography>{formatDate(row.endDate)}</Typography>,
       },
-
+      {
+         field: 'createdAt',
+         headerName: 'Created at',
+         flex: 1,
+         renderCell: ({ row }) => <Typography>{formatDate(row.createdAt)}</Typography>,
+      },
       {
          field: 'edit',
          headerName: 'View',
@@ -47,7 +52,7 @@ export const taskManagementColumnsConfig = () => {
          filterable: false,
          renderCell: ({ row }) => {
             return (
-               <Link to={`view/${row.id}`}>
+               <Link to={`/cubex/task-management/view/${row.id}`}>
                   <IconButton>
                      <ArrowForwardIcon />
                   </IconButton>
