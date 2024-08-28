@@ -21,4 +21,5 @@ export const paths = Object.freeze({
    taskView: '/cubex/task-management/view/:task_id',
    taskCreate: '/cubex/task-management/create',
    userActivity: '/cubex/user-activity',
+   templateManagement: '/cubex/template-management',
 });

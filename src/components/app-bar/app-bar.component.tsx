@@ -40,7 +40,7 @@ export const AppbarComponent = () => {
          }}
       >
          <Box display='flex' alignItems='center' gap={1.25}>
-            <IconButton onClick={() => dispatch(handleDrawer(true))}>
+            <IconButton color='inherit' onClick={() => dispatch(handleDrawer(true))}>
                <MenuIcon />
             </IconButton>
             <Link to={paths.cubex}>C U B E X</Link>
