@@ -1,31 +1,43 @@
 import { Box, Button, Card, CardContent } from '@mui/material';
-import { useState } from 'react';
-import { FormBuilderPostData, ReactFormBuilder, ReactFormGenerator } from 'react-form-builder2';
+
+import { ReactFormBuilder, ReactFormGenerator } from 'react-form-builder2';
 import 'react-form-builder2/dist/app.css';
 
-export default function TemplateManagementPage() {
-   const [formData, setFormData] = useState<FormBuilderPostData>({ task_data: [] });
-   const [isShownPreview, setIsShownPreview] = useState(false);
+import { useTemplateManagementLogic } from './template-management.logic';
+import { useTemplateManagementStyle } from './template-management.style';
 
-   const handleUpdateForm = (data: FormBuilderPostData) => {
-      console.log(data);
-      setFormData(data);
-   };
+export default function TemplateManagementPage() {
+   const { handlers, setState, state } = useTemplateManagementLogic();
+   const sx = useTemplateManagementStyle();
 
    return (
-      <Box sx={{ width: '100%', maxWidth: '1250px', margin: '0 auto', py: 3 }}>
-         <Button sx={{ mb: 2 }} variant='contained' onClick={() => setIsShownPreview((prev) => !prev)}>
-            Open form {isShownPreview ? 'builder' : 'preview'}
+      <Box sx={sx.wrapper}>
+         <Button
+            sx={sx.button}
+            disabled={state.formData.task_data.length === 0}
+            variant='contained'
+            onClick={() => setState.setIsShownPreview((prev) => !prev)}
+         >
+            Open form {state.isShownPreview ? 'builder' : 'preview'}
          </Button>
 
-         <Box className={isShownPreview ? 'hidden' : ''}>
-            <ReactFormBuilder onPost={handleUpdateForm} />
+         <Box className={sx.builder(state.isShownPreview)}>
+            <ReactFormBuilder data={state.formData.task_data} editMode onPost={handlers.handleUpdateForm} />
          </Box>
 
-         {isShownPreview ? (
+         {state.isShownPreview ? (
             <Card>
                <CardContent>
-                  <ReactFormGenerator data={formData.task_data} form_action='' form_method='' />
+                  <ReactFormGenerator
+                     submitButton={
+                        <Button onClick={(data) => console.log(data)} variant='contained'>
+                           Save
+                        </Button>
+                     }
+                     data={state.formData.task_data}
+                     form_action=''
+                     form_method=''
+                  />
                </CardContent>
             </Card>
          ) : null}

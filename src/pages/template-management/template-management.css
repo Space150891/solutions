@@ -23,3 +23,15 @@
    max-height: 703px;
    overflow: auto;
 }
+
+.react-form-builder-form .rfb-item {
+   padding: 8px 0 !important;
+}
+.react-form-builder-form .rfb-item .row {
+   border: none !important;
+   padding: 0 !important;
+}
+
+.react-form-builder-form .rfb-item label span {
+   padding: 0 !important;
+}
