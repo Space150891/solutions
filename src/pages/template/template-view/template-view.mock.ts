@@ -1,7 +1,17 @@
 // import { FormBuilderPostData } from 'react-form-builder2';
 
-export const TEMPLATE_MANAGEMENT_MOCK = {
-   task_data: [
+export type Template = {
+   id: number;
+   creator: string;
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   fields: any[];
+   // templateData: FormBuilderPostData;
+};
+
+const templateData =
+   // {
+   //    task_data:
+   [
       {
          id: '4E995CAC-4EE1-4C3A-A3D0-D4FA4F5C839F',
          element: 'Header',
@@ -253,5 +263,12 @@ export const TEMPLATE_MANAGEMENT_MOCK = {
          parentId: 'AB552FAB-3E29-4158-BD5A-08FC1407C99D',
          parentIndex: 3,
       },
-   ],
+   ];
+// };
+
+export const initialTemplate: Template = {
+   id: 0,
+   creator: 'John Doe',
+   fields: [],
 };
+export const templateViewMock: Template[] = [{ id: 1, creator: 'John Doe', fields: templateData }];

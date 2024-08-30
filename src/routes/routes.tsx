@@ -23,7 +23,7 @@ import MedicationInventoryPage from '../pages/medication/medication-inventory/me
 import TaskManagementPage from '../pages/task/task-management/task-management.page';
 import TaskViewPage from '../pages/task/task-view/task-view.page';
 import UserActivityPage from '../pages/user-activity/user-activity.page';
-import TemplateManagementPage from '../pages/template-management/template-management.page';
+import TemplateViewPage from '../pages/template/template-view/template-view.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -142,9 +142,9 @@ export const routesData: RouteObject[] = [
             element: <UserActivityPage />,
          },
          {
-            id: '30-templateManagement',
-            path: paths.templateManagement,
-            element: <TemplateManagementPage />,
+            id: '30-templateView',
+            path: paths.templateView,
+            element: <TemplateViewPage />,
          },
       ],
    },
