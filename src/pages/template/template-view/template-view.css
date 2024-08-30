@@ -1,0 +1,37 @@
+.react-form-builder.clearfix > div {
+   display: flex;
+   gap: 10px;
+}
+
+.react-form-builder-preview {
+   overflow: auto;
+   min-height: none;
+   max-height: 750px;
+}
+
+.react-form-builder-toolbar {
+   margin-top: 0 !important;
+   max-height: 750px;
+}
+
+.react-form-builder-toolbar h4 {
+   font-size: 2rem;
+   margin-bottom: 10px;
+}
+
+.react-form-builder-toolbar > ul {
+   max-height: 703px;
+   overflow: auto;
+}
+
+.react-form-builder-form .rfb-item {
+   padding: 8px 0 !important;
+}
+.react-form-builder-form .rfb-item .row {
+   border: none !important;
+   padding: 0 !important;
+}
+
+.react-form-builder-form .rfb-item label span {
+   padding: 0 !important;
+}

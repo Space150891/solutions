@@ -88,4 +88,9 @@ export const config = [
       path: paths.userActivity,
       name: IPages.USER_ACTIVITY,
    },
+   {
+      id: 18,
+      path: paths.templateManagement,
+      name: IPages.TEMPLATE_MANAGEMENT,
+   },
 ];
