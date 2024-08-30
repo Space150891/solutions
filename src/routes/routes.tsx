@@ -24,6 +24,7 @@ import TaskManagementPage from '../pages/task/task-management/task-management.pa
 import TaskViewPage from '../pages/task/task-view/task-view.page';
 import UserActivityPage from '../pages/user-activity/user-activity.page';
 import TemplateViewPage from '../pages/template/template-view/template-view.page';
+import TemplateManagementPage from '../pages/template/template-management/template-management.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -142,7 +143,12 @@ export const routesData: RouteObject[] = [
             element: <UserActivityPage />,
          },
          {
-            id: '30-templateView',
+            id: '30-templateManagement',
+            path: paths.templateManagement,
+            element: <TemplateManagementPage />,
+         },
+         {
+            id: '31-templateView',
             path: paths.templateView,
             element: <TemplateViewPage />,
          },

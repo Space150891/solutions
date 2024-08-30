@@ -39,7 +39,10 @@ export default function TemplateViewPage() {
                <CardContent>
                   <ReactFormGenerator
                      submitButton={
-                        <Button onClick={(data) => console.log(data)} variant='contained'>
+                        <Button
+                           onClick={() => data.navigate('/cubex/template-management')}
+                           variant='contained'
+                        >
                            Save
                         </Button>
                      }
