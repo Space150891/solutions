@@ -80,6 +80,8 @@ export default function PatientGrid({ patients }: PatientGridProps) {
                               <CardContent>
                                  <Typography>Email: {patient.email}</Typography>
                                  <Typography>Phone: {patient.phone_number}</Typography>
+                                 <Typography>Eb: {patient.eb}</Typography>
+                                 <Typography>Preferences: {patient.preferences}</Typography>
                               </CardContent>
                            </Collapse>
                         </Card>

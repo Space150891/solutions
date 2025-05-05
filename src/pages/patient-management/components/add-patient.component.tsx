@@ -18,12 +18,15 @@ import { IManagePatient } from '../mock';
 type AddPatientProps = {
    addPatient: (newPatient: IManagePatient) => void;
    nextId: number;
+   toggleOpen: () => void;
 };
 
-export default function AddPatient({ addPatient, nextId }: AddPatientProps) {
+export default function AddPatient({ addPatient, nextId, toggleOpen }: AddPatientProps) {
    const [firstName, setFirstName] = useState<string>('');
    const [lastName, setLastName] = useState<string>('');
    const [email, setEmail] = useState<string>('');
+   const [eb, setEb] = useState<string>('');
+   const [preferences, setPreferences] = useState<string>('');
    const [phoneNumber, setPhoneNumber] = useState<string>('');
    const [gender, setGender] = useState<'Male' | 'Female' | null>(null);
    const [dob, setDob] = useState<Dayjs | null>(null);
@@ -33,11 +36,13 @@ export default function AddPatient({ addPatient, nextId }: AddPatientProps) {
          setGender(event.target.value);
       }
    };
-   const handlSubmit = () => {
+   const handleSubmit = () => {
       if (
          firstName.trim().length === 0 ||
          lastName.trim().length === 0 ||
          email.trim().length === 0 ||
+         eb.trim().length === 0 ||
+         preferences.trim().length === 0 ||
          phoneNumber.trim().length === 0 ||
          !gender ||
          !dob
@@ -48,11 +53,14 @@ export default function AddPatient({ addPatient, nextId }: AddPatientProps) {
          id: nextId + 1,
          first_name: firstName,
          last_name: lastName,
-         email: email,
+         email,
+         eb,
+         preferences,
          gender,
          phone_number: phoneNumber,
          date_of_birth: dob.format('MM/DD/YYYY'),
       });
+      toggleOpen();
    };
 
    return (
@@ -128,8 +136,30 @@ export default function AddPatient({ addPatient, nextId }: AddPatientProps) {
                   }}
                />
             </Grid2>
+            <Grid2 xs={3}>
+               <TextField
+                  label='EB'
+                  variant='outlined'
+                  fullWidth
+                  value={eb}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                     setEb(event.target.value);
+                  }}
+               />
+            </Grid2>
+            <Grid2 xs={3}>
+               <TextField
+                  label='Preferences'
+                  variant='outlined'
+                  fullWidth
+                  value={preferences}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                     setPreferences(event.target.value);
+                  }}
+               />
+            </Grid2>
             <Grid2 xs={6}>
-               <Button variant='contained' fullWidth onClick={handlSubmit}>
+               <Button variant='contained' fullWidth onClick={handleSubmit}>
                   Add New Patient
                </Button>
             </Grid2>

@@ -6,6 +6,8 @@ export type IManagePatient = {
    email: string;
    gender: string;
    date_of_birth: string;
+   eb: string;
+   preferences: string;
 };
 
 export const managedPatients: IManagePatient[] = [
@@ -17,6 +19,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+66 (453) 135-0752',
       date_of_birth: '01/02/1995',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 2,
@@ -26,6 +30,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+57 (101) 824-4679',
       date_of_birth: '11/21/1967',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 3,
@@ -35,6 +41,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+976 (799) 886-8384',
       date_of_birth: '09/08/1999',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 4,
@@ -44,6 +52,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+855 (307) 640-1485',
       date_of_birth: '06/19/1961',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 5,
@@ -53,6 +63,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+55 (431) 569-7820',
       date_of_birth: '04/03/1961',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 6,
@@ -62,6 +74,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+351 (477) 491-2860',
       date_of_birth: '01/08/2010',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 7,
@@ -71,6 +85,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+86 (621) 875-3253',
       date_of_birth: '09/20/1989',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 8,
@@ -80,6 +96,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+351 (974) 808-5021',
       date_of_birth: '09/08/1963',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 9,
@@ -89,6 +107,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+7 (951) 252-0691',
       date_of_birth: '03/03/1985',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 10,
@@ -98,6 +118,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+86 (395) 911-9803',
       date_of_birth: '11/27/1984',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 11,
@@ -107,6 +129,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+86 (785) 896-3295',
       date_of_birth: '05/24/2008',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 12,
@@ -116,6 +140,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+86 (145) 981-2145',
       date_of_birth: '06/08/2007',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 13,
@@ -125,6 +151,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+509 (208) 720-2449',
       date_of_birth: '05/06/2015',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 14,
@@ -134,6 +162,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+380 (573) 104-1660',
       date_of_birth: '03/05/1990',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 15,
@@ -143,6 +173,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+63 (915) 456-7550',
       date_of_birth: '09/09/2002',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 16,
@@ -152,6 +184,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+685 (987) 108-8080',
       date_of_birth: '12/29/2005',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 17,
@@ -161,6 +195,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+62 (836) 810-4398',
       date_of_birth: '04/11/1994',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 18,
@@ -170,6 +206,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+380 (284) 861-4952',
       date_of_birth: '01/22/2015',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 19,
@@ -179,6 +217,8 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Male',
       phone_number: '+420 (708) 986-3343',
       date_of_birth: '01/10/1997',
+      eb: 'none special needs',
+      preferences: 'none',
    },
    {
       id: 20,
@@ -188,5 +228,7 @@ export const managedPatients: IManagePatient[] = [
       gender: 'Female',
       phone_number: '+355 (223) 310-8043',
       date_of_birth: '07/11/1960',
+      eb: 'none special needs',
+      preferences: 'none',
    },
 ];

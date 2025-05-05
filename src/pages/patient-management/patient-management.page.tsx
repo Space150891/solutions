@@ -22,7 +22,7 @@ export default function PatientManagement() {
                {open ? 'Back' : 'Add new patient'}
             </Button>
          </Box>
-         {open && <AddPatient addPatient={addPatient} nextId={patients.length} />}
+         {open && <AddPatient toggleOpen={toggleOpen} addPatient={addPatient} nextId={patients.length} />}
          {!open && <PatientGrid patients={patients} />}
       </Box>
    );
