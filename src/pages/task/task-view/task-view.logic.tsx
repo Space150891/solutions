@@ -25,6 +25,42 @@ export const useTaskViewLogic = () => {
       setTimeout(() => {
          setIsLoading(false);
          navigate(-1);
+         setTimeout(() => {
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '24px';
+            notification.style.right = '24px';
+            notification.style.backgroundColor = '#2e7d32';
+            notification.style.color = 'white';
+            notification.style.padding = '16px 24px';
+            notification.style.borderRadius = '8px';
+            notification.style.zIndex = '9999';
+            notification.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            notification.style.fontFamily = 'Roboto, sans-serif';
+            notification.style.fontSize = '14px';
+            notification.style.fontWeight = '500';
+            notification.style.display = 'flex';
+            notification.style.alignItems = 'center';
+            notification.style.gap = '8px';
+            notification.style.transition = 'opacity 0.3s ease-in-out';
+            notification.style.opacity = '0';
+            notification.innerHTML = `
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="white"/>
+               </svg>
+               Task saved successfully
+            `;
+            document.body.appendChild(notification);
+            requestAnimationFrame(() => {
+               notification.style.opacity = '1';
+            });
+            setTimeout(() => {
+               notification.style.opacity = '0';
+               setTimeout(() => {
+                  document.body.removeChild(notification);
+               }, 300);
+            }, 3000);
+         }, 100);
       }, 1500);
    };
 
@@ -36,7 +72,7 @@ export const useTaskViewLogic = () => {
                   name={field}
                   control={
                      <Checkbox
-                        checked={!!task[field] ?? false}
+                        checked={task[field] as boolean}
                         onChange={(e) => setTask((prev) => ({ ...prev, [field]: e.target.checked }))}
                      />
                   }
