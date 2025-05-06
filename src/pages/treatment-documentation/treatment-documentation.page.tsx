@@ -15,11 +15,7 @@ import {
    useTheme,
 } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 import { useState } from 'react';
-import { boolean } from 'zod';
 
 const initDevelopmentalHistory = {
    milestonesInTime: false,
@@ -51,6 +47,11 @@ export default function TreatmentDocumentation() {
    const [medications, setMedications] = useState('');
    const [developmentalHistory, setDevelopmentalHistory] = useState(initDevelopmentalHistory);
    const [educationalStatus, setEducationalStatus] = useState('');
+   const [treatmentType, setTreatmentType] = useState('');
+   const [treatmentStatus, setTreatmentStatus] = useState('');
+   const [referralSource, setReferralSource] = useState('');
+   const [accident, setAccident] = useState('');
+   const [disease, setDisease] = useState('');
 
    //BEHAVIOR
    const [attendingSkills, setAttendingSkills] = useState('adequate');
@@ -102,6 +103,55 @@ export default function TreatmentDocumentation() {
             </RadioGroup>
          </Box>
          <Box>
+            <Box display='flex' gap={2} mb={2}>
+               <FormControl sx={{ minWidth: 200 }}>
+                  <InputLabel id='treatment-type-label'>Treatment Type</InputLabel>
+                  <Select
+                     labelId='treatment-type-label'
+                     id='treatment-type'
+                     value={treatmentType}
+                     label='Treatment Type'
+                     onChange={(e) => setTreatmentType(e.target.value)}
+                  >
+                     <MenuItem value='accident'>Accident</MenuItem>
+                     <MenuItem value='illness'>Illness</MenuItem>
+                     <MenuItem value='chronic'>Chronic</MenuItem>
+                     <MenuItem value='preventive'>Preventive</MenuItem>
+                     <MenuItem value='rehabilitation'>Rehabilitation</MenuItem>
+                     <MenuItem value='surgical'>Surgical</MenuItem>
+                  </Select>
+               </FormControl>
+               <FormControl sx={{ minWidth: 200 }}>
+                  <InputLabel id='treatment-status-label'>Treatment Status</InputLabel>
+                  <Select
+                     labelId='treatment-status-label'
+                     id='treatment-status'
+                     value={treatmentStatus}
+                     label='Treatment Status'
+                     onChange={(e) => setTreatmentStatus(e.target.value)}
+                  >
+                     <MenuItem value='completed'>Completed</MenuItem>
+                     <MenuItem value='ongoing'>Ongoing</MenuItem>
+                     <MenuItem value='discontinued'>Discontinued</MenuItem>
+                     <MenuItem value='follow-up required'>Follow-up required</MenuItem>
+                  </Select>
+               </FormControl>
+               <FormControl sx={{ minWidth: 200 }}>
+                  <InputLabel id='referral-source-label'>Referral Source</InputLabel>
+                  <Select
+                     labelId='referral-source-label'
+                     id='referral-source'
+                     value={referralSource}
+                     label='Referral Source'
+                     onChange={(e) => setReferralSource(e.target.value)}
+                  >
+                     <MenuItem value='self'>Self</MenuItem>
+                     <MenuItem value='physician'>Physician</MenuItem>
+                     <MenuItem value='school'>School</MenuItem>
+                     <MenuItem value='emergency'>Emergency</MenuItem>
+                  </Select>
+               </FormControl>
+            </Box>
             <Box display='flex' gap={2}>
                <Grid2 container columns={2} spacing={2}>
                   <Grid2 xs={1}>
@@ -240,6 +290,34 @@ export default function TreatmentDocumentation() {
                      }}
                      value={medications || ''}
                      onChange={(e) => handleChangeString(e.target.value, setMedications)}
+                  />
+               </Grid2>
+               <Grid2 xs={2}>
+                  <TextField
+                     variant='outlined'
+                     label='Accident'
+                     fullWidth
+                     multiline
+                     rows={4}
+                     sx={{
+                        '& .MuiInputBase-root': { height: 'initial !important' },
+                     }}
+                     value={accident || ''}
+                     onChange={(e) => handleChangeString(e.target.value, setAccident)}
+                  />
+               </Grid2>
+               <Grid2 xs={2}>
+                  <TextField
+                     variant='outlined'
+                     label='Disease'
+                     fullWidth
+                     multiline
+                     rows={4}
+                     sx={{
+                        '& .MuiInputBase-root': { height: 'initial !important' },
+                     }}
+                     value={disease || ''}
+                     onChange={(e) => handleChangeString(e.target.value, setDisease)}
                   />
                </Grid2>
                <Grid2 xs={2}>
