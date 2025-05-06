@@ -1,5 +1,5 @@
 import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
-import { AppBar, Box, IconButton, Menu, MenuItem } from '@mui/material';
+import { AppBar, Box, IconButton, Menu, MenuItem, DialogTitle } from '@mui/material';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -71,6 +71,9 @@ export const AppbarComponent = () => {
                open={Boolean(anchorEl)}
                onClose={handleClose}
             >
+               <DialogTitle style={{ textAlign: 'center', padding: '0 12px' }}>
+                  {localStorage.getItem('userEmail')?.split('@')[0]}
+               </DialogTitle>
                <MenuItem onClick={handleClose}>Profile</MenuItem>
                <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>

@@ -8,11 +8,11 @@ export type ILoginFields = {
 const Cubex = z
    .string()
    .trim()
-   .refine((value) => value === 'admin' || value === 'user', {
-      message: 'Field must be "admin" or "user"',
+   .refine((value) => value.length >= 8, {
+      message: 'Password cannot be less than 8 characters',
    });
 
 export const loginSchema = z.object({
-   email: Cubex,
+   email: z.string().email({ message: 'Invalid email address' }),
    password: Cubex,
 });

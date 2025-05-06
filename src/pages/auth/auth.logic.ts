@@ -19,8 +19,12 @@ export const useAuthLogic = () => {
       mode: 'onSubmit',
    });
 
+   function saveUserEmail(email: string) {
+      localStorage.setItem('userEmail', email);
+   }
+
    const onSubmitLoginData = (data: ILoginFields) => {
-      console.log('login-data:', data);
+      saveUserEmail(data.email);
       navigate(paths.cubex);
    };
 
