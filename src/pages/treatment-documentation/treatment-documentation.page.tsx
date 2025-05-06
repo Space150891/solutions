@@ -50,6 +50,7 @@ export default function TreatmentDocumentation() {
    const [treatmentType, setTreatmentType] = useState('');
    const [treatmentStatus, setTreatmentStatus] = useState('');
    const [referralSource, setReferralSource] = useState('');
+   const [categories, setCategories] = useState('');
    const [accident, setAccident] = useState('');
    const [disease, setDisease] = useState('');
 
@@ -149,6 +150,22 @@ export default function TreatmentDocumentation() {
                      <MenuItem value='physician'>Physician</MenuItem>
                      <MenuItem value='school'>School</MenuItem>
                      <MenuItem value='emergency'>Emergency</MenuItem>
+                  </Select>
+               </FormControl>
+
+               <FormControl sx={{ minWidth: 200 }}>
+                  <InputLabel id='referral-source-label'>Categories</InputLabel>
+                  <Select
+                     labelId='categories-source-label'
+                     id='categories-source'
+                     value={categories}
+                     label='Categories'
+                     onChange={(e) => setCategories(e.target.value)}
+                  >
+                     <MenuItem value='articles'>Articles</MenuItem>
+                     <MenuItem value='purchases'>Purchases</MenuItem>
+                     <MenuItem value='patientTreatment'>Patient treatment</MenuItem>
+                     <MenuItem value='articleAssortment'>Article assortment</MenuItem>
                   </Select>
                </FormControl>
             </Box>
