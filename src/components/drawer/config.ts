@@ -93,4 +93,9 @@ export const config = [
       path: paths.templateManagement,
       name: IPages.TEMPLATE_MANAGEMENT,
    },
+   {
+      id: 19,
+      path: paths.email,
+      name: IPages.EMAIL,
+   },
 ];

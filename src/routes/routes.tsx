@@ -25,6 +25,7 @@ import TaskViewPage from '../pages/task/task-view/task-view.page';
 import UserActivityPage from '../pages/user-activity/user-activity.page';
 import TemplateViewPage from '../pages/template/template-view/template-view.page';
 import TemplateManagementPage from '../pages/template/template-management/template-management.page';
+import Email from '../pages/email/email.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -151,6 +152,11 @@ export const routesData: RouteObject[] = [
             id: '31-templateView',
             path: paths.templateView,
             element: <TemplateViewPage />,
+         },
+         {
+            id: '32-email',
+            path: paths.email,
+            element: <Email />,
          },
       ],
    },
