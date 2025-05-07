@@ -29,13 +29,25 @@ export default function BillingPage() {
 
    const [procedures, setProcedures] = useState<ManualProcedure[]>([]);
    const [form, setForm] = useState({ description: '', frequency: '', amount: '' });
+   const [errors, setErrors] = useState({ description: false, frequency: false, amount: false });
 
    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setForm({ ...form, [e.target.name]: e.target.value });
+      setErrors({ ...errors, [e.target.name]: false }); // Скидаємо помилку при зміні
    };
 
    const handleAdd = () => {
-      if (!form.description || !form.amount) return;
+      const newErrors = {
+         description: form.description.trim() === '',
+         frequency: form.frequency.trim() === '',
+         amount: form.amount.trim() === '' || isNaN(Number(form.amount)) || Number(form.amount) <= 0,
+      };
+
+      setErrors(newErrors);
+
+      const hasError = Object.values(newErrors).some((e) => e);
+      if (hasError) return;
+
       setProcedures([
          ...procedures,
          {
@@ -104,6 +116,8 @@ export default function BillingPage() {
                      value={form.description}
                      onChange={handleChange}
                      sx={{ minWidth: 180 }}
+                     error={errors.description}
+                     helperText={errors.description && 'Description is required'}
                   />
                   <TextField
                      label='Frequency'
@@ -112,6 +126,8 @@ export default function BillingPage() {
                      onChange={handleChange}
                      sx={{ minWidth: 120 }}
                      placeholder='e.g. 2x/week'
+                     error={errors.frequency}
+                     helperText={errors.frequency && 'Frequency is required'}
                   />
                   <TextField
                      label='Amount'
@@ -120,6 +136,8 @@ export default function BillingPage() {
                      value={form.amount}
                      onChange={handleChange}
                      sx={{ minWidth: 100 }}
+                     error={errors.amount}
+                     helperText={errors.amount && 'Enter a valid amount > 0'}
                   />
                   <Button variant='contained' onClick={handleAdd}>
                      Add

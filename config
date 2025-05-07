@@ -1,0 +1,7 @@
+Host github_Space150891
+HostName github.com
+User git
+IdentityFile ~/.ssh/id_rsa_Space150891
+
+
+
