@@ -15,6 +15,7 @@ import { IPages } from '../../types/common.types';
 import { FormEvent, useState } from 'react';
 import { useMultistepForm } from './multistep-form.logic';
 import { UserForm } from './components/use-form.component';
+import { PersonalForm } from './components/personal-form.component';
 import { type FormData } from './types';
 import { AddressForm } from './components/account-form.component';
 
@@ -28,6 +29,10 @@ const INITIAL_DATA: FormData = {
    zip: '',
    email: '',
    password: '',
+   phone: '',
+   gender: '',
+   nationality: '',
+   occupation: '',
 };
 
 export default function MultistepFormPage() {
@@ -43,8 +48,7 @@ export default function MultistepFormPage() {
    const { steps, currentStepIndex, step, isFirstStep, isLastStep, back, next, goTo } = useMultistepForm([
       <UserForm {...data} updateFields={updateFields} />,
       <AddressForm {...data} updateFields={updateFields} />,
-      <div>s</div>,
-      <div>s</div>,
+      <PersonalForm {...data} updateFields={updateFields} />,
    ]);
 
    function onSubmit(e: FormEvent) {
@@ -53,7 +57,7 @@ export default function MultistepFormPage() {
    }
 
    function StepIcon(props: StepIconProps) {
-      const { active, completed, className } = props;
+      const { active, className } = props;
 
       return <Filter9PlusRounded sx={{ color: active ? '#fff' : 'black' }} className={className} />;
    }

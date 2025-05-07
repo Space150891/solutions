@@ -8,4 +8,8 @@ export type FormData = {
    zip: string;
    email: string;
    password: string;
+   phone: string;
+   gender: string;
+   nationality: string;
+   occupation: string;
 };

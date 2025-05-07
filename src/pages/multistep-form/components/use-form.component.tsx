@@ -1,5 +1,6 @@
-import { Box, Button, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { FormWrapper } from './form-wrapper.component';
+import './form.css';
 
 type UserData = {
    firstName: string;
@@ -15,25 +16,27 @@ export const UserForm = ({ firstName, lastName, age, updateFields }: UserFormPro
    return (
       <>
          <FormWrapper title='User Details'>
-            <label>First Name</label>
+            <label className='label-form'>First Name</label>
             <TextField
                autoFocus
                type='text'
                value={firstName}
                onChange={(e) => updateFields({ firstName: e.target.value })}
             />
-            <label>Last Name</label>
+            <label className='label-form'>Last Name</label>
             <TextField
                type='text'
                value={lastName}
                onChange={(e) => updateFields({ lastName: e.target.value })}
             />
-            <label>Age</label>
-            <TextField type='number' value={age} onChange={(e) => updateFields({ age: e.target.value })} />
+            <label className='label-form'>Age</label>
+            <TextField
+               type='number'
+               value={age}
+               onChange={(e) => updateFields({ age: e.target.value })}
+               inputProps={{ min: 0 }}
+            />
          </FormWrapper>
-         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: '1rem' }}>
-            <Button>Next</Button>
-         </Box>
       </>
    );
 };

@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
 import { FormWrapper } from './form-wrapper.component';
+import './form.css';
 
 type AddressData = {
    street: string;
@@ -15,18 +16,18 @@ type AddressFormProps = AddressData & {
 export function AddressForm({ street, city, state, zip, updateFields }: AddressFormProps) {
    return (
       <FormWrapper title='Address'>
-         <label>Street</label>
+         <label className='label-form'>Street</label>
          <TextField
             autoFocus
             type='text'
             value={street}
             onChange={(e) => updateFields({ street: e.target.value })}
          />
-         <label>City</label>
+         <label className='label-form'>City</label>
          <TextField type='text' value={city} onChange={(e) => updateFields({ city: e.target.value })} />
-         <label>State</label>
+         <label className='label-form'>State</label>
          <TextField type='text' value={state} onChange={(e) => updateFields({ state: e.target.value })} />
-         <label>Zip</label>
+         <label className='label-form'>Zip</label>
          <TextField type='text' value={zip} onChange={(e) => updateFields({ zip: e.target.value })} />
       </FormWrapper>
    );
