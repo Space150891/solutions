@@ -1,306 +1,167 @@
+import React, { useState, useEffect } from 'react';
 import {
    Box,
    Button,
    Card,
    CardContent,
-   Grid,
-   MenuItem,
+   Typography,
+   TextField,
    Table,
    TableBody,
    TableCell,
    TableContainer,
    TableHead,
    TableRow,
-   TextField,
-   Typography,
+   Paper,
 } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { paths } from '../../routes/paths';
+import { useLocation } from 'react-router-dom';
 
-interface BillingItem {
+interface ManualProcedure {
    id: string;
    description: string;
-   quantity: number;
-   unitPrice: number;
-   total: number;
-}
-
-interface TreatmentData {
-   patient: {
-      name: string;
-      dob: string;
-      age: string;
-      nativeLanguage: string;
-      primaryDiagnosis: string;
-      secondaryDiagnosis: string;
-      doctor: string;
-   };
-   treatment: {
-      documentName: string;
-      evaluationDate: string;
-      duration: number;
-      significantHistory: string;
-      medicalHistory: string;
-      medications: string;
-      developmentalHistory: Record<string, unknown>;
-      educationalStatus: string;
-      behavioral: {
-         attendingSkills: string;
-         coop: string;
-         awarenessOfOthers: string;
-         prognosisForICF: string;
-         responseRate: string;
-         socialInteractions: string;
-         reliabilityOfScores: string;
-         levelOfActivity: string;
-         communicativeIntent: string;
-         awarenessOfEnvironmentalEvents: string;
-      };
-   };
+   frequency: string;
+   amount: number;
 }
 
 export default function BillingPage() {
-   const navigate = useNavigate();
    const location = useLocation();
-   const treatmentData = location.state as TreatmentData;
+   const { treatmentType, treatmentStatus, referralSource } = location.state || {};
 
-   const [billingItems, setBillingItems] = useState<BillingItem[]>([
-      {
-         id: '1',
-         description: 'Initial Evaluation',
-         quantity: 1,
-         unitPrice: 150,
-         total: 150,
-      },
-   ]);
+   const [procedures, setProcedures] = useState<ManualProcedure[]>([]);
+   const [form, setForm] = useState({ description: '', frequency: '', amount: '' });
 
-   const [paymentMethod, setPaymentMethod] = useState('insurance');
-   const [insuranceDetails, setInsuranceDetails] = useState({
-      provider: '',
-      policyNumber: '',
-      groupNumber: '',
-   });
-   const [notes, setNotes] = useState('');
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setForm({ ...form, [e.target.name]: e.target.value });
+   };
+
+   const handleAdd = () => {
+      if (!form.description || !form.amount) return;
+      setProcedures([
+         ...procedures,
+         {
+            id: (procedures.length + 1).toString(),
+            description: form.description,
+            frequency: form.frequency,
+            amount: Number(form.amount),
+         },
+      ]);
+      setForm({ description: '', frequency: '', amount: '' });
+   };
+
+   const calculatePrice = (type: string, status: string, referral: string): number => {
+      let price = 0;
+      if (type === 'accident') price += 150;
+      else if (type === 'illness') price += 100;
+      else if (type === 'chronic') price += 200;
+      else if (type === 'preventive') price += 80;
+      else if (type === 'rehabilitation') price += 120;
+      else if (type === 'surgical') price += 300;
+
+      if (status === 'completed') price += 0;
+      else if (status === 'ongoing') price += 50;
+      else if (status === 'discontinued') price -= 20;
+      else if (status === 'follow-up required') price += 30;
+
+      if (referral === 'self') price += 0;
+      else if (referral === 'physician') price += 20;
+      else if (referral === 'school') price += 10;
+      else if (referral === 'emergency') price += 40;
+
+      return price;
+   };
 
    useEffect(() => {
-      if (!treatmentData) {
-         navigate(paths.treatmentDocumentation);
+      if (treatmentType && treatmentStatus && referralSource) {
+         const autoAmount = calculatePrice(treatmentType, treatmentStatus, referralSource);
+
+         setProcedures([
+            {
+               id: 'auto',
+               description: `Auto-generated: ${treatmentType}, ${treatmentStatus}, ${referralSource}`,
+               frequency: '1x',
+               amount: autoAmount,
+            },
+         ]);
       }
-   }, [treatmentData, navigate]);
+   }, [treatmentType, treatmentStatus, referralSource]);
 
-   const handleAddItem = () => {
-      const newItem: BillingItem = {
-         id: (billingItems.length + 1).toString(),
-         description: '',
-         quantity: 1,
-         unitPrice: 0,
-         total: 0,
-      };
-      setBillingItems([...billingItems, newItem]);
-   };
-
-   const handleUpdateItem = (id: string, field: keyof BillingItem, value: string | number) => {
-      setBillingItems(
-         billingItems.map((item) => {
-            if (item.id === id) {
-               const updatedItem = { ...item, [field]: value };
-               if (field === 'quantity' || field === 'unitPrice') {
-                  updatedItem.total = updatedItem.quantity * updatedItem.unitPrice;
-               }
-               return updatedItem;
-            }
-            return item;
-         }),
-      );
-   };
-
-   const handleSubmit = () => {
-      const billingDetails = {
-         patient: treatmentData.patient,
-         treatment: treatmentData.treatment,
-         billingItems,
-         total: billingItems.reduce((sum, item) => sum + item.total, 0),
-         paymentMethod,
-         insuranceDetails: paymentMethod === 'insurance' ? insuranceDetails : undefined,
-         notes,
-      };
-
-      navigate(paths.confirmation, { state: billingDetails });
-   };
-
-   if (!treatmentData) {
-      return null;
-   }
+   const total = procedures.reduce((sum, p) => sum + p.amount, 0);
 
    return (
-      <Box p={3}>
-         <Typography variant='h4' gutterBottom>
+      <Box p={3} maxWidth={800} mx='auto'>
+         <Typography variant='h4' mb={3}>
             Billing
          </Typography>
-
-         {/* Patient Information */}
          <Card sx={{ mb: 3 }}>
             <CardContent>
-               <Typography variant='h6' gutterBottom>
-                  Patient Information
+               <Typography variant='h6' mb={2}>
+                  Add Manual Procedure
                </Typography>
-               <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                     <Typography>Name: {treatmentData.patient.name}</Typography>
-                     <Typography>Date of Birth: {treatmentData.patient.dob}</Typography>
-                     <Typography>Age: {treatmentData.patient.age}</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                     <Typography>Primary Diagnosis: {treatmentData.patient.primaryDiagnosis}</Typography>
-                     <Typography>Secondary Diagnosis: {treatmentData.patient.secondaryDiagnosis}</Typography>
-                     <Typography>Doctor: {treatmentData.patient.doctor}</Typography>
-                  </Grid>
-               </Grid>
-            </CardContent>
-         </Card>
-
-         {/* Billing Items */}
-         <Card sx={{ mb: 3 }}>
-            <CardContent>
-               <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
-                  <Typography variant='h6'>Billing Items</Typography>
-                  <Button variant='outlined' onClick={handleAddItem}>
-                     Add Item
+               <Box display='flex' gap={2} alignItems='center' flexWrap='wrap'>
+                  <TextField
+                     label='Description'
+                     name='description'
+                     value={form.description}
+                     onChange={handleChange}
+                     sx={{ minWidth: 180 }}
+                  />
+                  <TextField
+                     label='Frequency'
+                     name='frequency'
+                     value={form.frequency}
+                     onChange={handleChange}
+                     sx={{ minWidth: 120 }}
+                     placeholder='e.g. 2x/week'
+                  />
+                  <TextField
+                     label='Amount'
+                     name='amount'
+                     type='number'
+                     value={form.amount}
+                     onChange={handleChange}
+                     sx={{ minWidth: 100 }}
+                  />
+                  <Button variant='contained' onClick={handleAdd}>
+                     Add
                   </Button>
                </Box>
-               <TableContainer>
+            </CardContent>
+         </Card>
+         <Card>
+            <CardContent>
+               <Typography variant='h6' mb={2}>
+                  Procedures
+               </Typography>
+               <TableContainer component={Paper}>
                   <Table>
                      <TableHead>
                         <TableRow>
                            <TableCell>Description</TableCell>
-                           <TableCell align='right'>Quantity</TableCell>
-                           <TableCell align='right'>Unit Price</TableCell>
-                           <TableCell align='right'>Total</TableCell>
+                           <TableCell>Frequency</TableCell>
+                           <TableCell align='right'>Amount</TableCell>
                         </TableRow>
                      </TableHead>
                      <TableBody>
-                        {billingItems.map((item) => (
-                           <TableRow key={item.id}>
-                              <TableCell>
-                                 <TextField
-                                    fullWidth
-                                    value={item.description}
-                                    onChange={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
-                                 />
-                              </TableCell>
-                              <TableCell align='right'>
-                                 <TextField
-                                    type='number'
-                                    value={item.quantity}
-                                    onChange={(e) =>
-                                       handleUpdateItem(item.id, 'quantity', parseInt(e.target.value))
-                                    }
-                                    sx={{ width: '80px' }}
-                                 />
-                              </TableCell>
-                              <TableCell align='right'>
-                                 <TextField
-                                    type='number'
-                                    value={item.unitPrice}
-                                    onChange={(e) =>
-                                       handleUpdateItem(item.id, 'unitPrice', parseFloat(e.target.value))
-                                    }
-                                    sx={{ width: '100px' }}
-                                 />
-                              </TableCell>
-                              <TableCell align='right'>${item.total.toFixed(2)}</TableCell>
+                        {procedures.map((proc) => (
+                           <TableRow key={proc.id}>
+                              <TableCell>{proc.description}</TableCell>
+                              <TableCell>{proc.frequency}</TableCell>
+                              <TableCell align='right'>{proc.amount.toFixed(2)}</TableCell>
                            </TableRow>
                         ))}
+                        <TableRow>
+                           <TableCell colSpan={2} align='right'>
+                              <b>Total</b>
+                           </TableCell>
+                           <TableCell align='right'>
+                              <b>{total.toFixed(2)}</b>
+                           </TableCell>
+                        </TableRow>
                      </TableBody>
                   </Table>
                </TableContainer>
             </CardContent>
          </Card>
-
-         {/* Payment Information */}
-         <Card sx={{ mb: 3 }}>
-            <CardContent>
-               <Typography variant='h6' gutterBottom>
-                  Payment Information
-               </Typography>
-               <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                     <TextField
-                        select
-                        fullWidth
-                        label='Payment Method'
-                        value={paymentMethod}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                     >
-                        <MenuItem value='insurance'>Insurance</MenuItem>
-                        <MenuItem value='cash'>Cash</MenuItem>
-                        <MenuItem value='credit'>Credit Card</MenuItem>
-                     </TextField>
-                  </Grid>
-                  {paymentMethod === 'insurance' && (
-                     <>
-                        <Grid item xs={12} sm={4}>
-                           <TextField
-                              fullWidth
-                              label='Insurance Provider'
-                              value={insuranceDetails.provider}
-                              onChange={(e) =>
-                                 setInsuranceDetails({ ...insuranceDetails, provider: e.target.value })
-                              }
-                           />
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                           <TextField
-                              fullWidth
-                              label='Policy Number'
-                              value={insuranceDetails.policyNumber}
-                              onChange={(e) =>
-                                 setInsuranceDetails({ ...insuranceDetails, policyNumber: e.target.value })
-                              }
-                           />
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                           <TextField
-                              fullWidth
-                              label='Group Number'
-                              value={insuranceDetails.groupNumber}
-                              onChange={(e) =>
-                                 setInsuranceDetails({ ...insuranceDetails, groupNumber: e.target.value })
-                              }
-                           />
-                        </Grid>
-                     </>
-                  )}
-               </Grid>
-            </CardContent>
-         </Card>
-
-         {/* Additional Notes */}
-         <Card sx={{ mb: 3 }}>
-            <CardContent>
-               <Typography variant='h6' gutterBottom>
-                  Additional Notes
-               </Typography>
-               <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-               />
-            </CardContent>
-         </Card>
-
-         {/* Action Buttons */}
-         <Box display='flex' gap={2}>
-            <Button variant='contained' onClick={handleSubmit} sx={{ flex: 1 }}>
-               Submit Billing
-            </Button>
-            <Button variant='outlined' onClick={() => navigate(-1)} sx={{ flex: 1 }}>
-               Cancel
-            </Button>
-         </Box>
       </Box>
    );
 }

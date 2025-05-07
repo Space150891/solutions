@@ -15,6 +15,7 @@ import {
    useTheme,
 } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const initDevelopmentalHistory = {
@@ -67,6 +68,7 @@ export default function TreatmentDocumentation() {
    const [awarenessOfEnvironmentalEvents, setAwarenessOfEnvironmentalEvents] = useState('moderately');
 
    const theme = useTheme();
+   const navigate = useNavigate();
 
    const handleChangeString = (value: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
       setter(value);
@@ -79,6 +81,18 @@ export default function TreatmentDocumentation() {
    const handleDHChange = (name: string, value: string | boolean) => {
       setDevelopmentalHistory((prev) => ({ ...prev, [name]: value }));
    };
+
+   function redirectionForPayment(categories: string): void {
+      if (categories === 'patientTreatment') {
+         navigate('/cubex/billing', {
+            state: {
+               treatmentType,
+               treatmentStatus,
+               referralSource,
+            },
+         });
+      }
+   }
 
    return (
       <Box display='flex' flexDirection='column' p={3} gap={3}>
@@ -604,7 +618,9 @@ export default function TreatmentDocumentation() {
             </Grid2>
          </Box>
          <Box width='100%'>
-            <Button fullWidth>Save</Button>
+            <Button onClick={() => redirectionForPayment(categories)} fullWidth>
+               Save
+            </Button>
          </Box>
       </Box>
    );

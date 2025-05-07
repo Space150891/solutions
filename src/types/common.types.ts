@@ -19,6 +19,7 @@ export enum IPages {
    TEMPLATE_MANAGEMENT = 'Template Management',
    TEMPLATE_VIEW = 'Template View',
    EMAIL = 'Email',
+   BILLING = 'Billing',
 }
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
