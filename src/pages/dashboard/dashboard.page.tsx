@@ -25,6 +25,7 @@ import { MonthlyBarChart } from '../../components/charts/monthly-bar-chart.compo
 import { OrdersTable } from '../../components/tables/orders-table.component';
 import { ReportAreaChart } from '../../components/charts/report-area-chart.component';
 import { SalesColumnChart } from '../../components/charts/sales-column-chart.component';
+import { NumberColumnChart } from '../../components/charts/number-column-chart.component copy';
 
 const avatarSX = {
    width: 36,
@@ -335,6 +336,20 @@ export default function DashboardPage() {
                         Need Help?
                      </Button>
                   </Stack>
+               </MainCard>
+            </Grid>
+            <Grid item lg={7}>
+               <Stack alignItems='center' justifyContent='space-between' direction='row'>
+                  <Typography variant='h5'>Number of patients and where they are treated</Typography>
+               </Stack>
+               <MainCard sx={{ mt: 1.75 }}>
+                  <Stack spacing={1.5} sx={{ mb: -12 }}>
+                     <Typography variant='h6' color='secondary'>
+                        Number of patients
+                     </Typography>
+                     <Typography variant='h4'>2738</Typography>
+                  </Stack>
+                  <NumberColumnChart period={value} />
                </MainCard>
             </Grid>
          </Grid>
