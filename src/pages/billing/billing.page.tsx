@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import {
    Box,
    Button,
@@ -14,50 +14,98 @@ import {
    TableRow,
    Paper,
 } from '@mui/material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-interface ManualProcedure {
+interface Procedure {
    id: string;
    description: string;
    frequency: string;
    amount: number;
 }
 
+interface ProcedureForm {
+   description: string;
+   frequency: string;
+   amount: string;
+}
+
+interface FormErrors {
+   description: boolean;
+   frequency: boolean;
+   amount: boolean;
+}
+
+type FormType = 'manual' | 'lab' | 'meds';
+
 export default function BillingPage() {
    const location = useLocation();
    const { treatmentType, treatmentStatus, referralSource } = location.state || {};
 
-   const [procedures, setProcedures] = useState<ManualProcedure[]>([]);
-   const [form, setForm] = useState({ description: '', frequency: '', amount: '' });
-   const [errors, setErrors] = useState({ description: false, frequency: false, amount: false });
+   const [manualProcedures, setManualProcedures] = useState<Procedure[]>([]);
+   const [labProcedures, setLabProcedures] = useState<Procedure[]>([]);
+   const [medications, setMedications] = useState<Procedure[]>([]);
 
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setForm({ ...form, [e.target.name]: e.target.value });
-      setErrors({ ...errors, [e.target.name]: false }); // Скидаємо помилку при зміні
+   const [formManual, setFormManual] = useState<ProcedureForm>({
+      description: '',
+      frequency: '',
+      amount: '',
+   });
+   const [formLab, setFormLab] = useState<ProcedureForm>({ description: '', frequency: '', amount: '' });
+   const [formMeds, setFormMeds] = useState<ProcedureForm>({ description: '', frequency: '', amount: '' });
+
+   const [errors, setErrors] = useState<FormErrors>({ description: false, frequency: false, amount: false });
+
+   const handleChange = (e: ChangeEvent<HTMLInputElement>, formType: FormType) => {
+      const { name, value } = e.target;
+
+      const update = (prev: ProcedureForm): ProcedureForm => ({ ...prev, [name]: value });
+
+      if (formType === 'manual') setFormManual(update(formManual));
+      else if (formType === 'lab') setFormLab(update(formLab));
+      else setFormMeds(update(formMeds));
+
+      setErrors((prev) => ({ ...prev, [name]: false }));
    };
 
-   const handleAdd = () => {
-      const newErrors = {
+   const navigate = useNavigate();
+
+   const handlePayment = () => {
+      navigate('/cubex/treatment-documentation', {});
+   };
+
+   const validateForm = (form: ProcedureForm): FormErrors => {
+      return {
          description: form.description.trim() === '',
          frequency: form.frequency.trim() === '',
          amount: form.amount.trim() === '' || isNaN(Number(form.amount)) || Number(form.amount) <= 0,
       };
+   };
 
+   const handleAdd = (type: FormType) => {
+      const form = type === 'manual' ? formManual : type === 'lab' ? formLab : formMeds;
+      const newErrors = validateForm(form);
       setErrors(newErrors);
 
-      const hasError = Object.values(newErrors).some((e) => e);
+      const hasError = Object.values(newErrors).some(Boolean);
       if (hasError) return;
 
-      setProcedures([
-         ...procedures,
-         {
-            id: (procedures.length + 1).toString(),
-            description: form.description,
-            frequency: form.frequency,
-            amount: Number(form.amount),
-         },
-      ]);
-      setForm({ description: '', frequency: '', amount: '' });
+      const newItem: Procedure = {
+         id: `${type}-${Math.random().toString(36).substring(2, 9)}`,
+         description: form.description,
+         frequency: form.frequency,
+         amount: Number(form.amount),
+      };
+
+      if (type === 'manual') {
+         setManualProcedures([...manualProcedures, newItem]);
+         setFormManual({ description: '', frequency: '', amount: '' });
+      } else if (type === 'lab') {
+         setLabProcedures([...labProcedures, newItem]);
+         setFormLab({ description: '', frequency: '', amount: '' });
+      } else {
+         setMedications([...medications, newItem]);
+         setFormMeds({ description: '', frequency: '', amount: '' });
+      }
    };
 
    const calculatePrice = (type: string, status: string, referral: string): number => {
@@ -85,8 +133,7 @@ export default function BillingPage() {
    useEffect(() => {
       if (treatmentType && treatmentStatus && referralSource) {
          const autoAmount = calculatePrice(treatmentType, treatmentStatus, referralSource);
-
-         setProcedures([
+         setManualProcedures([
             {
                id: 'auto',
                description: `Auto-generated: ${treatmentType}, ${treatmentStatus}, ${referralSource}`,
@@ -97,89 +144,110 @@ export default function BillingPage() {
       }
    }, [treatmentType, treatmentStatus, referralSource]);
 
-   const total = procedures.reduce((sum, p) => sum + p.amount, 0);
+   const total = [...manualProcedures, ...labProcedures, ...medications].reduce(
+      (sum, p) => sum + p.amount,
+      0,
+   );
+
+   const renderForm = (title: string, form: ProcedureForm, formType: FormType) => (
+      <CardContent>
+         <Typography variant='h6' mb={2}>
+            {title}
+         </Typography>
+         <Box display='flex' gap={2} alignItems='center' flexWrap='wrap'>
+            <TextField
+               label='Description'
+               name='description'
+               value={form.description}
+               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, formType)}
+               sx={{ minWidth: 180 }}
+               error={errors.description}
+               helperText={errors.description && 'Required'}
+            />
+            <TextField
+               label='Frequency'
+               name='frequency'
+               value={form.frequency}
+               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, formType)}
+               sx={{ minWidth: 120 }}
+               error={errors.frequency}
+               helperText={errors.frequency && 'Required'}
+            />
+            <TextField
+               label='Amount'
+               name='amount'
+               type='number'
+               value={form.amount}
+               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, formType)}
+               sx={{ minWidth: 100 }}
+               error={errors.amount}
+               helperText={errors.amount && 'Enter valid amount > 0'}
+            />
+            <Button variant='contained' onClick={() => handleAdd(formType)}>
+               Add
+            </Button>
+         </Box>
+      </CardContent>
+   );
+
+   const renderTable = (title: string, items: Procedure[]) => (
+      <Card sx={{ mb: 3 }}>
+         <CardContent>
+            <Typography variant='h6' mb={2}>
+               {title}
+            </Typography>
+            <TableContainer component={Paper}>
+               <Table>
+                  <TableHead>
+                     <TableRow>
+                        <TableCell>Description</TableCell>
+                        <TableCell>Frequency</TableCell>
+                        <TableCell align='right'>Amount</TableCell>
+                     </TableRow>
+                  </TableHead>
+                  <TableBody>
+                     {items.map((item) => (
+                        <TableRow key={item.id}>
+                           <TableCell>{item.description}</TableCell>
+                           <TableCell>{item.frequency}</TableCell>
+                           <TableCell align='right'>{item.amount.toFixed(2)}</TableCell>
+                        </TableRow>
+                     ))}
+                  </TableBody>
+               </Table>
+            </TableContainer>
+         </CardContent>
+      </Card>
+   );
 
    return (
-      <Box p={3} maxWidth={800} mx='auto'>
+      <Box p={3} maxWidth={900} mx='auto'>
          <Typography variant='h4' mb={3}>
             Billing
          </Typography>
+
          <Card sx={{ mb: 3 }}>
-            <CardContent>
-               <Typography variant='h6' mb={2}>
-                  Add Manual Procedure
-               </Typography>
-               <Box display='flex' gap={2} alignItems='center' flexWrap='wrap'>
-                  <TextField
-                     label='Description'
-                     name='description'
-                     value={form.description}
-                     onChange={handleChange}
-                     sx={{ minWidth: 180 }}
-                     error={errors.description}
-                     helperText={errors.description && 'Description is required'}
-                  />
-                  <TextField
-                     label='Frequency'
-                     name='frequency'
-                     value={form.frequency}
-                     onChange={handleChange}
-                     sx={{ minWidth: 120 }}
-                     placeholder='e.g. 2x/week'
-                     error={errors.frequency}
-                     helperText={errors.frequency && 'Frequency is required'}
-                  />
-                  <TextField
-                     label='Amount'
-                     name='amount'
-                     type='number'
-                     value={form.amount}
-                     onChange={handleChange}
-                     sx={{ minWidth: 100 }}
-                     error={errors.amount}
-                     helperText={errors.amount && 'Enter a valid amount > 0'}
-                  />
-                  <Button variant='contained' onClick={handleAdd}>
-                     Add
-                  </Button>
-               </Box>
-            </CardContent>
+            {renderForm('Add Manual Procedure', formManual, 'manual')}
+            {renderForm('Add Laboratory Procedure', formLab, 'lab')}
+            {renderForm('Add Medication', formMeds, 'meds')}
          </Card>
+
+         {renderTable('Manual Procedures', manualProcedures)}
+         {renderTable('Laboratory Procedures', labProcedures)}
+         {renderTable('Medications', medications)}
+
          <Card>
             <CardContent>
-               <Typography variant='h6' mb={2}>
-                  Procedures
+               <Typography variant='h6' align='right'>
+                  <b>Total: {total.toFixed(2)}</b>
                </Typography>
-               <TableContainer component={Paper}>
-                  <Table>
-                     <TableHead>
-                        <TableRow>
-                           <TableCell>Description</TableCell>
-                           <TableCell>Frequency</TableCell>
-                           <TableCell align='right'>Amount</TableCell>
-                        </TableRow>
-                     </TableHead>
-                     <TableBody>
-                        {procedures.map((proc) => (
-                           <TableRow key={proc.id}>
-                              <TableCell>{proc.description}</TableCell>
-                              <TableCell>{proc.frequency}</TableCell>
-                              <TableCell align='right'>{proc.amount.toFixed(2)}</TableCell>
-                           </TableRow>
-                        ))}
-                        <TableRow>
-                           <TableCell colSpan={2} align='right'>
-                              <b>Total</b>
-                           </TableCell>
-                           <TableCell align='right'>
-                              <b>{total.toFixed(2)}</b>
-                           </TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
-               </TableContainer>
             </CardContent>
          </Card>
+         <Box display='flex' justifyContent='flex-end' mt={3}>
+            <Button variant='contained' color='primary' onClick={handlePayment}>
+               Pay
+            </Button>
+         </Box>
       </Box>
    );
 }
