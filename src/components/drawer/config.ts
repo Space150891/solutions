@@ -103,4 +103,9 @@ export const config = [
       path: paths.patientHistory,
       name: IPages.PATIENT_HISTORY,
    },
+   {
+      id: 21,
+      path: paths.survey,
+      name: IPages.SURVEY,
+   },
 ];

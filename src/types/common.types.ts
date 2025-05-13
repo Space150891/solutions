@@ -21,6 +21,7 @@ export enum IPages {
    EMAIL = 'Email',
    BILLING = 'Billing',
    PATIENT_HISTORY = 'Patient History',
+   SURVEY = 'Survey',
 }
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
