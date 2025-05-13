@@ -1,10 +1,10 @@
-import { Action, ThunkAction, combineReducers, configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers, Action, ThunkAction } from '@reduxjs/toolkit';
 import { appbarSlice } from '../components/app-bar/app-bar.store';
+import patientHistoryReducer from './slices/patientHistorySlice';
 
 const rootReducer = combineReducers({
    appbar: appbarSlice.reducer,
-   // causes: persistReducer(causesPersistConfig, causesSlice.reducer),
-   // common: commonSlice.reducer,
+   patientHistory: patientHistoryReducer,
 });
 
 const store = configureStore({

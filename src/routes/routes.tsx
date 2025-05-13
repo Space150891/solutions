@@ -27,6 +27,7 @@ import TemplateViewPage from '../pages/template/template-view/template-view.page
 import TemplateManagementPage from '../pages/template/template-management/template-management.page';
 import Email from '../pages/email/email.page';
 import BillingPage from '../pages/billing/billing.page';
+import PatientHistoryPage from '../pages/patient-history/patient-history.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -163,6 +164,11 @@ export const routesData: RouteObject[] = [
             id: '33-billing',
             path: paths.billing,
             element: <BillingPage />,
+         },
+         {
+            id: '34-billing',
+            path: paths.patientHistory,
+            element: <PatientHistoryPage />,
          },
       ],
    },
