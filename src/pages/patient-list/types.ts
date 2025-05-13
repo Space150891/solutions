@@ -24,6 +24,7 @@ export type IPatientDoctor = {
    doctor_id: string;
    gender?: IGender;
    locations?: string[];
+   description?: string; // Added description field for doctor details
 };
 
 export type IDoctorSpecialization =
