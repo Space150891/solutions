@@ -1,149 +1,47 @@
-import { useEffect, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
+import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import ReactApexChart from 'react-apexcharts';
-import { type IPeriod } from '../../pages/dashboard/dashboard.page';
+import { IPeriod } from '../../pages/medical-stats/medical-stats.page';
 
-const columnChartOptions: ApexOptions = {
-   chart: {
-      type: 'bar',
-      height: 430,
-      toolbar: {
-         show: false,
+interface Props {
+   period: IPeriod;
+}
+
+export const NumberColumnChart = ({ period }: Props) => {
+   const dataMap: Record<IPeriod, number[]> = {
+      today: [10, 15, 20, 18, 12, 14, 16],
+      week: [70, 80, 75, 90, 85, 95, 100],
+      month: [300, 320, 310, 400, 420, 390, 450],
+      year: [7823, 4532, 4561, 4080, 7433, 5853, 4673],
+   };
+
+   const options: ApexOptions = {
+      chart: {
+         type: 'bar',
+         toolbar: { show: false },
+         zoom: { enabled: false },
       },
-   },
-   plotOptions: {
-      bar: {
-         columnWidth: '30%',
-         borderRadius: 4,
+      plotOptions: {
+         bar: {
+            columnWidth: '45%',
+            borderRadius: 4,
+         },
       },
-   },
-   dataLabels: {
-      enabled: false,
-   },
-   stroke: {
-      show: true,
-      width: 8,
-      colors: ['transparent'],
-   },
-   xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-   },
-   yaxis: {
+      xaxis: {
+         categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      },
       title: {
-         text: '$ (thousands)',
+         text: 'Number of Patients',
+         align: 'left',
       },
-   },
-   fill: {
-      opacity: 1,
-   },
-   tooltip: {
-      y: {
-         formatter(val) {
-            return `$ ${val} thousands`;
-         },
-      },
-   },
-   legend: {
-      show: true,
-      fontFamily: `'Public Sans', sans-serif`,
-      offsetX: 10,
-      offsetY: 10,
-      labels: {
-         useSeriesColors: false,
-      },
-      markers: {
-         width: 16,
-         height: 16,
-         radius: 50,
-         offsetX: 2,
-         offsetY: 2,
-      },
-      itemMargin: {
-         horizontal: 15,
-         vertical: 50,
-      },
-   },
-   responsive: [
+      dataLabels: { enabled: false },
+   };
+
+   const series = [
       {
-         breakpoint: 600,
-         options: {
-            yaxis: {
-               show: false,
-            },
-         },
+         name: 'Patients',
+         data: dataMap[period] || [],
       },
-   ],
-};
+   ];
 
-export const NumberColumnChart = ({ period }: { period: IPeriod }) => {
-   const theme = useTheme();
-
-   const { primary, secondary } = theme.palette.text;
-   const line = theme.palette.divider;
-
-   const warning = theme.palette.warning.main;
-   const primaryMain = theme.palette.primary.main;
-   const successDark = theme.palette.success.dark;
-
-   const [options, setOptions] = useState(columnChartOptions);
-
-   const [series, setSeries] = useState<{ name: string; data: number[] }[]>([]);
-
-   useEffect(() => {
-      const fluCases = [120, 130, 150, 170, 160, 140];
-      const covidCases = [80, 95, 100, 110, 105, 98];
-      const fractures = [45, 95, 39, 200, 43, 80];
-
-      setSeries([
-         {
-            name: 'Flu',
-            data: fluCases.map((val) => Math.round(val)),
-         },
-         {
-            name: 'COVID-19',
-            data: covidCases.map((val) => Math.round(val)),
-         },
-         {
-            name: 'Fractures',
-            data: fractures.map((val) => Math.round(val)),
-         },
-      ]);
-   }, [period]);
-
-   useEffect(() => {
-      setOptions((prevState) => ({
-         ...prevState,
-         colors: [warning, primaryMain],
-         xaxis: {
-            labels: {
-               style: {
-                  colors: [secondary, secondary, secondary, secondary, secondary, secondary],
-               },
-            },
-         },
-         yaxis: {
-            labels: {
-               style: {
-                  colors: [secondary],
-               },
-            },
-         },
-         grid: {
-            borderColor: line,
-         },
-         tooltip: {
-            theme: 'light',
-         },
-         legend: {
-            position: 'top',
-            horizontalAlign: 'right',
-            labels: {
-               colors: 'grey.500',
-            },
-         },
-      }));
-   }, [primary, secondary, line, warning, primaryMain, successDark]);
-
-   return <ReactApexChart options={options} series={series} type='bar' height={430} />;
+   return <Chart options={options} series={series} type='bar' height={300} />;
 };

@@ -108,4 +108,9 @@ export const config = [
       path: paths.survey,
       name: IPages.SURVEY,
    },
+   {
+      id: 22,
+      path: paths.medicalStats,
+      name: IPages.MEDICAL_STATS,
+   },
 ];
