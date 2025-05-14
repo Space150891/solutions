@@ -98,4 +98,9 @@ export const config = [
       path: paths.email,
       name: IPages.EMAIL,
    },
+   {
+      id: 20,
+      path: paths.vitalMonitoring,
+      name: IPages.VITAL_MONITORING,
+   },
 ];

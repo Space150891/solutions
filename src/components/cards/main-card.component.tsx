@@ -71,10 +71,8 @@ export const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
                   title={<Typography variant='h3'>{title}</Typography>}
                   action={secondary}
                />
-            )}
-
-            {/* card content */}
-            {content && <CardContent sx={contentSX}>{children}</CardContent>}
+            )}            {/* card content */}
+            {content && <CardContent component="div" sx={contentSX}>{children}</CardContent>}
             {!content && children}
 
             {/* card footer - clipboard & highlighter  */}

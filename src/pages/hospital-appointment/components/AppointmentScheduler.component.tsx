@@ -39,7 +39,7 @@ export default function AppointmentScheduler({ doctors }: { doctors: IPatientDoc
                   setEvents={setEvents}
                />
             )}
-            viewerExtraComponent={(fields, event: IEvent) => {
+            viewerExtraComponent={(_fields, event: IEvent) => {
                return (
                   <div>
                      <p>Appointment</p>
