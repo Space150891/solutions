@@ -20,11 +20,18 @@ interface Task {
    title: string;
 }
 
+interface SocialEntry {
+   livingConditions: string;
+   supportSystem: string;
+   specialNotes: string;
+}
+
 interface PatientHistoryState {
    documentation: Documentation[];
    diagnosis: Diagnosis[];
    documents: Documents[];
    tasks: Task[];
+   socialInfo: SocialEntry[];
 }
 
 const initialState: PatientHistoryState = {
@@ -32,9 +39,10 @@ const initialState: PatientHistoryState = {
    diagnosis: [],
    documents: [],
    tasks: [],
+   socialInfo: [],
 };
 
-type HistoryType = 'documentation' | 'diagnosis' | 'documents' | 'tasks';
+type HistoryType = 'documentation' | 'diagnosis' | 'documents' | 'tasks' | 'socialInfo';
 
 interface AddInfPayload {
    type: HistoryType;

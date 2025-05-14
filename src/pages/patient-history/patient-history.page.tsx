@@ -4,6 +4,7 @@ import DocumentationTab from './tabs/documentation-tab';
 import DiagnosisTab from './tabs/diagnosis-tab';
 import DocumentsTab from './tabs/documents-tab';
 import TasksTab from './tabs/tasks-tab';
+import SocialInfoTab from './tabs/social-info-tab';
 import { IPages } from '../../types/common.types';
 
 export default function PatientHistoryPage() {
@@ -25,12 +26,14 @@ export default function PatientHistoryPage() {
             <Tab label='Diagnosis' />
             <Tab label='Documents' />
             <Tab label='Tasks' />
+            <Tab label='Social Info' />
          </Tabs>
 
          {currentTab === 0 && <DocumentationTab />}
          {currentTab === 1 && <DiagnosisTab />}
          {currentTab === 2 && <DocumentsTab />}
          {currentTab === 3 && <TasksTab />}
+         {currentTab === 4 && <SocialInfoTab />}
       </Box>
    );
 }
