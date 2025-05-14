@@ -25,4 +25,5 @@ export const paths = Object.freeze({
    templateView: '/cubex/template-management/view/:template_id',
    email: '/cubex/email',
    billing: '/cubex/billing',
+   patientHistory: '/cubex/patient-history',
 });

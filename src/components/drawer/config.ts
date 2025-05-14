@@ -98,4 +98,9 @@ export const config = [
       path: paths.email,
       name: IPages.EMAIL,
    },
+   {
+      id: 20,
+      path: paths.patientHistory,
+      name: IPages.PATIENT_HISTORY,
+   },
 ];
