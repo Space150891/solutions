@@ -27,4 +27,5 @@ export const paths = Object.freeze({
    billing: '/cubex/billing',
    patientHistory: '/cubex/patient-history',
    survey: '/cubex/survey',
+   medicalStats: '/cubex/medical-stats',
 });

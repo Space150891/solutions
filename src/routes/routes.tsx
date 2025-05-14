@@ -29,6 +29,7 @@ import Email from '../pages/email/email.page';
 import BillingPage from '../pages/billing/billing.page';
 import PatientHistoryPage from '../pages/patient-history/patient-history.page';
 import SurveyPage from '../pages/survey/survey.page';
+import MedicalStatsPage from '../pages/medical-stats/medical-stats.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -175,6 +176,11 @@ export const routesData: RouteObject[] = [
             id: '35-survey',
             path: paths.survey,
             element: <SurveyPage />,
+         },
+         {
+            id: '36-medicalStats',
+            path: paths.medicalStats,
+            element: <MedicalStatsPage />,
          },
       ],
    },
