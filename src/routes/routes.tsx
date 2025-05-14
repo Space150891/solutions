@@ -27,6 +27,9 @@ import TemplateViewPage from '../pages/template/template-view/template-view.page
 import TemplateManagementPage from '../pages/template/template-management/template-management.page';
 import Email from '../pages/email/email.page';
 import BillingPage from '../pages/billing/billing.page';
+import PatientHistoryPage from '../pages/patient-history/patient-history.page';
+import SurveyPage from '../pages/survey/survey.page';
+import MedicalStatsPage from '../pages/medical-stats/medical-stats.page';
 import VitalMonitoring from '../pages/vital-monitoring/vital-monitoring.page';
 
 export const routesData: RouteObject[] = [
@@ -166,7 +169,22 @@ export const routesData: RouteObject[] = [
             element: <BillingPage />,
          },
          {
-            id: '34-vitalMonitoring',
+            id: '34-billing',
+            path: paths.patientHistory,
+            element: <PatientHistoryPage />,
+         },
+         {
+            id: '35-survey',
+            path: paths.survey,
+            element: <SurveyPage />,
+         },
+         {
+            id: '36-medicalStats',
+            path: paths.medicalStats,
+            element: <MedicalStatsPage />,
+         },
+         {
+            id: '37-vitalMonitoring',
             path: paths.vitalMonitoring,
             element: <VitalMonitoring />,
          },
