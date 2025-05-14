@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 import { agendas } from './mock';
+import { IPages } from '../../types/common.types';
 
 interface Column {
    id: 'time' | 'task' | 'doctor' | 'patient' | 'outcome';
@@ -50,12 +51,10 @@ export default function Agenda() {
          height={'calc(100svh - 60px)'}
          maxHeight={'calc(100svh - 60px)'}
       >
-         <Box sx={{ backgroundColor: theme.palette.primary.main }} p={1} width='100%'>
-            <Typography variant='h4' color={theme.palette.primary.contrastText}>
-               Agenda
-            </Typography>
+         <Box sx={{ mb: 2.25 }}>
+            <Typography variant='h5'>{`${IPages.AGENDA.toUpperCase()}`}</Typography>
          </Box>
-         <Box p={4} width='100%'>
+         <Box padding='0 16px 16px 16px' width='100%'>
             <TableContainer sx={{ height: '100%' }}>
                <Table stickyHeader aria-label='sticky table'>
                   <TableHead>

@@ -1,5 +1,4 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { MainCard } from '../../components/cards/main-card.component';
+import { Box, Typography } from '@mui/material';
 import { IPages } from '../../types/common.types';
 import PatientCard from './components/patient-card.component';
 import AssignedDoctorCard from './components/assigned-doctor.component';

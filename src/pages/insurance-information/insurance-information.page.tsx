@@ -1,9 +1,8 @@
-import { TextField } from '@mui/material';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import InsuranceForm from './components/insurance-form.component';
 import { useState } from 'react';
 import { CountryType } from './mock';
-import InsuranceView from './components/insurance-view.component';
+// Import the updated component
+import InsuranceView from './components/insurance-view-updated.component';
 
 export default function InsuranceInformation() {
    const [country, setCountry] = useState<CountryType | null>(null);

@@ -9,33 +9,7 @@ import {
    Typography,
 } from '@mui/material';
 import { MainCard } from '../../../components/cards/main-card.component';
-
-const appointmentHistory = [
-   {
-      date: '2023-04-05',
-      doctorName: 'Dr. Jane Smith',
-      reason: 'Annual Check-up',
-      prescription: 'None',
-   },
-   {
-      date: '2023-03-15',
-      doctorName: 'Dr. John Doe',
-      reason: 'Flu Symptoms',
-      prescription: 'Antiviral medication',
-   },
-   {
-      date: '2023-02-20',
-      doctorName: 'Dr. Emily Brown',
-      reason: 'Sprained Ankle',
-      prescription: 'Pain relievers and rest',
-   },
-   {
-      date: '2023-01-10',
-      doctorName: 'Dr. Michael Johnson',
-      reason: 'Asthma Follow-up',
-      prescription: 'Inhaler',
-   },
-];
+import { appointmentHistory } from './mock';
 
 export default function AppointmentHistory() {
    return (
@@ -44,7 +18,7 @@ export default function AppointmentHistory() {
          <List>
             {appointmentHistory.map((el, idx) => {
                return (
-                  <>
+                  <Box key={el.id}>
                      <ListItem alignItems='flex-start'>
                         <ListItemAvatar>
                            <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
@@ -53,13 +27,13 @@ export default function AppointmentHistory() {
                            primary={el.doctorName}
                            secondary={
                               <>
-                                 <Typography variant='body2' color='text.primary'>
+                                 <Typography variant='body2' color='text.primary' component='span'>
                                     {el.reason}
                                  </Typography>
-                                 <Typography variant='body1' color='text.primary'>
+                                 <Typography variant='body1' color='text.primary' component='span'>
                                     Prescription: {el.prescription}
                                  </Typography>
-                                 <Typography variant='caption' color='text.primary'>
+                                 <Typography variant='caption' color='text.primary' component='span'>
                                     {el.date}
                                  </Typography>
                               </>
@@ -67,7 +41,7 @@ export default function AppointmentHistory() {
                         />
                      </ListItem>
                      {idx !== appointmentHistory.length - 1 && <Divider variant='inset' component='li' />}
-                  </>
+                  </Box>
                );
             })}
          </List>

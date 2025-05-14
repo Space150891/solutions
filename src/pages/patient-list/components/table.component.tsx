@@ -15,6 +15,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useState } from 'react';
 import { TablePagination, TableSortLabel } from '@mui/material';
 import { IPatient, IPatientDoctor } from '../types';
+import { formatDisplayDate, compareDates } from '../../../utils/date.util';
 
 function Row(props: { row: IPatient }) {
    const { row } = props;
@@ -28,42 +29,34 @@ function Row(props: { row: IPatient }) {
                   {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                </IconButton>
             </TableCell>
-            <TableCell component='th' scope='row'>
-               {row.first_name}
-            </TableCell>
-            <TableCell component='th' scope='row'>
-               {row.last_name}
-            </TableCell>
-            <TableCell align='right'>{row.email}</TableCell>
-            <TableCell align='right'>{row.status}</TableCell>
-            <TableCell align='right'>{row.gender}</TableCell>
-            <TableCell align='right'>{row.date_of_birth}</TableCell>
-            <TableCell align='right'>{row.doctor.first_name}</TableCell>
-            <TableCell align='right'>{row.doctor.last_name}</TableCell>
-            <TableCell align='right'>{row.doctor.specialization}</TableCell>
+            <TableCell component='th' scope='row'>{row.firstName}</TableCell>
+            <TableCell component='th' scope='row'>{row.lastName}</TableCell>
+            <TableCell>{row.email}</TableCell>
+            <TableCell>{row.status}</TableCell>
+            <TableCell>{row.gender}</TableCell>
+            <TableCell>{formatDisplayDate(row.dateOfBirth)}</TableCell>
+            <TableCell>{row.doctor.firstName}</TableCell>
+            <TableCell>{row.doctor.lastName}</TableCell>
+            <TableCell>{row.doctor.specialization}</TableCell>
          </TableRow>
          <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
                <Collapse in={open} timeout='auto' unmountOnExit>
                   <Box sx={{ margin: 1 }}>
-                     <Typography variant='h6' gutterBottom component='div'>
-                        Contact Info
-                     </Typography>
+                     <Typography variant='h6' gutterBottom component='div'>Contact Info</Typography>
                      <Table size='small' aria-label='purchases'>
                         <TableHead>
                            <TableRow>
                               <TableCell>Address</TableCell>
                               <TableCell>Mobile phone number</TableCell>
-                              <TableCell align='right'>City</TableCell>
+                              <TableCell>City</TableCell>
                            </TableRow>
                         </TableHead>
                         <TableBody>
                            <TableRow>
-                              <TableCell component='th' scope='row'>
-                                 {row.contact_info.address}
-                              </TableCell>
-                              <TableCell>{row.contact_info.mobile}</TableCell>
-                              <TableCell align='right'>{row.contact_info.city}</TableCell>
+                              <TableCell>{row.contactInfo.address}</TableCell>
+                              <TableCell>{row.contactInfo.mobile}</TableCell>
+                              <TableCell>{row.contactInfo.city}</TableCell>
                            </TableRow>
                         </TableBody>
                      </Table>
@@ -81,11 +74,9 @@ export type PatientListProps = {
 
 export default function PatientListTable({ patients }: PatientListProps) {
    const [order, setOrder] = useState<string>('asc');
-   const [orderBy, setOrderBy] = useState<keyof IPatient>('first_name');
+   const [orderBy, setOrderBy] = useState<string>('firstName');
    const [page, setPage] = useState<number>(0);
-   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-
-   const handleSort = (property: any) => (event: React.MouseEvent<unknown>) => {
+   const [rowsPerPage, setRowsPerPage] = useState<number>(5);   const handleSort = (property: keyof IPatient | `doctor.${keyof IPatientDoctor}`) => (_event: React.MouseEvent<unknown>) => {
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
@@ -98,35 +89,36 @@ export default function PatientListTable({ patients }: PatientListProps) {
    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
-   };
-
-   const sortedPatients = [...patients].sort((a, b) => {
-      const isAsc = order === 'asc';
-      if (orderBy === 'date_of_birth') {
-         // Convert date strings to Date objects for comparison
-         const dateA = new Date(a[orderBy]).getTime();
-         const dateB = new Date(b[orderBy]).getTime();
-
-         return isAsc ? dateA - dateB : dateB - dateA;
-      } else if (orderBy.includes('doctor.')) {
-         const doctorProp: keyof IPatientDoctor = orderBy.split('.')[1] as keyof IPatientDoctor;
-         if (a.doctor[doctorProp] < b.doctor[doctorProp]) {
-            return isAsc ? -1 : 1;
-         }
-         if (a.doctor[doctorProp] > b.doctor[doctorProp]) {
-            return isAsc ? 1 : -1;
-         }
-
-         return 0;
-      } else {
-         if (a[orderBy] < b[orderBy]) {
-            return isAsc ? -1 : 1;
-         }
-         if (a[orderBy] > b[orderBy]) {
-            return isAsc ? 1 : -1;
-         }
-         return 0;
+   }; const sortedPatients = [...patients].sort((a, b) => {
+      const isAsc = order === 'asc';      if (orderBy === 'dateOfBirth') {
+         return isAsc 
+            ? compareDates(a.dateOfBirth, b.dateOfBirth)
+            : compareDates(b.dateOfBirth, a.dateOfBirth);
       }
+
+      if (orderBy.includes('doctor.')) {
+         const doctorProp: keyof IPatientDoctor = orderBy.split('.')[1] as keyof IPatientDoctor;
+
+         if (!a.doctor || !b.doctor) {
+            return isAsc ? -1 : 1;
+         }
+
+         const valueA = String(a.doctor[doctorProp] ?? '');
+         const valueB = String(b.doctor[doctorProp] ?? '');
+
+         return isAsc
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
+      }
+
+      // Handle other fields
+      const keyToUse = orderBy as keyof IPatient;
+      const valueA = String(a[keyToUse] ?? '');
+      const valueB = String(b[keyToUse] ?? '');
+
+      return isAsc
+         ? valueA.localeCompare(valueB)
+         : valueB.localeCompare(valueA);
    });
 
    const paginatedPatients = sortedPatients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -137,91 +129,19 @@ export default function PatientListTable({ patients }: PatientListProps) {
             <TableHead>
                <TableRow>
                   <TableCell />
-                  <TableCell>
-                     <TableSortLabel
-                        active={orderBy === 'first_name'}
-                        direction={orderBy === 'first_name' ? (order as 'asc' | 'desc') : 'asc'}
-                        onClick={handleSort('first_name')}
-                     >
-                        First Name
-                     </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                     <TableSortLabel
-                        active={orderBy === 'last_name'}
-                        direction={orderBy === 'last_name' ? (order as 'asc' | 'desc') : 'asc'}
-                        onClick={handleSort('last_name')}
-                     >
-                        Last Name
-                     </TableSortLabel>
-                  </TableCell>
-                  <TableCell align='right'>Email</TableCell>
-                  <TableCell align='right'>
-                     <TableSortLabel
-                        active={orderBy === 'status'}
-                        direction={orderBy === 'status' ? (order as 'asc' | 'desc') : 'asc'}
-                        onClick={handleSort('status')}
-                     >
-                        Status
-                     </TableSortLabel>
-                  </TableCell>
-                  <TableCell align='right'>
-                     <TableSortLabel
-                        active={orderBy === 'gender'}
-                        direction={orderBy === 'gender' ? (order as 'asc' | 'desc') : 'asc'}
-                        onClick={handleSort('gender')}
-                     >
-                        Gender
-                     </TableSortLabel>
-                  </TableCell>
-                  <TableCell align='right'>
-                     <TableSortLabel
-                        active={orderBy === 'date_of_birth'}
-                        direction={orderBy === 'date_of_birth' ? (order as 'asc' | 'desc') : 'asc'}
-                        onClick={handleSort('date_of_birth')}
-                     >
-                        Date of Birth
-                     </TableSortLabel>
-                  </TableCell>
-                  <TableCell align='right'>
-                     <TableSortLabel
-                        active={(orderBy as string) === 'doctor.first_name'}
-                        direction={
-                           (orderBy as string) === 'doctor.first_name' ? (order as 'asc' | 'desc') : 'asc'
-                        }
-                        onClick={handleSort('doctor.first_name')}
-                     >
-                        Doctor's First Name
-                     </TableSortLabel>
-                  </TableCell>
-                  <TableCell align='right'>
-                     <TableSortLabel
-                        active={(orderBy as string) === 'doctor.last_name'}
-                        direction={
-                           (orderBy as string) === 'doctor.last_name' ? (order as 'asc' | 'desc') : 'asc'
-                        }
-                        onClick={handleSort('doctor.last_name')}
-                     >
-                        Doctor's Last Name
-                     </TableSortLabel>
-                  </TableCell>
-                  <TableCell align='right'>
-                     <TableSortLabel
-                        active={(orderBy as string) === 'doctor.specialization'}
-                        direction={
-                           (orderBy as string) === 'doctor.specialization' ? (order as 'asc' | 'desc') : 'asc'
-                        }
-                        onClick={handleSort('doctor.specialization')}
-                     >
-                        Specialization
-                     </TableSortLabel>
-                  </TableCell>
+                  <TableCell align="left"><TableSortLabel active={orderBy === 'firstName'} direction={orderBy === 'firstName' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('firstName')}>First Name</TableSortLabel></TableCell>
+                  <TableCell align="left"><TableSortLabel active={orderBy === 'lastName'} direction={orderBy === 'lastName' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('lastName')}>Last Name</TableSortLabel></TableCell>
+                  <TableCell align="left">Email</TableCell>
+                  <TableCell align="left"><TableSortLabel active={orderBy === 'status'} direction={orderBy === 'status' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('status')}>Status</TableSortLabel></TableCell>
+                  <TableCell align="left"><TableSortLabel active={orderBy === 'gender'} direction={orderBy === 'gender' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('gender')}>Gender</TableSortLabel></TableCell>
+                  <TableCell align="left"><TableSortLabel active={orderBy === 'dateOfBirth'} direction={orderBy === 'dateOfBirth' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('dateOfBirth')}>Date of Birth</TableSortLabel></TableCell>
+                  <TableCell align="left"><TableSortLabel active={(orderBy as string) === 'doctor.firstName'} direction={(orderBy as string) === 'doctor.firstName' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('doctor.firstName')}>Doctor's First Name</TableSortLabel></TableCell>
+                  <TableCell align="left"><TableSortLabel active={(orderBy as string) === 'doctor.lastName'} direction={(orderBy as string) === 'doctor.lastName' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('doctor.lastName')}>Doctor's Last Name</TableSortLabel></TableCell>
+                  <TableCell align="left"><TableSortLabel active={(orderBy as string) === 'doctor.specialization'} direction={(orderBy as string) === 'doctor.specialization' ? (order as 'asc' | 'desc') : 'asc'} onClick={handleSort('doctor.specialization')}>Specialization</TableSortLabel></TableCell>
                </TableRow>
             </TableHead>
             <TableBody>
-               {paginatedPatients.map((row) => (
-                  <Row key={row.patient_id} row={row} />
-               ))}
+               {paginatedPatients.map((row) => <Row key={row.patientId} row={row} />)}
             </TableBody>
          </Table>
          <TablePagination

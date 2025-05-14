@@ -2,10 +2,24 @@
    width: 100%;
    display: flex;
    align-items: center;
-   padding: 8px;
-   gap: 8px;
+   padding: 12px 16px;
+   gap: 12px;
+   transition: all 0.2s ease;
+   margin: 2px 8px;
+   border-radius: 4px;
 
    &:hover {
       text-decoration: none;
+      /* This will work with both light and dark modes as the opacity is applied to the current theme's text color */
+      background-color: var(--hover-bg, rgba(0, 0, 0, 0.04));
    }
+}
+
+/* For dark mode - these variables will be set via JS in the component */
+:root.dark-mode .navlink:hover {
+   --hover-bg: rgba(255, 255, 255, 0.08);
+}
+
+:root.light-mode .navlink:hover {
+   --hover-bg: rgba(0, 0, 0, 0.04);
 }

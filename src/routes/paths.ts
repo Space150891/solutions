@@ -28,4 +28,5 @@ export const paths = Object.freeze({
    patientHistory: '/cubex/patient-history',
    survey: '/cubex/survey',
    medicalStats: '/cubex/medical-stats',
+   vitalMonitoring: '/cubex/vital-monitoring',
 });

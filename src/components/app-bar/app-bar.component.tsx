@@ -1,15 +1,17 @@
-import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
-import { AppBar, Box, IconButton, Menu, MenuItem, DialogTitle } from '@mui/material';
+import { AccountCircle, Menu as MenuIcon, Brightness4, Brightness7 } from '@mui/icons-material';
+import { AppBar, Box, IconButton, Menu, MenuItem, DialogTitle, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { paths } from '../../routes/paths';
 import { handleDrawer } from './app-bar.store';
 import { useAppDispatch } from '../../store/hooks';
+import { useThemeContext } from '../../providers/theme-context.provider';
 
 export const AppbarComponent = () => {
    const navigate = useNavigate();
    const dispatch = useAppDispatch();
+   const { mode, toggleTheme } = useThemeContext();
 
    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -44,6 +46,16 @@ export const AppbarComponent = () => {
                <MenuIcon />
             </IconButton>
             <Link to={paths.cubex}>C U B E X</Link>
+            <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
+               <IconButton 
+                  color='inherit' 
+                  onClick={toggleTheme} 
+                  sx={{ ml: 1 }}
+                  aria-label="toggle theme"
+               >
+                  {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
+               </IconButton>
+            </Tooltip>
          </Box>
          <Box>
             <IconButton

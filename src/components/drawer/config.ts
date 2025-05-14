@@ -113,4 +113,9 @@ export const config = [
       path: paths.medicalStats,
       name: IPages.MEDICAL_STATS,
    },
+   {
+      id: 23,
+      path: paths.vitalMonitoring,
+      name: IPages.VITAL_MONITORING,
+   },
 ];

@@ -1,10 +1,13 @@
-import { Box, Button, Card, Paper, Typography } from '@mui/material';
+import { Box, Button, Paper, Typography, useTheme, alpha } from '@mui/material';
 import { IPages } from '../../types/common.types';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { doctorNames } from './mock';
+import AddIcon from '@mui/icons-material/Add';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 export default function WaitingBoard() {
+   const theme = useTheme();
    const [waitingQueue, setWaitingQueue] = useState<number[]>(generateRandomArray(10));
    const [activeTickets, setActiveTickets] = useState<number[]>([]);
    const [lastIndex, setLastIndex] = useState<number>(0);
@@ -49,97 +52,185 @@ export default function WaitingBoard() {
 
    useEffect(() => {
       setLastIndex(waitingQueue.length);
-   }, []);
+   }, [waitingQueue.length]);
 
    return (
-      <Box component='section' padding={1.25}>
-         <Box sx={{ mb: 2.25 }}>
-            <Typography variant='h5'>{`${IPages.WAITING_BOARD.toUpperCase()}`}</Typography>
+      <Box component='section' sx={{ p: 3, height: '100%' }}>
+         <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant='h4' fontWeight="medium">{IPages.WAITING_BOARD}</Typography>
+            <Button
+               variant="contained"
+               startIcon={<AddIcon />}
+               onClick={addTicket}
+               sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+               }}
+            >
+               Add New Ticket
+            </Button>
          </Box>
-         <Box>
-            <Button onClick={addTicket}>Add ticket</Button>
-         </Box>
-         <Grid2 container columns={7} spacing={3}>
-            <Grid2 xs={4}>
-               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='h5'>QUEUE</Typography>
 
-                  <Grid2 container spacing={1}>
-                     {waitingQueue.map((el) => {
-                        return (
-                           <Grid2 key={`Q-${el}`} xs={4}>
-                              <Box borderRadius={3} overflow='hidden'>
-                                 <Paper variant='outlined' sx={{ height: '150px' }}>
-                                    <Typography
-                                       variant='h6'
-                                       textAlign='center'
-                                       sx={{ backgroundColor: '#fff05f' }}
-                                    >
-                                       Ticket №{el + 1}
+         <Grid2 container spacing={4}>
+            <Grid2 xs={12} md={7}>
+               <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                  height: '100%'
+               }}>
+                  <Typography
+                     variant='h6'
+                     sx={{
+                        px: 1,
+                        py: 0.5,
+                        borderRadius: 1,
+                        bgcolor: alpha(theme.palette.primary.main, 0.1),
+                        color: theme.palette.primary.main,
+                        width: 'fit-content'
+                     }}
+                  >
+                     Waiting Queue ({waitingQueue.length})
+                  </Typography>
+
+                  <Grid2 container spacing={2}>
+                     {waitingQueue.map((el) => (
+                        <Grid2 key={`Q-${el}`} xs={12} sm={6} md={4}>
+                           <Paper
+                              elevation={0}
+                              sx={{
+                                 height: '100%',
+                                 borderRadius: 3,
+                                 border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                                 bgcolor: theme.palette.mode === 'dark'
+                                    ? alpha(theme.palette.warning.main, 0.1)
+                                    : alpha(theme.palette.warning.light, 0.1),
+                                 transition: 'transform 0.2s ease-in-out',
+                                 '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                 }
+                              }}
+                           >
+                              <Box sx={{ p: 2 }}>
+                                 <Typography
+                                    variant='h5'
+                                    fontWeight="medium"
+                                    sx={{
+                                       mb: 2,
+                                       color: theme.palette.mode === 'dark'
+                                          ? theme.palette.warning.light
+                                          : theme.palette.warning.dark
+                                    }}
+                                 >
+                                    Ticket #{el + 1}
+                                 </Typography>
+                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                    <Typography variant='body2' color="text.secondary">
+                                       Room: {Math.floor(Math.random() * 9) + 1}
                                     </Typography>
                                     <Typography
                                        variant='body1'
-                                       p={1}
-                                       whiteSpace='nowrap'
-                                       overflow='hidden'
-                                       textOverflow='ellipsis'
+                                       sx={{
+                                          whiteSpace: 'nowrap',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis'
+                                       }}
                                     >
-                                       To:
-                                       <br />
-                                       Room: {Math.floor(Math.random() * 9)}
-                                       <br />
-                                       Doctor: {doctorNames[Math.floor(Math.random() * 8)]}
-                                       <br />
+                                       Dr. {doctorNames[Math.floor(Math.random() * 8)]}
                                     </Typography>
-                                 </Paper>
+                                 </Box>
                               </Box>
-                           </Grid2>
-                        );
-                     })}
+                           </Paper>
+                        </Grid2>
+                     ))}
                   </Grid2>
                </Box>
             </Grid2>
-            <Grid2 xs={3}>
-               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography variant='h5'>ACTIVE</Typography>
 
-                  <Grid2 container spacing={1}>
-                     {activeTickets.map((el) => {
-                        return (
-                           <Grid2 key={`A-${el}`} xs={4}>
-                              <Box borderRadius={3} overflow='hidden'>
-                                 <Paper variant='outlined' sx={{ height: '150px' }}>
-                                    <Typography
-                                       variant='h6'
-                                       textAlign='center'
-                                       sx={{ backgroundColor: '#1ccb1c' }}
-                                    >
-                                       Ticket №{el + 1}
+            <Grid2 xs={12} md={5}>
+               <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                  height: '100%'
+               }}>
+                  <Typography
+                     variant='h6'
+                     sx={{
+                        px: 1,
+                        py: 0.5,
+                        borderRadius: 1,
+                        bgcolor: alpha(theme.palette.success.main, 0.1),
+                        color: theme.palette.success.main,
+                        width: 'fit-content'
+                     }}
+                  >
+                     Active Appointments ({activeTickets.length})
+                  </Typography>
+
+                  <Grid2 container spacing={2}>
+                     {activeTickets.map((el) => (
+                        <Grid2 key={`A-${el}`} xs={12} sm={6}>
+                           <Paper
+                              elevation={0}
+                              sx={{
+                                 height: '100%',
+                                 borderRadius: 3,
+                                 border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                                 bgcolor: theme.palette.mode === 'dark'
+                                    ? alpha(theme.palette.success.main, 0.1)
+                                    : alpha(theme.palette.success.light, 0.1),
+                                 transition: 'transform 0.2s ease-in-out',
+                                 '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                 }
+                              }}
+                           >
+                              <Box sx={{ p: 2 }}>
+                                 <Typography
+                                    variant='h5'
+                                    fontWeight="medium"
+                                    sx={{
+                                       mb: 2,
+                                       color: theme.palette.mode === 'dark'
+                                          ? theme.palette.success.light
+                                          : theme.palette.success.dark
+                                    }}
+                                 >
+                                    Ticket #{el + 1}
+                                 </Typography>
+                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                    <Typography variant='body2' color="text.secondary">
+                                       Room: {Math.floor(Math.random() * 9) + 1}
                                     </Typography>
                                     <Typography
                                        variant='body1'
-                                       p={1}
-                                       whiteSpace='nowrap'
-                                       overflow='hidden'
-                                       textOverflow='ellipsis'
+                                       sx={{
+                                          whiteSpace: 'nowrap',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          mb: 2
+                                       }}
                                     >
-                                       To:
-                                       <br />
-                                       Room: {Math.floor(Math.random() * 9) + 1}
-                                       <br />
-                                       Doctor: {doctorNames[Math.floor(Math.random() * 8)]}
-                                       <br />
+                                       Dr. {doctorNames[Math.floor(Math.random() * 8)]}
                                     </Typography>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                       <Button onClick={() => completeTicket(el)} fullWidth>
-                                          End Appointment
-                                       </Button>
-                                    </Box>
-                                 </Paper>
+                                    <Button
+                                       variant="outlined"
+                                       color="success"
+                                       startIcon={<CheckCircleOutlineIcon />}
+                                       onClick={() => completeTicket(el)}
+                                       sx={{
+                                          borderRadius: 2,
+                                          textTransform: 'none',
+                                       }}
+                                    >
+                                       Complete Appointment
+                                    </Button>
+                                 </Box>
                               </Box>
-                           </Grid2>
-                        );
-                     })}
+                           </Paper>
+                        </Grid2>
+                     ))}
                   </Grid2>
                </Box>
             </Grid2>

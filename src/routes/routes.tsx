@@ -30,6 +30,7 @@ import BillingPage from '../pages/billing/billing.page';
 import PatientHistoryPage from '../pages/patient-history/patient-history.page';
 import SurveyPage from '../pages/survey/survey.page';
 import MedicalStatsPage from '../pages/medical-stats/medical-stats.page';
+import VitalMonitoring from '../pages/vital-monitoring/vital-monitoring.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -181,6 +182,11 @@ export const routesData: RouteObject[] = [
             id: '36-medicalStats',
             path: paths.medicalStats,
             element: <MedicalStatsPage />,
+         },
+         {
+            id: '37-vitalMonitoring',
+            path: paths.vitalMonitoring,
+            element: <VitalMonitoring />,
          },
       ],
    },

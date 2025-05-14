@@ -1,11 +1,11 @@
 export interface IPatient {
-   patient_id: string;
+   patientId: string;
    status: IPatientStatus;
-   first_name: string;
-   last_name: string;
-   date_of_birth: string;
+   firstName: string;
+   lastName: string;
+   dateOfBirth: string;
    gender: IGender;
-   contact_info: IPatientContactInfo;
+   contactInfo: IPatientContactInfo;
    doctor: IPatientDoctor;
    email: string;
 }
@@ -18,13 +18,13 @@ export type IPatientContactInfo = {
    address: string;
 };
 export type IPatientDoctor = {
-   last_name: string;
-   first_name: string;
+   lastName: string;
+   firstName: string;
    specialization: IDoctorSpecialization;
-   doctor_id: string;
+   doctorId: string;
    gender?: IGender;
    locations?: string[];
-   description?: string; // Added description field for doctor details
+   description?: string;
 };
 
 export type IDoctorSpecialization =
