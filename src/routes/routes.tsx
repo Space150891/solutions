@@ -28,6 +28,7 @@ import TemplateManagementPage from '../pages/template/template-management/templa
 import Email from '../pages/email/email.page';
 import BillingPage from '../pages/billing/billing.page';
 import PatientHistoryPage from '../pages/patient-history/patient-history.page';
+import SurveyPage from '../pages/survey/survey.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -169,6 +170,11 @@ export const routesData: RouteObject[] = [
             id: '34-billing',
             path: paths.patientHistory,
             element: <PatientHistoryPage />,
+         },
+         {
+            id: '35-survey',
+            path: paths.survey,
+            element: <SurveyPage />,
          },
       ],
    },
