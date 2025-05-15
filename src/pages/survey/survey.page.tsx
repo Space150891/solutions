@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Stack, Button, Paper } from '@mui/material';
+import { Box, Typography, TextField, Stack, Button, Paper, useTheme } from '@mui/material';
 import { question } from './question';
 import { useNavigate } from 'react-router-dom';
+import { useThemeContext } from '../../providers/theme-context.provider';
 
 interface SurveyData {
    waitTime: string;
@@ -17,6 +18,8 @@ interface SurveyData {
 
 export default function SurveyPage() {
    const navigate = useNavigate();
+   const theme = useTheme();
+   const { mode } = useThemeContext();
 
    const [data, setData] = useState<SurveyData>({
       waitTime: '',
@@ -26,18 +29,11 @@ export default function SurveyPage() {
       futureWishes: '',
       overallExperience: '',
       overallRating: null,
-   });
-
-   const [submittedData, setSubmittedData] = useState<SurveyData | null>(null);
-
-   const updateFields = (fields: Partial<SurveyData>) => {
+   }); const updateFields = (fields: Partial<SurveyData>) => {
       setData((prev) => ({ ...prev, ...fields }));
    };
    const handleSubmit = () => {
-      navigate('/cubex');
-
-      setSubmittedData(data);
-      setData({
+      navigate('/cubex'); setData({
          waitTime: '',
          likedMost: '',
          improvementSuggestions: '',
@@ -51,13 +47,15 @@ export default function SurveyPage() {
       notification.style.position = 'fixed';
       notification.style.top = '24px';
       notification.style.right = '24px';
-      notification.style.backgroundColor = '#1976d2';
-      notification.style.color = 'white';
+      notification.style.backgroundColor = mode === 'dark' ? theme.palette.primary.dark : theme.palette.primary.main;
+      notification.style.color = theme.palette.primary.contrastText;
       notification.style.padding = '16px 24px';
       notification.style.borderRadius = '8px';
       notification.style.zIndex = '9999';
-      notification.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-      notification.style.fontFamily = 'Roboto, sans-serif';
+      notification.style.boxShadow = mode === 'dark'
+         ? '0 4px 6px rgba(0, 0, 0, 0.3)'
+         : '0 4px 6px rgba(0, 0, 0, 0.1)';
+      notification.style.fontFamily = theme.typography.fontFamily || 'Roboto, sans-serif';
       notification.style.fontSize = '14px';
       notification.style.fontWeight = '500';
       notification.style.transition = 'opacity 0.3s ease-in-out';
@@ -77,13 +75,30 @@ export default function SurveyPage() {
    };
 
    return (
-      <Box width='100vw' minHeight='100vh' bgcolor='#f7f7f7' p={4}>
-         <Typography variant='h4' fontWeight={500} mb={4}>
+      <Box
+         width='100vw'
+         minHeight='100vh'
+         bgcolor="background.default"
+         color="text.primary"
+         p={4}
+      >
+         <Typography variant='h4' fontWeight={500} mb={4} color="text.primary">
             Patient Satisfaction Survey
          </Typography>
 
-         <Paper sx={{ maxWidth: 700, p: 4, margin: '0 auto' }}>
-            <label style={labelStyle}>How long did you wait for your appointment? (in minutes)</label>
+         <Paper
+            sx={{
+               maxWidth: 700,
+               p: 4,
+               margin: '0 auto',
+               bgcolor: 'background.paper',
+               color: 'text.primary'
+            }}
+         >
+            <label style={{
+               ...labelStyle,
+               color: theme.palette.text.primary
+            }}>How long did you wait for your appointment? (in minutes)</label>
             <TextField
                fullWidth
                type='number'
@@ -96,11 +111,27 @@ export default function SurveyPage() {
                }}
                variant='outlined'
                inputProps={{ min: 0 }}
+               sx={{
+                  '& .MuiOutlinedInput-root': {
+                     '& fieldset': {
+                        borderColor: 'text.secondary'
+                     },
+                     '&:hover fieldset': {
+                        borderColor: 'text.primary'
+                     }
+                  },
+                  '& input': {
+                     color: 'text.primary'
+                  }
+               }}
             />
 
             {Object.entries(question).map(([key, label]) => (
                <div key={key}>
-                  <label style={labelStyle}>{label}</label>
+                  <label style={{
+                     ...labelStyle,
+                     color: theme.palette.text.primary
+                  }}>{label}</label>
                   <TextField
                      multiline
                      rows={2}
@@ -111,7 +142,14 @@ export default function SurveyPage() {
                      sx={{
                         '& .MuiInputBase-root': {
                            height: '60px',
-                        },
+                           color: 'text.primary',
+                           '& fieldset': {
+                              borderColor: 'text.secondary'
+                           },
+                           '&:hover fieldset': {
+                              borderColor: 'text.primary'
+                           }
+                        }
                      }}
                   />
                </div>

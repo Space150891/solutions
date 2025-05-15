@@ -1,5 +1,6 @@
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
+import { useTheme } from '@mui/material';
 import { IPeriod } from '../../pages/medical-stats/medical-stats.page';
 
 interface Props {
@@ -7,6 +8,9 @@ interface Props {
 }
 
 export const NumberColumnChart = ({ period }: Props) => {
+   const theme = useTheme();
+   const { mode } = theme.palette;
+   
    const dataMap: Record<IPeriod, number[]> = {
       today: [10, 15, 20, 18, 12, 14, 16],
       week: [70, 80, 75, 90, 85, 95, 100],
@@ -19,6 +23,8 @@ export const NumberColumnChart = ({ period }: Props) => {
          type: 'bar',
          toolbar: { show: false },
          zoom: { enabled: false },
+         foreColor: theme.palette.text.primary,
+         background: 'transparent',
       },
       plotOptions: {
          bar: {
@@ -28,10 +34,38 @@ export const NumberColumnChart = ({ period }: Props) => {
       },
       xaxis: {
          categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+         labels: {
+            style: {
+               colors: theme.palette.text.secondary,
+            },
+         },
+         axisBorder: {
+            color: theme.palette.divider,
+         },
+         axisTicks: {
+            color: theme.palette.divider,
+         },
+      },
+      yaxis: {
+         labels: {
+            style: {
+               colors: theme.palette.text.secondary,
+            },
+         },
+      },
+      grid: {
+         borderColor: theme.palette.divider,
+         strokeDashArray: 4,
       },
       title: {
          text: 'Number of Patients',
          align: 'left',
+         style: {
+            color: theme.palette.text.primary,
+         },
+      },
+      tooltip: {
+         theme: mode,
       },
       dataLabels: { enabled: false },
    };
