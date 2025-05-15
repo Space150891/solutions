@@ -32,7 +32,6 @@ const initDevelopmentalHistory = {
 };
 
 export default function TreatmentDocumentation() {
-   //HISTORY
    const [documentName, setDocumentName] = useState('');
    const [patient, setPatient] = useState('');
    const [dob, setDob] = useState('');

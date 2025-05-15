@@ -1,38 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface Documentation {
-   title: string;
-}
-
-interface Diagnosis {
-   code: number;
-   title: string;
-}
-
-interface Documents {
-   title: string;
-}
-
-interface Task {
-   done: boolean;
-   title: string;
-}
-
-interface SocialEntry {
-   livingConditions: string;
-   supportSystem: string;
-   specialNotes: string;
-}
-
-interface PatientHistoryState {
-   documentation: Documentation[];
-   diagnosis: Diagnosis[];
-   documents: Documents[];
-   tasks: Task[];
-   socialInfo: SocialEntry[];
-}
+import {
+   PatientHistoryState,
+   AddInfPayload,
+   Task,
+   HistoryType,
+} from './types/patientHistoryTypes';
 
 const initialState: PatientHistoryState = {
    documentation: [],
@@ -40,31 +14,62 @@ const initialState: PatientHistoryState = {
    documents: [],
    tasks: [],
    socialInfo: [],
+   isLoading: false,
+   error: null,
 };
-
-type HistoryType = 'documentation' | 'diagnosis' | 'documents' | 'tasks' | 'socialInfo';
-
-interface AddInfPayload {
-   type: HistoryType;
-   data: any;
-}
 
 export const patientHistorySlice = createSlice({
    name: 'patientHistory',
    initialState,
    reducers: {
-      toggleDoneTask: (state, action: PayloadAction<number>) => {
-         const index = action.payload;
-         if (state.tasks[index]) {
-            state.tasks[index].done = !state.tasks[index].done;
+      setLoading: (state, action: PayloadAction<boolean>) => {
+         state.isLoading = action.payload;
+      },
+      setError: (state, action: PayloadAction<string | null>) => {
+         state.error = action.payload;
+      },
+      toggleDoneTask: (state, action: PayloadAction<string>) => {
+         const taskId = action.payload;
+         const taskIndex = state.tasks.findIndex((task) => task.id === taskId);
+
+         if (taskIndex !== -1) {
+            state.tasks[taskIndex].done = !state.tasks[taskIndex].done;
          }
       },
       addInfForHistory: (state, action: PayloadAction<AddInfPayload>) => {
          const { type, data } = action.payload;
-         state[type].push(data);
+
+         (state[type] as any[]).push(data);
+      },
+      updateTask: (state, action: PayloadAction<{ id: string; updates: Partial<Task> }>) => {
+         const { id, updates } = action.payload;
+         const taskIndex = state.tasks.findIndex((task) => task.id === id);
+
+         if (taskIndex !== -1) {
+            state.tasks[taskIndex] = { ...state.tasks[taskIndex], ...updates };
+         }
+      },
+      removeInfFromHistory: (state, action: PayloadAction<{ type: HistoryType; id: string }>) => {
+         const { type, id } = action.payload;
+         if (Array.isArray(state[type])) {
+            // @ts-expect-error - We know this is an array of objects with id
+            state[type] = state[type].filter((item) => item.id !== id);
+         }
+      },
+      clearHistory: (_state) => {
+         return initialState;
       },
    },
 });
 
-export const { addInfForHistory, toggleDoneTask } = patientHistorySlice.actions;
+export const {
+   setLoading,
+   setError,
+   toggleDoneTask,
+   addInfForHistory,
+   updateTask,
+   removeInfFromHistory,
+   clearHistory,
+} = patientHistorySlice.actions;
+
 export default patientHistorySlice.reducer;

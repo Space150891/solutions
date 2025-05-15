@@ -2,6 +2,7 @@ import { Box, Typography, TextField, Button, Stack, List, ListItem, ListItemText
 import { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { addInfForHistory } from '../../../store/slices/patientHistorySlice';
+import { SocialEntry } from '../../../store/slices/types/patientHistoryTypes';
 
 export default function SocialInfoTab() {
    const dispatch = useAppDispatch();
@@ -12,20 +13,21 @@ export default function SocialInfoTab() {
    const [specialNotes, setSpecialNotes] = useState('');
 
    const handleSave = () => {
-      dispatch(
-         addInfForHistory({
-            type: 'socialInfo',
-            data: {
-               livingConditions,
-               supportSystem,
-               specialNotes,
-            },
-         }),
-      );
+      if (livingConditions.trim() || supportSystem.trim() || specialNotes.trim()) {
+         const newEntry: SocialEntry = {
+            id: Math.random().toString(36).substring(2, 15),
+            livingConditions,
+            supportSystem,
+            specialNotes,
+            lastUpdated: new Date().toISOString()
+         };
 
-      setLivingConditions('');
-      setSupportSystem('');
-      setSpecialNotes('');
+         dispatch(addInfForHistory({ type: 'socialInfo', data: newEntry }));
+
+         setLivingConditions('');
+         setSupportSystem('');
+         setSpecialNotes('');
+      }
    };
 
    return (

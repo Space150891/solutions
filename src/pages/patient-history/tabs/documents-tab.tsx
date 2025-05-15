@@ -1,6 +1,7 @@
 import { Box, Typography, Button, List, ListItem, ListItemText } from '@mui/material';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { addInfForHistory } from '../../../store/slices/patientHistorySlice';
+import { Document } from '../../../store/slices/types/patientHistoryTypes';
 
 export default function DocumentsTab() {
    const dispatch = useAppDispatch();
@@ -9,12 +10,14 @@ export default function DocumentsTab() {
    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file) {
-         dispatch(
-            addInfForHistory({
-               type: 'documents',
-               data: { title: file.name },
-            }),
-         );
+         const newDocument: Document = {
+            title: file.name,
+            id: Math.random().toString(36).substring(2, 15),
+            url: URL.createObjectURL(file),
+            uploadedAt: new Date().toISOString(),
+         };
+
+         dispatch(addInfForHistory({ type: 'documents', data: newDocument }));
       }
    };
 

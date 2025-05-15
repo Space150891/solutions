@@ -15,11 +15,7 @@ import {
 import { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { addInfForHistory } from '../../../store/slices/patientHistorySlice';
-
-interface Diagnosis {
-   code: string;
-   description: string;
-}
+import { Diagnosis } from '../../../store/slices/types/patientHistoryTypes';
 
 export default function DiagnosisTab() {
    const [code, setCode] = useState('');
@@ -30,9 +26,11 @@ export default function DiagnosisTab() {
    const handleAddDiagnosis = () => {
       if (code.trim() && description.trim()) {
          const newDiagnosis: Diagnosis = {
-            code: code.trim(),
-            description: description.trim(),
-         };
+            code: parseInt(code),
+            title: description,
+            id: Math.random().toString(36).substring(2, 15),
+            date: new Date().toISOString()
+         }
 
          dispatch(addInfForHistory({ type: 'diagnosis', data: newDiagnosis }));
 

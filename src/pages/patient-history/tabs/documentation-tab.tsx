@@ -6,6 +6,7 @@ import { useAppSelector, useAppDispatch } from '../../../store/hooks';
 import { addInfForHistory } from '../../../store/slices/patientHistorySlice';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
+import { Documentation } from '../../../store/slices/types/patientHistoryTypes';
 
 interface SpeechRecognitionAlternative {
    transcript: string;
@@ -39,10 +40,6 @@ interface SpeechRecognition extends EventTarget {
    start(): void;
    stop(): void;
    abort(): void;
-}
-
-interface Documentation {
-   title: string;
 }
 
 export default function DocumentationTab() {
@@ -97,7 +94,9 @@ export default function DocumentationTab() {
       if (note.trim() === '') return;
 
       const newNote: Documentation = {
+         id: Math.random().toString(36).substring(2, 15),
          title: note,
+         createdAt: new Date().toISOString(),
       };
 
       dispatch(addInfForHistory({ type: 'documentation', data: newNote }));
