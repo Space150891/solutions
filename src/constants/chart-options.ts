@@ -248,3 +248,164 @@ export const getVitalSignChartOptions = (
     }
   };
 };
+
+// Base options for medical stats charts
+export const getMedicalStatsBaseOptions = (theme: Theme): ApexOptions => {
+  const { mode, text, divider } = theme.palette;
+  
+  return {
+    chart: {
+      toolbar: { show: false },
+      zoom: { enabled: false },
+      foreColor: text.primary,
+      background: 'transparent',
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    grid: {
+      borderColor: divider,
+      strokeDashArray: 4,
+    },
+    xaxis: {
+      labels: {
+        style: {
+          colors: text.secondary,
+        },
+      },
+      axisBorder: {
+        color: divider,
+      },
+      axisTicks: {
+        color: divider,
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: text.secondary,
+        },
+      },
+    },
+    tooltip: {
+      theme: mode,
+    },
+  };
+};
+
+export const getPatientNumberColumnOptions = (theme: Theme): ApexOptions => {
+  const baseOptions = getMedicalStatsBaseOptions(theme);
+  return {
+    ...baseOptions,
+    chart: {
+      ...baseOptions.chart,
+      type: 'bar',
+    },
+    plotOptions: {
+      bar: {
+        columnWidth: '45%',
+        borderRadius: 4,
+      },
+    },
+    xaxis: {
+      ...baseOptions.xaxis,
+      categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    },
+    title: {
+      text: 'Number of Patients',
+      align: 'left',
+      style: {
+        color: theme.palette.text.primary,
+      },
+    },
+  };
+};
+
+// Options for gender distribution pie chart
+export const getGenderPieOptions = (theme: Theme): ApexOptions => {
+  const baseOptions = getMedicalStatsBaseOptions(theme);
+  return {
+    ...baseOptions,
+    chart: {
+      ...baseOptions.chart,
+      type: 'pie',
+    },
+    labels: ['Male', 'Female'],
+    colors: ['#2196f3', '#f50057'],
+    legend: {
+      position: 'bottom',
+      labels: {
+        colors: theme.palette.text.primary,
+      },
+    },
+    title: {
+      text: 'Gender Distribution',
+      align: 'left',
+      style: {
+        color: theme.palette.text.primary,
+      },
+    },
+    stroke: {
+      width: 0,
+    },
+  };
+};
+
+// Options for age distribution chart
+export const getAgeDistributionOptions = (theme: Theme): ApexOptions => {
+  const baseOptions = getMedicalStatsBaseOptions(theme);
+  return {
+    ...baseOptions,
+    chart: {
+      ...baseOptions.chart,
+      type: 'bar',
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        borderRadius: 4,
+      },
+    },
+    xaxis: {
+      ...baseOptions.xaxis,
+      categories: ['0-18', '19-30', '31-45', '46-60', '60+'],
+    },
+    title: {
+      text: 'Age Distribution',
+      align: 'left',
+      style: {
+        color: theme.palette.text.primary,
+      },
+    },
+  };
+};
+
+// Options for disease distribution chart
+export const getDiseaseDistributionOptions = (theme: Theme): ApexOptions => {
+  const baseOptions = getMedicalStatsBaseOptions(theme);
+  return {
+    ...baseOptions,
+    chart: {
+      ...baseOptions.chart,
+      type: 'bar',
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        horizontal: false,
+      },
+    },
+    xaxis: {
+      ...baseOptions.xaxis,
+      categories: ['Flu', 'Diabetes', 'COVID-19', 'Hypertension', 'Asthma'],
+    },
+    title: {
+      text: 'Disease Distribution',
+      align: 'left',
+      style: {
+        color: theme.palette.text.primary,
+      },
+    },
+  };
+};
