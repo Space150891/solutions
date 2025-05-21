@@ -46,7 +46,7 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
       }));
    };
 
-   const handleChange = (event: React.MouseEvent<HTMLElement>, newDisplay: string) => {
+   const handleChange = (_event: React.MouseEvent<HTMLElement>, newDisplay: string) => {
       setDisplay(newDisplay);
    };
 
