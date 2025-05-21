@@ -17,40 +17,6 @@ const getCommonThemeOptions = (mode: PaletteMode): ThemeOptions => ({
             },
          },
       },
-      MuiTextField: {
-         styleOverrides: {
-            root: {
-               '& .MuiInputBase-root': {
-                  height: '45px',
-               },
-               '& .MuiFormHelperText-root.Mui-error': {
-                  position: 'absolute',
-                  bottom: '-20px',
-               },
-            },
-         },
-      },
-      MuiGrid: {
-         styleOverrides: {
-            root: {
-               marginTop: 0,
-               marginLeft: 0,
-               width: '100%',
-               '& .MuiGrid-item': {
-                  padding: 0,
-               },
-            },
-         },
-      },
-      MuiAutocomplete: {
-         styleOverrides: {
-            root: {
-               '& .MuiInputBase-root': {
-                  height: 'initial !important',
-               },
-            },
-         },
-      },
       MuiCard: {
          styleOverrides: {
             root: {

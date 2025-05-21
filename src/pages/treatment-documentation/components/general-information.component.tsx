@@ -78,7 +78,7 @@ export default function GeneralInformation() {
             />
           </Grid>
 
-          <Grid item xs={6} md={2} sx={{ pl: 2 }}>
+          <Grid item xs={6} md={2}>
             <TextField
               id='outlined-number'
               label='Duration (min)'
@@ -107,7 +107,7 @@ export default function GeneralInformation() {
                 height: '100%'
               }}
             >
-              <Typography variant="body2" color="text.secondary" sx={{ mr: 2 }}>
+              <Typography variant="body2" color="text.secondary">
                 Evaluation Type:
               </Typography>
               <RadioGroup

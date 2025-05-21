@@ -31,12 +31,12 @@ export default function HistorySection() {
     developmentalHistory,
     educationalStatus,
   } = useAppSelector((state) => state.treatmentDocumentation);
-  
+
   const dispatch = useAppDispatch();
 
   // Define proper type for general info fields
-  type GeneralInfoField = 
-    | 'significantHistory' | 'medicalHistory' | 'medications' 
+  type GeneralInfoField =
+    | 'significantHistory' | 'medicalHistory' | 'medications'
     | 'accident' | 'disease' | 'educationalStatus';
 
   const handleChangeString = (field: GeneralInfoField, value: string) => {
@@ -44,7 +44,7 @@ export default function HistorySection() {
   };
 
   // Define proper type for developmental history fields
-  type DevelopmentalHistoryField = 
+  type DevelopmentalHistoryField =
     | 'milestonesInTime' | 'satUp' | 'crawl' | 'stood' | 'walked'
     | 'fedSelf' | 'dressSelf' | 'toileted' | 'singleWords' | 'combinedWords';
 
@@ -57,151 +57,173 @@ export default function HistorySection() {
 
   return (
     <Box>
-      <Typography variant="h6" color="primary" sx={{ mb: 2, fontWeight: 500 }}>
+      <Typography variant="h6" color="primary" sx={{ mb: 3, fontWeight: 500 }}>
         Patient History
       </Typography>
-      
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ height: '100%' }}>
-            <CardHeader
-              title={
-                <Box display="flex" alignItems="center" gap={1}>
-                  <HistoryIcon color="primary" />
-                  <Typography variant="subtitle1">Significant History</Typography>
-                </Box>
-              }
-              sx={{ pb: 0 }}
-            />
-            <CardContent>
-              <TextField
-                variant='outlined'
-                placeholder='Enter significant patient history details...'
-                fullWidth
-                multiline
-                rows={3}
-                sx={{
-                  '& .MuiInputBase-root': { height: 'initial !important' },
-                }}
-                value={significantHistory || ''}
-                onChange={(e) => handleChangeString('significantHistory', e.target.value)}
+
+      {/* Basic History Information - First Row */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5, fontWeight: 500 }}>
+          Basic Information
+        </Typography>
+        <Grid container spacing={1}>
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ height: '100%', mr: 2, }}>
+              <CardHeader
+                title={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <HistoryIcon color="primary" />
+                    <Typography variant="subtitle1">Significant History</Typography>
+                  </Box>
+                }
+                sx={{ pb: 0 }}
               />
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ height: '100%' }}>
-            <CardHeader
-              title={
-                <Box display="flex" alignItems="center" gap={1}>
-                  <MedicalInformationIcon color="primary" />
-                  <Typography variant="subtitle1">Medical History</Typography>
-                </Box>
-              }
-              sx={{ pb: 0 }}
-            />
-            <CardContent>
-              <TextField
-                variant='outlined'
-                placeholder='Enter patient medical history...'
-                fullWidth
-                multiline
-                rows={3}
-                sx={{
-                  '& .MuiInputBase-root': { height: 'initial !important' },
-                }}
-                value={medicalHistory || ''}
-                onChange={(e) => handleChangeString('medicalHistory', e.target.value)}
+              <CardContent>
+                <TextField
+                  variant='outlined'
+                  placeholder='Enter significant patient history details...'
+                  fullWidth
+                  multiline
+                  rows={3}
+                  sx={{
+                    '& .MuiInputBase-root': { height: 'initial !important' },
+                  }}
+                  value={significantHistory || ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeString('significantHistory', e.target.value)}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
+              <CardHeader
+                title={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <MedicalInformationIcon color="primary" />
+                    <Typography variant="subtitle1">Medical History</Typography>
+                  </Box>
+                }
+                sx={{ pb: 0 }}
               />
-            </CardContent>
-          </Card>
+              <CardContent>
+                <TextField
+                  variant='outlined'
+                  placeholder='Enter patient medical history...'
+                  fullWidth
+                  multiline
+                  rows={3}
+                  sx={{
+                    '& .MuiInputBase-root': { height: 'initial !important' },
+                  }}
+                  value={medicalHistory || ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeString('medicalHistory', e.target.value)}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ height: '100%' }}>
-            <CardHeader
-              title={
-                <Box display="flex" alignItems="center" gap={1}>
-                  <MedicationIcon color="primary" />
-                  <Typography variant="subtitle1">Medications</Typography>
-                </Box>
-              }
-              sx={{ pb: 0 }}
-            />
-            <CardContent>
-              <TextField
-                variant='outlined'
-                placeholder='List current medications and dosages...'
-                fullWidth
-                multiline
-                rows={3}
-                sx={{
-                  '& .MuiInputBase-root': { height: 'initial !important' },
-                }}
-                value={medications || ''}
-                onChange={(e) => handleChangeString('medications', e.target.value)}
+      </Box>
+
+      {/* Medical Details - Second Row */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5, fontWeight: 500 }}>
+          Medical Details
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ height: '100%', mr: 2 }}>
+              <CardHeader
+                title={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <MedicationIcon color="primary" />
+                    <Typography variant="subtitle1">Medications</Typography>
+                  </Box>
+                }
+                sx={{ pb: 0 }}
               />
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ height: '100%' }}>
-            <CardHeader
-              title={
-                <Box display="flex" alignItems="center" gap={1}>
-                  <DirectionsCarIcon color="primary" />
-                  <Typography variant="subtitle1">Accident History</Typography>
-                </Box>
-              }
-              sx={{ pb: 0 }}
-            />
-            <CardContent>
-              <TextField
-                variant='outlined'
-                placeholder='Describe any relevant accidents or injuries...'
-                fullWidth
-                multiline
-                rows={3}
-                sx={{
-                  '& .MuiInputBase-root': { height: 'initial !important' },
-                }}
-                value={accident || ''}
-                onChange={(e) => handleChangeString('accident', e.target.value)}
+              <CardContent>
+                <TextField
+                  variant='outlined'
+                  placeholder='List current medications and dosages...'
+                  fullWidth
+                  multiline
+                  rows={3}
+                  sx={{
+                    '& .MuiInputBase-root': { height: 'initial !important' },
+                  }}
+                  value={medications || ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeString('medications', e.target.value)}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
+              <CardHeader
+                title={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <DirectionsCarIcon color="primary" />
+                    <Typography variant="subtitle1">Accident History</Typography>
+                  </Box>
+                }
+                sx={{ pb: 0 }}
               />
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ height: '100%' }}>
-            <CardHeader
-              title={
-                <Box display="flex" alignItems="center" gap={1}>
-                  <CoronavirusIcon color="primary" />
-                  <Typography variant="subtitle1">Disease History</Typography>
-                </Box>
-              }
-              sx={{ pb: 0 }}
-            />
-            <CardContent>
-              <TextField
-                variant='outlined'
-                placeholder='Document history of diseases or chronic conditions...'
-                fullWidth
-                multiline
-                rows={3}
-                sx={{
-                  '& .MuiInputBase-root': { height: 'initial !important' },
-                }}
-                value={disease || ''}
-                onChange={(e) => handleChangeString('disease', e.target.value)}
+              <CardContent>
+                <TextField
+                  variant='outlined'
+                  placeholder='Describe any relevant accidents or injuries...'
+                  fullWidth
+                  multiline
+                  rows={3}
+                  sx={{
+                    '& .MuiInputBase-root': { height: 'initial !important' },
+                  }}
+                  value={accident || ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeString('accident', e.target.value)}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ height: '100%', mt: { xs: 2, md: 2 }, mr: 2 }}>
+              <CardHeader
+                title={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <CoronavirusIcon color="primary" />
+                    <Typography variant="subtitle1">Disease History</Typography>
+                  </Box>
+                }
+                sx={{ pb: 0 }}
               />
-            </CardContent>
-          </Card>
+              <CardContent>
+                <TextField
+                  variant='outlined'
+                  placeholder='Document history of diseases or chronic conditions...'
+                  fullWidth
+                  multiline
+                  rows={3}
+                  sx={{
+                    '& .MuiInputBase-root': { height: 'initial !important' },
+                  }}
+                  value={disease || ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeString('disease', e.target.value)}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Card variant="outlined" sx={{ mb: 2 }}>
+      </Box>
+
+      {/* Developmental History - Third Section */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5, fontWeight: 500 }}>
+          Development & Education
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>            <Card variant="outlined" sx={{ mb: 2 }}>
             <CardHeader
               title={
                 <Box display="flex" alignItems="center" gap={1}>
@@ -209,16 +231,19 @@ export default function HistorySection() {
                   <Typography variant="subtitle1">Developmental History</Typography>
                 </Box>
               }
-              sx={{ pb: 0 }}
+              sx={{ pb: 0, borderBottom: '1px solid', borderColor: 'divider' }}
             />
             <CardContent>
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ mb: 3, py: 1, bgcolor: 'background.default', borderRadius: 1 }}>
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={developmentalHistory?.milestonesInTime || false}
-                      onChange={(e) => handleDHChange('milestonesInTime', e.target.checked)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('milestonesInTime', e.target.checked)}
                       color="primary"
+                      sx={{
+                        ml: 3,
+                      }}
                     />
                   }
                   label={
@@ -228,12 +253,18 @@ export default function HistorySection() {
                   }
                 />
               </Box>
-              
-              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1, mt: 1 }}>
+              <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2, mt: 2 }}>
                 Developmental Milestones (Age in months)
               </Typography>
-              
+
               <Grid container spacing={2}>
+                {/* Motor Development */}
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500, mb: 1, display: 'block' }}>
+                    Motor Development
+                  </Typography>
+                </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -241,7 +272,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.crawl || ''}
-                    onChange={(e) => handleDHChange('crawl', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('crawl', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -251,6 +282,7 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -258,7 +290,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.satUp || ''}
-                    onChange={(e) => handleDHChange('satUp', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('satUp', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -268,6 +300,7 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -275,7 +308,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.stood || ''}
-                    onChange={(e) => handleDHChange('stood', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('stood', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -285,6 +318,7 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -292,7 +326,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.walked || ''}
-                    onChange={(e) => handleDHChange('walked', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('walked', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -302,6 +336,14 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
+                {/* Self-care Development */}
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500, mb: 1, mt: 1, display: 'block' }}>
+                    Self-care Development
+                  </Typography>
+                </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -309,7 +351,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.fedSelf || ''}
-                    onChange={(e) => handleDHChange('fedSelf', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('fedSelf', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -319,6 +361,7 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -326,7 +369,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.dressSelf || ''}
-                    onChange={(e) => handleDHChange('dressSelf', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('dressSelf', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -336,6 +379,7 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -343,7 +387,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.toileted || ''}
-                    onChange={(e) => handleDHChange('toileted', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('toileted', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -353,6 +397,14 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
+                {/* Language Development */}
+                <Grid item xs={12}>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500, mb: 1, mt: 1, display: 'block' }}>
+                    Language Development
+                  </Typography>
+                </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -360,7 +412,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.singleWords || ''}
-                    onChange={(e) => handleDHChange('singleWords', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('singleWords', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -370,6 +422,7 @@ export default function HistorySection() {
                     }}
                   />
                 </Grid>
+
                 <Grid item xs={6} sm={4} md={3} lg={2}>
                   <TextField
                     variant="outlined"
@@ -377,7 +430,7 @@ export default function HistorySection() {
                     size="small"
                     fullWidth
                     value={developmentalHistory?.combinedWords || ''}
-                    onChange={(e) => handleDHChange('combinedWords', e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDHChange('combinedWords', e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -390,36 +443,37 @@ export default function HistorySection() {
               </Grid>
             </CardContent>
           </Card>
-        </Grid>
-        
-        <Grid item xs={12} md={12}>
-          <Card variant="outlined">
-            <CardHeader
-              title={
-                <Box display="flex" alignItems="center" gap={1}>
-                  <SchoolIcon color="primary" />
-                  <Typography variant="subtitle1">Educational Status</Typography>
-                </Box>
-              }
-              sx={{ pb: 0 }}
-            />
-            <CardContent>
-              <TextField
-                variant="outlined"
-                placeholder="Include details about education, school performance, and accommodations..."
-                fullWidth
-                multiline
-                rows={3}
-                sx={{
-                  '& .MuiInputBase-root': { height: 'initial !important' },
-                }}
-                value={educationalStatus || ''}
-                onChange={(e) => handleChangeString('educationalStatus', e.target.value)}
+          </Grid>
+
+          <Grid item xs={12}>
+            <Card variant="outlined">
+              <CardHeader
+                title={
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <SchoolIcon color="primary" />
+                    <Typography variant="subtitle1">Educational Status</Typography>
+                  </Box>
+                }
+                sx={{ pb: 0 }}
               />
-            </CardContent>
-          </Card>
+              <CardContent>
+                <TextField
+                  variant="outlined"
+                  placeholder="Include details about education, school performance, and accommodations..."
+                  fullWidth
+                  multiline
+                  rows={3}
+                  sx={{
+                    '& .MuiInputBase-root': { height: 'initial !important' },
+                  }}
+                  value={educationalStatus || ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChangeString('educationalStatus', e.target.value)}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </Box>
   );
 }

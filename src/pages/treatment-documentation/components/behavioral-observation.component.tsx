@@ -40,16 +40,16 @@ export default function BehavioralObservation() {
     awarenessOfEnvironmentalEvents,
     prognosisForICF
   } = useAppSelector((state) => state.treatmentDocumentation);
-  
+
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
   // Define a proper type for behavioral observation fields
-  type BehavioralField = 
+  type BehavioralField =
     | 'attendingSkills' | 'responseRate' | 'coop' | 'levelOfActivity'
     | 'socialInteractions' | 'communicativeIntent' | 'awarenessOfOthers'
     | 'reliabilityOfScores' | 'awarenessOfEnvironmentalEvents' | 'prognosisForICF';
-  
+
   const handleChangeString = (field: BehavioralField, value: string) => {
     dispatch(setGeneralInfo({ field, value }));
   };
@@ -68,13 +68,13 @@ export default function BehavioralObservation() {
       'corresponding': 'success',
       'present': 'success',
       'allowed': 'success',
-      
+
       // Neutral values
       'moderate': 'info',
       'with some pro': 'info',
       'average': 'info',
       'moderately': 'info',
-      
+
       // Negative values
       'poor': 'error',
       'slow': 'warning',
@@ -86,7 +86,7 @@ export default function BehavioralObservation() {
       'withdrawn': 'warning',
       'absent': 'error'
     };
-    
+
     return valueMap[value] || 'default';
   };
 
@@ -95,13 +95,13 @@ export default function BehavioralObservation() {
       <Typography variant="h6" color="primary" sx={{ mb: 2, fontWeight: 500 }}>
         Behavioral Observations
       </Typography>
-      
+
       <Grid container spacing={2}>
         {/* Attending Skills */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -116,10 +116,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                attendingSkills && 
-                <Chip 
-                  label={attendingSkills} 
-                  size="small" 
+                attendingSkills &&
+                <Chip
+                  label={attendingSkills}
+                  size="small"
                   color={getChipColor(attendingSkills)}
                 />
               }
@@ -142,12 +142,12 @@ export default function BehavioralObservation() {
             </CardContent>
           </Card>
         </Grid>
-        
+
         {/* Response Rate */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -162,10 +162,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                responseRate && 
-                <Chip 
-                  label={responseRate} 
-                  size="small" 
+                responseRate &&
+                <Chip
+                  label={responseRate}
+                  size="small"
                   color={getChipColor(responseRate)}
                 />
               }
@@ -191,9 +191,9 @@ export default function BehavioralObservation() {
 
         {/* Cooperation */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -208,10 +208,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                coop && 
-                <Chip 
-                  label={coop} 
-                  size="small" 
+                coop &&
+                <Chip
+                  label={coop}
+                  size="small"
                   color={getChipColor(coop)}
                 />
               }
@@ -237,9 +237,9 @@ export default function BehavioralObservation() {
 
         {/* Level of Activity */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -254,10 +254,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                levelOfActivity && 
-                <Chip 
-                  label={levelOfActivity} 
-                  size="small" 
+                levelOfActivity &&
+                <Chip
+                  label={levelOfActivity}
+                  size="small"
                   color={getChipColor(levelOfActivity)}
                 />
               }
@@ -283,9 +283,9 @@ export default function BehavioralObservation() {
 
         {/* Social Interactions */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -300,10 +300,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                socialInteractions && 
-                <Chip 
-                  label={socialInteractions} 
-                  size="small" 
+                socialInteractions &&
+                <Chip
+                  label={socialInteractions}
+                  size="small"
                   color={getChipColor(socialInteractions)}
                 />
               }
@@ -328,9 +328,9 @@ export default function BehavioralObservation() {
 
         {/* Communicative Intent */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -345,10 +345,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                communicativeIntent && 
-                <Chip 
-                  label={communicativeIntent} 
-                  size="small" 
+                communicativeIntent &&
+                <Chip
+                  label={communicativeIntent}
+                  size="small"
                   color={getChipColor(communicativeIntent)}
                 />
               }
@@ -373,9 +373,9 @@ export default function BehavioralObservation() {
 
         {/* Awareness of Others */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -390,10 +390,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                awarenessOfOthers && 
-                <Chip 
-                  label={awarenessOfOthers} 
-                  size="small" 
+                awarenessOfOthers &&
+                <Chip
+                  label={awarenessOfOthers}
+                  size="small"
                   color={getChipColor(awarenessOfOthers)}
                 />
               }
@@ -418,9 +418,9 @@ export default function BehavioralObservation() {
 
         {/* Reliability of Scores */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -435,10 +435,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                reliabilityOfScores && 
-                <Chip 
-                  label={reliabilityOfScores} 
-                  size="small" 
+                reliabilityOfScores &&
+                <Chip
+                  label={reliabilityOfScores}
+                  size="small"
                   color={getChipColor(reliabilityOfScores)}
                 />
               }
@@ -463,9 +463,9 @@ export default function BehavioralObservation() {
 
         {/* Environmental Awareness */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -480,10 +480,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                awarenessOfEnvironmentalEvents && 
-                <Chip 
-                  label={awarenessOfEnvironmentalEvents} 
-                  size="small" 
+                awarenessOfEnvironmentalEvents &&
+                <Chip
+                  label={awarenessOfEnvironmentalEvents}
+                  size="small"
                   color={getChipColor(awarenessOfEnvironmentalEvents)}
                 />
               }
@@ -509,9 +509,9 @@ export default function BehavioralObservation() {
 
         {/* Prognosis */}
         <Grid item xs={12} sm={6} md={4}>
-          <Card 
-            variant="outlined" 
-            sx={{ 
+          <Card
+            variant="outlined"
+            sx={{
               height: '100%',
               transition: 'transform 0.2s, box-shadow 0.2s',
               '&:hover': {
@@ -526,10 +526,10 @@ export default function BehavioralObservation() {
               titleTypographyProps={{ variant: 'subtitle2' }}
               sx={{ pb: 0 }}
               action={
-                prognosisForICF && 
-                <Chip 
-                  label={prognosisForICF} 
-                  size="small" 
+                prognosisForICF &&
+                <Chip
+                  label={prognosisForICF}
+                  size="small"
                   color={getChipColor(prognosisForICF)}
                 />
               }
