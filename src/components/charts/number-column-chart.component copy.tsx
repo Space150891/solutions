@@ -2,6 +2,7 @@ import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material';
 import { getPatientNumberColumnOptions } from '../../constants/chart-options';
 import { IPeriod } from '../../pages/medical-stats/medical-stats.page';
+import { ChartContainer } from '../common';
 
 interface Props {
    period: IPeriod;
@@ -25,5 +26,9 @@ export const NumberColumnChart = ({ period }: Props) => {
       },
    ];
 
-   return <Chart options={options} series={series} type='bar' height={300} />;
+   return (
+      <ChartContainer height="320px">
+         <Chart options={options} series={series} type='bar' height={300} />
+      </ChartContainer>
+   );
 };

@@ -78,43 +78,42 @@ export default function AddPersonnel({ addPersonnel }: AddPersonnelProps) {
    };
 
    const handleSubmit = () => {
-      const data = {
-         doctor: {
+      const data = {         doctor: {
             id: uuidv4(),
-            first_name: firstName,
-            last_name: lastName,
+            firstName,
+            lastName,
             gender,
             specialization,
             locations,
-            hire_date: hireDate?.format('MM/DD/YYYY'),
+            hireDate: hireDate?.format('MM/DD/YYYY'),
             salary,
-            years_of_experience: yearsOfExp,
+            yearsOfExperience: yearsOfExp,
          } as IManagedDoctor,
 
          nurse: {
             id: uuidv4(),
-            first_name: firstName,
-            last_name: lastName,
+            firstName,
+            lastName,
             gender,
             rank,
             department,
             location,
-            hire_date: hireDate?.format('MM/DD/YYYY'),
+            hireDate: hireDate?.format('MM/DD/YYYY'),
             salary,
-            years_of_experience: yearsOfExp,
+            yearsOfExperience: yearsOfExp,
          } as IManagedNurse,
 
          other: {
             id: uuidv4(),
-            first_name: firstName,
-            last_name: lastName,
+            firstName,
+            lastName,
             gender,
             role,
             department,
             location,
-            hire_date: hireDate?.format('MM/DD/YYYY'),
+            hireDate: hireDate?.format('MM/DD/YYYY'),
             salary,
-            years_of_experience: yearsOfExp,
+            yearsOfExperience: yearsOfExp,
             shift,
          } as IManagedOther,
       };

@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Box, Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
+import { Box, Grid, MenuItem, Stack, TextField, Typography, Divider } from '@mui/material';
 import { IPages } from '../../types/common.types';
 import { MainCard } from '../../components/cards/main-card.component';
 import { NumberColumnChart } from '../../components/charts/number-column-chart.component copy';
 import { AgeDistributionChart } from '../../components/charts/age-distribution-chart.component.tsx';
 import { GenderPieChart } from '../../components/charts/gender-pie-chart.component.tsx';
 import { DiseaseBarChart } from '../../components/charts/disease-bar-chart.component.tsx';
+import { PageScrollContainer } from '../../components/common';
+import TabbedStatsExample from './tabbed-stats-example';
+import PatientFilterForm from './patient-filter-form';
 
 export type IPeriod = 'today' | 'week' | 'month' | 'year';
 
@@ -19,7 +22,7 @@ export default function MedicalStatsPage() {
    const [period, setPeriod] = useState<IPeriod>('today');
 
    return (
-      <Box component='section' padding={1.25}>
+      <PageScrollContainer>
          <Box sx={{ mb: 2.25 }}>
             <Typography variant='h5'>{`${IPages.MEDICAL_STATS.toUpperCase()}`}</Typography>
          </Box>
@@ -70,6 +73,20 @@ export default function MedicalStatsPage() {
                </MainCard>
             </Grid>
          </Grid>
-      </Box>
+
+         <Divider sx={{ my: 4 }} />
+         
+         <Typography variant='h5' sx={{ mb: 2 }}>Advanced Data Analysis</Typography>
+         
+         <Grid container spacing={3}>
+            <Grid item xs={12} md={7}>
+               <TabbedStatsExample />
+            </Grid>
+            <Grid item xs={12} md={5}>
+               <Typography variant='h6' sx={{ mb: 2 }}>Filter Patients</Typography>
+               <PatientFilterForm />
+            </Grid>
+         </Grid>
+      </PageScrollContainer>
    );
 }

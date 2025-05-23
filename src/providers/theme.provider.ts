@@ -8,6 +8,22 @@ const getCommonThemeOptions = (mode: PaletteMode): ThemeOptions => ({
             body: {
                transition: 'background-color 0.2s ease, color 0.2s ease',
             },
+            '*::-webkit-scrollbar': {
+               width: '8px',
+               height: '8px',
+            },
+            '*::-webkit-scrollbar-track': {
+               backgroundColor: mode === 'light' ? '#f1f1f1' : 'rgba(255, 255, 255, 0.05)',
+               borderRadius: '4px',
+            },
+            '*::-webkit-scrollbar-thumb': {
+               backgroundColor: mode === 'light' ? '#c1c1c1' : 'rgba(255, 255, 255, 0.2)',
+               borderRadius: '4px',
+               transition: 'background-color 0.2s ease',
+            },
+            '*::-webkit-scrollbar-thumb:hover': {
+               backgroundColor: mode === 'light' ? '#a1a1a1' : 'rgba(255, 255, 255, 0.3)', 
+            },
          },
       },
       MuiPaper: {

@@ -80,10 +80,10 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
                                           whiteSpace: 'nowrap',
                                        }}
                                     >
-                                       {doctor.first_name} {doctor.last_name}
+                                       {doctor.firstName} {doctor.lastName}
                                     </Typography>
                                     <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-                                       Hired at: {doctor.hire_date}
+                                       Hired at: {doctor.hireDate}
                                     </Typography>
                                     <Typography variant='body2'>Doctor, {doctor.specialization}</Typography>
                                  </CardContent>
@@ -111,7 +111,7 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
                                           <Typography variant='caption'>/year</Typography>
                                        </Typography>
                                        <Typography>
-                                          Years of experience: {doctor.years_of_experience}
+                                          Years of experience: {doctor.yearsOfExperience}
                                        </Typography>
                                     </CardContent>
                                  </Collapse>
@@ -139,10 +139,10 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
                                           whiteSpace: 'nowrap',
                                        }}
                                     >
-                                       {nurse.first_name} {nurse.last_name}
+                                       {nurse.firstName} {nurse.lastName}
                                     </Typography>
                                     <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-                                       Hired at: {nurse.hire_date}
+                                       Hired at: {nurse.hireDate}
                                     </Typography>
                                     <Typography variant='body2'>Nurse, {nurse.rank}</Typography>
                                     <Typography variant='body2'>Department: {nurse.department}</Typography>
@@ -165,7 +165,7 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
                                           <Typography variant='caption'>/year</Typography>
                                        </Typography>
                                        <Typography>
-                                          Years of experience: {nurse.years_of_experience}
+                                          Years of experience: {nurse.yearsOfExperience}
                                        </Typography>
                                     </CardContent>
                                  </Collapse>
@@ -193,10 +193,10 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
                                           whiteSpace: 'nowrap',
                                        }}
                                     >
-                                       {other.first_name} {other.last_name}
+                                       {other.firstName} {other.lastName}
                                     </Typography>
                                     <Typography sx={{ mb: 1.5 }} color='text.secondary'>
-                                       Hired at: {other.hire_date}
+                                       Hired at: {other.hireDate}
                                     </Typography>
                                     <Typography variant='body2'>Stuff, {other.role}</Typography>
                                     <Typography variant='body2'>Department: {other.department}</Typography>
@@ -220,7 +220,7 @@ export default function PersonnelGrid({ doctors, nurses, others }: PersonnelGrid
                                           <Typography variant='caption'>/year</Typography>
                                        </Typography>
                                        <Typography>
-                                          Years of experience: {other.years_of_experience}
+                                          Years of experience: {other.yearsOfExperience}
                                        </Typography>
                                     </CardContent>
                                  </Collapse>

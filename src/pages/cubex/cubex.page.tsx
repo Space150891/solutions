@@ -5,6 +5,7 @@ import { DrawerComponent } from '../../components/drawer/drawer.component';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { appbarState, handleDrawer } from '../../components/app-bar/app-bar.store';
 import { useThemeContext } from '../../providers/theme-context.provider';
+import { PageScrollContainer } from '../../components/common';
 
 export default function CubexPage() {
    const dispatch = useAppDispatch();
@@ -36,10 +37,11 @@ export default function CubexPage() {
                p: 1,
                transition: theme.transitions.create(['background-color', 'color'], {
                   duration: theme.transitions.duration.standard,
-               }),
-            }}
+               }),            }}
          >
-            <Outlet />
+            <PageScrollContainer>
+              <Outlet />
+            </PageScrollContainer>
          </Box>
       </Stack>
    );
