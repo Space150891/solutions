@@ -92,7 +92,7 @@ export const ReportAreaChart = () => {
             borderColor: line,
          },
          tooltip: {
-            theme: 'light',
+            theme: theme.palette.mode,
          },
          legend: {
             labels: {
@@ -100,7 +100,7 @@ export const ReportAreaChart = () => {
             },
          },
       }));
-   }, [primary, secondary, line, theme]);
+   }, [primary, secondary, line, theme.palette.mode, theme]);
 
    return <ReactApexChart options={options} series={series} type='line' height={415} />;
 };

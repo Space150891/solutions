@@ -86,7 +86,7 @@ export const IncomeAreaChart = ({ slot }: { slot: 'month' | 'week' }) => {
             borderColor: line,
          },
          tooltip: {
-            theme: 'light',
+            theme: theme.palette.mode,
          },
       }));
    }, [primary, secondary, line, theme, slot]);

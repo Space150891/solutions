@@ -28,7 +28,8 @@ export const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
       ref,
    ) => {
       const theme = useTheme();
-      boxShadow = theme.palette.mode === 'dark' ? boxShadow || true : boxShadow;
+      const isDark = theme.palette.mode === 'dark';
+      boxShadow = isDark ? boxShadow || true : boxShadow;
 
       return (
          <Card
@@ -38,13 +39,15 @@ export const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
             sx={{
                border: border ? '1px solid' : 'none',
                borderRadius: 2,
-               borderColor: theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.divider,
-               boxShadow:
-                  boxShadow && (!border || theme.palette.mode === 'dark')
-                     ? shadow || theme.shadows['1']
-                     : 'inherit',
+               borderColor: theme.palette.divider,
+               bgcolor: theme.palette.background.paper,
+               boxShadow: boxShadow && (!border || isDark)
+                  ? shadow || (isDark ? '0 4px 8px rgba(0, 0, 0, 0.4)' : theme.shadows[1])
+                  : 'inherit',
                ':hover': {
-                  boxShadow: boxShadow ? shadow || theme.shadows['1'] : 'inherit',
+                  boxShadow: boxShadow 
+                     ? shadow || (isDark ? '0 6px 12px rgba(0, 0, 0, 0.5)' : theme.shadows[2])
+                     : 'inherit',
                },
                '& pre': {
                   m: 0,
@@ -60,7 +63,10 @@ export const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
             {!darkTitle && title && (
                <CardHeader
                   sx={headerSX}
-                  titleTypographyProps={{ variant: 'subtitle1' }}
+                  titleTypographyProps={{ 
+                     variant: 'subtitle1',
+                     color: isDark ? 'text.primary' : 'text.secondary'
+                  }}
                   title={title}
                   action={secondary}
                />
@@ -68,17 +74,41 @@ export const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
             {darkTitle && title && (
                <CardHeader
                   sx={headerSX}
-                  title={<Typography variant='h3'>{title}</Typography>}
+                  title={
+                     <Typography 
+                        variant='h3' 
+                        color={isDark ? 'text.primary' : 'inherit'}
+                     >
+                        {title}
+                     </Typography>
+                  }
                   action={secondary}
                />
-            )}            {/* card content */}
-            {content && <CardContent component="div" sx={contentSX}>{children}</CardContent>}
+            )}
+            
+            {/* card content */}
+            {content && (
+               <CardContent 
+                  component="div" 
+                  sx={{
+                     ...contentSX,
+                     color: isDark ? 'text.primary' : 'inherit'
+                  }}
+               >
+                  {children}
+               </CardContent>
+            )}
             {!content && children}
 
             {/* card footer - clipboard & highlighter  */}
             {codeHighlight && (
                <>
-                  <Divider sx={{ borderStyle: 'dashed' }} />
+                  <Divider 
+                     sx={{ 
+                        borderStyle: 'dashed',
+                        borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)'
+                     }} 
+                  />
                   {children}
                </>
             )}

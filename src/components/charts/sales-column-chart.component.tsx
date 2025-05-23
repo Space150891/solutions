@@ -132,7 +132,7 @@ export const SalesColumnChart = ({ period }: { period: IPeriod }) => {
             borderColor: line,
          },
          tooltip: {
-            theme: 'light',
+            theme: theme.palette.mode,
          },
          legend: {
             position: 'top',
@@ -142,7 +142,7 @@ export const SalesColumnChart = ({ period }: { period: IPeriod }) => {
             },
          },
       }));
-   }, [primary, secondary, line, warning, primaryMain, successDark]);
+   }, [primary, secondary, line, warning, primaryMain, successDark, theme.palette.mode]);
 
    return <ReactApexChart options={options} series={series} type='bar' height={430} />;
 };

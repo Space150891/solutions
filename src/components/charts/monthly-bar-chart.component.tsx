@@ -65,10 +65,10 @@ export const MonthlyBarChart = () => {
             },
          },
          tooltip: {
-            theme: 'light',
+            theme: theme.palette.mode,
          },
       }));
-   }, [primary, info, secondary]);
+   }, [primary, info, secondary, theme.palette.mode]);
 
    return (
       <Box id='chart'>
