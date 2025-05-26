@@ -33,6 +33,7 @@ import GeneralInformation from './components/general-information.component';
 import HistorySection from './components/history-section.component';
 import BehavioralObservation from './components/behavioral-observation.component';
 import LocationInfo from './components/location-info.component';
+import MedicationManagement from './components/medication-management.component.tsx';
 
 export default function TreatmentDocumentation() {
    const theme = useTheme();
@@ -47,6 +48,7 @@ export default function TreatmentDocumentation() {
       { label: "General Information", completed: false },
       { label: "Medical History", completed: false },
       { label: "Behavioral Observation", completed: false },
+      { label: "Medication Management", completed: false },
    ];
 
    // Progress percentage calculation
@@ -99,6 +101,8 @@ export default function TreatmentDocumentation() {
             return <HistorySection />;
          case 2:
             return <BehavioralObservation />;
+         case 3:
+            return <MedicationManagement />;
          default:
             return <Box>Unknown step</Box>;
       }
@@ -178,9 +182,7 @@ export default function TreatmentDocumentation() {
                   bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
                }}
             />
-         </AppBar>
-
-         {/* Main Content */}
+         </AppBar>         {/* Main Content */}
          <Container maxWidth="xl" sx={{ mt: 4, mb: 4, flexGrow: 1 }}>
             {/* Desktop Stepper - only visible on desktop */}
             {!isMobile && (
@@ -318,8 +320,7 @@ export default function TreatmentDocumentation() {
                   >
                      Complete & Save
                   </Button>
-               )}
-            </Box>
+               )}            </Box>
          </Container>
       </Box>
    );
