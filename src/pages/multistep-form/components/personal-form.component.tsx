@@ -9,6 +9,7 @@ type UserData = {
    nationality: string;
    occupation: string;
    updateFields: (fields: Partial<UserData>) => void;
+   errors?: Partial<UserData>;
 };
 
 export const PersonalForm = ({ email, phone, gender, nationality, occupation, updateFields }: UserData) => {
