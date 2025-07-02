@@ -100,21 +100,26 @@ export const config = [
    },
    {
       id: 20,
+      path: paths.chat,
+      name: IPages.CHAT,
+   },
+   {
+      id: 21,
       path: paths.patientHistory,
       name: IPages.PATIENT_HISTORY,
    },
    {
-      id: 21,
+      id: 22,
       path: paths.survey,
       name: IPages.SURVEY,
    },
    {
-      id: 22,
+      id: 23,
       path: paths.medicalStats,
       name: IPages.MEDICAL_STATS,
    },
    {
-      id: 23,
+      id: 24,
       path: paths.vitalMonitoring,
       name: IPages.VITAL_MONITORING,
    },

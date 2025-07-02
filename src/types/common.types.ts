@@ -19,6 +19,7 @@ export enum IPages {
    TEMPLATE_MANAGEMENT = 'Template Management',
    TEMPLATE_VIEW = 'Template View',
    EMAIL = 'Email',
+   CHAT = 'Chat',
    BILLING = 'Billing',
    PATIENT_HISTORY = 'Patient History',
    SURVEY = 'Survey',

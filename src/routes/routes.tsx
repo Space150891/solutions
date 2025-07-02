@@ -26,6 +26,7 @@ import UserActivityPage from '../pages/user-activity/user-activity.page';
 import TemplateViewPage from '../pages/template/template-view/template-view.page';
 import TemplateManagementPage from '../pages/template/template-management/template-management.page';
 import Email from '../pages/email/email.page';
+import ChatPage from '../pages/chat/chat.page';
 import BillingPage from '../pages/billing/billing.page';
 import PatientHistoryPage from '../pages/patient-history/patient-history.page';
 import SurveyPage from '../pages/survey/survey.page';
@@ -164,27 +165,32 @@ export const routesData: RouteObject[] = [
             element: <Email />,
          },
          {
-            id: '33-billing',
+            id: '33-chat',
+            path: paths.chat,
+            element: <ChatPage />,
+         },
+         {
+            id: '34-billing',
             path: paths.billing,
             element: <BillingPage />,
          },
          {
-            id: '34-billing',
+            id: '35-patientHistory',
             path: paths.patientHistory,
             element: <PatientHistoryPage />,
          },
          {
-            id: '35-survey',
+            id: '36-survey',
             path: paths.survey,
             element: <SurveyPage />,
          },
          {
-            id: '36-medicalStats',
+            id: '37-medicalStats',
             path: paths.medicalStats,
             element: <MedicalStatsPage />,
          },
          {
-            id: '37-vitalMonitoring',
+            id: '38-vitalMonitoring',
             path: paths.vitalMonitoring,
             element: <VitalMonitoring />,
          },
