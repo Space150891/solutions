@@ -34,6 +34,7 @@ import HistorySection from './components/history-section.component';
 import BehavioralObservation from './components/behavioral-observation.component';
 import LocationInfo from './components/location-info.component';
 import MedicationManagement from './components/medication-management.component.tsx';
+import ClinicalAlertsBanner from './components/clinical-alerts-banner.component';
 
 export default function TreatmentDocumentation() {
    const theme = useTheme();
@@ -200,6 +201,9 @@ export default function TreatmentDocumentation() {
                   ))}
                </Stepper>
             )}
+
+            {/* Clinical Alerts Banner */}
+            <ClinicalAlertsBanner />
 
             <Card elevation={isMobile ? 0 : 1} sx={{ borderRadius: 2 }}>
                <CardContent sx={{ p: { xs: 2, md: 3 } }}>

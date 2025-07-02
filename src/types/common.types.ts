@@ -25,6 +25,8 @@ export enum IPages {
    SURVEY = 'Survey',
    MEDICAL_STATS = 'Medical Stats',
    VITAL_MONITORING = 'Vital Monitoring',
+   CLINICAL_ALERTS = 'Clinical Alerts',
+  TELEMEDICINE = 'Telemedicine',
 }
 
 export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;

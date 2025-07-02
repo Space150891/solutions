@@ -32,6 +32,8 @@ import PatientHistoryPage from '../pages/patient-history/patient-history.page';
 import SurveyPage from '../pages/survey/survey.page';
 import MedicalStatsPage from '../pages/medical-stats/medical-stats.page';
 import VitalMonitoring from '../pages/vital-monitoring/vital-monitoring.page';
+import ClinicalAlertsPage from '../pages/clinical-alerts/clinical-alerts.page';
+import TelemedicinePage from '../pages/telemedicine/telemedicine.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -193,6 +195,16 @@ export const routesData: RouteObject[] = [
             id: '38-vitalMonitoring',
             path: paths.vitalMonitoring,
             element: <VitalMonitoring />,
+         },
+         {
+            id: '39-clinicalAlerts',
+            path: paths.clinicalAlerts,
+            element: <ClinicalAlertsPage />,
+         },
+         {
+            id: '40-telemedicine',
+            path: paths.telemedicine,
+            element: <TelemedicinePage />,
          },
       ],
    },

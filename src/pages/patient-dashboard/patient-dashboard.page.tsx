@@ -6,6 +6,7 @@ import HomeAddress from './components/hame-address.component';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import IllnessHistory from './components/illness-history.component';
 import AppointmentHistory from './components/appointments-history.component';
+import ClinicalAlertsDashboard from './components/clinical-alerts-dashboard.component';
 
 export default function PatientDashboard() {
    return (
@@ -30,6 +31,11 @@ export default function PatientDashboard() {
             </Grid2>
             <Grid2 lg={8} sm={6}>
                <AppointmentHistory />
+            </Grid2>
+         </Grid2>
+         <Grid2 container spacing={1} sx={{ justifyContent: 'space-between', mt: 1 }}>
+            <Grid2 lg={12} sm={12}>
+               <ClinicalAlertsDashboard />
             </Grid2>
          </Grid2>
       </Box>
