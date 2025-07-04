@@ -32,4 +32,5 @@ export const paths = Object.freeze({
    vitalMonitoring: '/cubex/vital-monitoring',
    clinicalAlerts: '/cubex/clinical-alerts',
   telemedicine: '/cubex/telemedicine',
+  treatmentPlanning: '/cubex/treatment-planning',
 });

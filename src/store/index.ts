@@ -2,6 +2,7 @@ import { configureStore, combineReducers, Action, ThunkAction } from '@reduxjs/t
 import { appbarSlice } from '../components/app-bar/app-bar.store';
 import patientHistoryReducer from './slices/patientHistorySlice';
 import treatmentDocumentationReducer from './slices/treatmentDocumentationSlice';
+import treatmentPlanningReducer from './slices/treatmentPlanningSlice';
 import personnelReducer from './slices/personnelSlice';
 import patientReducer from './slices/patientSlice';
 
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
    appbar: appbarSlice.reducer,
    patientHistory: patientHistoryReducer,
    treatmentDocumentation: treatmentDocumentationReducer,
+   treatmentPlanning: treatmentPlanningReducer,
    personnel: personnelReducer,
    patients: patientReducer,
 });

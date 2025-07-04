@@ -1,611 +1,855 @@
-import { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Card, 
-  CardContent, 
-  Button, 
-  TextField, 
-  MenuItem, 
-  Grid, 
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Box,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardHeader,
+  CardContent,
+  AppBar,
+  Toolbar,
   IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
   Fab,
-  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Chip,
+  Badge,
   Divider,
-  Paper,
   useTheme,
-  alpha 
+  useMediaQuery,
+  Paper,
 } from '@mui/material';
-import { 
-  Add as AddIcon, 
-  Save as SaveIcon,
-  ContentCopy as CopyIcon,
-  Delete as DeleteIcon,
-  MedicalServices as MedicalServicesIcon,
-  Medication as MedicationIcon,
-  EventNote as EventNoteIcon,
-  DragIndicator as DragIndicatorIcon,
-  CheckCircle as CheckIcon
-} from '@mui/icons-material';
-import { v4 as uuidv4 } from 'uuid';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
-  createPlan,
-  addPhase,
-  updatePhase,
-  removePhase,
-  addTreatmentItem,
-  removeTreatmentItem,
-  savePlan,
-  updatePlanDetails
+  createTreatmentPlan,
+  setCurrentPlan,
+  updateTreatmentPlan,
+  addProcedureToCurrentPlan,
+  addMedicationToCurrentPlan,
+  addAppointmentToCurrentPlan,
+  removeProcedureFromCurrentPlan,
+  removeMedicationFromCurrentPlan,
+  removeAppointmentFromCurrentPlan,
+  setSelectedPatient,
 } from '../../store/slices/treatmentPlanningSlice';
-import {
-  TreatmentPhase,
-  TreatmentItem,
-  samplePatients,
-  sampleDoctors,
-  availableProcedures,
-  availableMedications,
-  availableFollowUps,
-  createEmptyTreatmentPlan
-} from './mock';
-import { PhaseColumn } from './components/phase-column.component';
-import { TreatmentItemPanel } from './components/treatment-item-panel.component';
-import { DragDropContext, DropResult } from '@hello-pangea/dnd';
-import { IPages } from '../../types/common.types';
+import { Procedure, Medication as MedicationType, FollowUpAppointment, TreatmentPlan } from '../../store/slices/types/treatmentPlanningTypes';
 
-export default function TreatmentPlanningPage() {
+// Icons
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
+import MenuIcon from '@mui/icons-material/Menu';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import MedicationIcon from '@mui/icons-material/Medication';
+import EventIcon from '@mui/icons-material/Event';
+import PersonIcon from '@mui/icons-material/Person';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
+
+// Components
+import TreatmentPlanCard from './components/treatment-plan-card.component';
+import DraggableItem from './components/draggable-item.component';
+import PatientSelector from './components/patient-selector.component';
+import TreatmentDocConnection from './components/treatment-doc-connection.component';
+
+const TreatmentPlanningPage: React.FC = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { currentPlan, savedPlans: _savedPlans } = useAppSelector(state => state.treatmentPlanning);
-  
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Redux state
+  const {
+    currentPlan,
+    availableProcedures,
+    availableMedications,
+    availableAppointments,
+    selectedPatient,
+    isLoading,
+    error,
+  } = useAppSelector((state) => state.treatmentPlanning);
+
   // Local state
-  const [selectedPatient, setSelectedPatient] = useState(samplePatients[0].id);
-  const [selectedDoctor, setSelectedDoctor] = useState(sampleDoctors[0].id);
-  const [planTitle, setPlanTitle] = useState('');
-  const [planDescription, setPlanDescription] = useState('');
-  const [isEditingPlan, setIsEditingPlan] = useState(false);
-  
-  // Initialize with an empty plan if no plan is loaded
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const [newPlanDialogOpen, setNewPlanDialogOpen] = useState(false);
+  const [editPlanDialogOpen, setEditPlanDialogOpen] = useState(false);
+  const [patientSelectorOpen, setPatientSelectorOpen] = useState(false);
+
+  // Form state for new plan
+  const [newPlanForm, setNewPlanForm] = useState({
+    title: '',
+    description: '',
+    startDate: dayjs(),
+    endDate: dayjs().add(1, 'month'),
+    goals: '',
+  });
+
+  // Initialize with empty plan if none exists
   useEffect(() => {
     if (!currentPlan) {
       handleCreateNewPlan();
-    } else {
-      setPlanTitle(currentPlan.title);
-      setPlanDescription(currentPlan.description);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPlan]);
+  }, []);
 
-  // Create new plan
-  const handleCreateNewPlan = () => {
-    const patient = samplePatients.find(p => p.id === selectedPatient);
-    const doctor = sampleDoctors.find(d => d.id === selectedDoctor);
-    
-    if (patient && doctor) {
-      const newPlan = createEmptyTreatmentPlan(
-        patient.id,
-        patient.name,
-        doctor.id,
-        doctor.name
-      );
-      dispatch(createPlan(newPlan));
-      setPlanTitle(newPlan.title);
-      setPlanDescription(newPlan.description);
+  // Handle creating new plan
+  const handleCreateNewPlan = useCallback(() => {
+    const newPlan: Partial<TreatmentPlan> = {
+      title: newPlanForm.title || 'New Treatment Plan',
+      description: newPlanForm.description,
+      patientId: selectedPatient?.id || '',
+      patientName: selectedPatient?.name || 'No Patient Selected',
+      startDate: newPlanForm.startDate.format('YYYY-MM-DD'),
+      endDate: newPlanForm.endDate.format('YYYY-MM-DD'),
+      goals: newPlanForm.goals ? [newPlanForm.goals] : [],
+    };
+
+    dispatch(createTreatmentPlan(newPlan));
+    setNewPlanDialogOpen(false);
+    setNewPlanForm({
+      title: '',
+      description: '',
+      startDate: dayjs(),
+      endDate: dayjs().add(1, 'month'),
+      goals: '',
+    });
+  }, [dispatch, newPlanForm, selectedPatient]);
+
+  // Handle adding items to plan
+  const handleAddProcedure = (procedure: Procedure) => {
+    if (currentPlan) {
+      dispatch(addProcedureToCurrentPlan(procedure));
     }
   };
 
-  // Save current plan
-  const [saveConfirmation, setSaveConfirmation] = useState(false);
-  
+  const handleAddMedication = (medication: MedicationType) => {
+    if (currentPlan) {
+      dispatch(addMedicationToCurrentPlan(medication));
+    }
+  };
+
+  const handleAddAppointment = (appointment: FollowUpAppointment) => {
+    if (currentPlan) {
+      dispatch(addAppointmentToCurrentPlan(appointment));
+    }
+  };
+
+  // Handle save plan
   const handleSavePlan = () => {
     if (currentPlan) {
-      dispatch(updatePlanDetails({
-        title: planTitle,
-        description: planDescription
-      }));
-      dispatch(savePlan());
-      
-      // Show confirmation
-      setSaveConfirmation(true);
-      setTimeout(() => {
-        setSaveConfirmation(false);
-      }, 3000);
+      dispatch(updateTreatmentPlan({ status: 'Active' }));
+      // Here you would typically save to backend
+      console.log('Plan saved:', currentPlan);
     }
   };
 
-  // Add a new phase
-  const handleAddPhase = () => {
-    if (currentPlan) {
-      const newPhase: TreatmentPhase = {
-        id: uuidv4(),
-        title: `Phase ${currentPlan.phases.length + 1}`,
-        description: 'New treatment phase',
-        order: currentPlan.phases.length + 1,
-        items: []
-      };
-      dispatch(addPhase(newPhase));
-    }
-  };
-
-  // Track drag state for animation
-  const [isDragging, setIsDragging] = useState(false);
-  
-  // Handle drag start
-  const handleDragStart = () => {
-    setIsDragging(true);
-    // Change cursor during drag with smooth transition
-    document.body.style.transition = 'cursor 0.1s ease';
-    document.body.style.cursor = 'grabbing';
-    // Add class to body for global drag styles
-    document.body.classList.add('dragging');
-    // Prevent text selection during drag
-    document.body.style.userSelect = 'none';
-    document.body.style.webkitUserSelect = 'none';
-  };
-  
-  // Handle drag and drop
-  const handleDragEnd = (result: DropResult) => {
-    setIsDragging(false);
-    // Reset cursor with smooth transition
-    document.body.style.cursor = 'default';
-    // Remove drag class from body
-    document.body.classList.remove('dragging');
-    // Re-enable text selection
-    document.body.style.userSelect = '';
-    document.body.style.webkitUserSelect = '';
-    
-    const { source, destination, draggableId } = result;
-    
-    // Dropped outside a valid drop zone
-    if (!destination) return;
-    
-    // Handle dropping from available items into a phase
-    if (source.droppableId.startsWith('available-') && destination.droppableId.startsWith('phase-')) {
-      const category = source.droppableId.replace('available-', '');
-      const phaseId = destination.droppableId.replace('phase-', '');
-      let itemToAdd: TreatmentItem | undefined;
-      
-      try {
-        // Find the item in the appropriate category
-        switch (category) {
-          case 'procedures': {
-            const foundProcedure = availableProcedures.find(item => item.id === draggableId);
-            if (foundProcedure) itemToAdd = { ...foundProcedure };
-            break;
-          }
-          case 'medications': {
-            const foundMedication = availableMedications.find(item => item.id === draggableId);
-            if (foundMedication) itemToAdd = { ...foundMedication };
-            break;
-          }
-          case 'followUps': {
-            const foundFollowUp = availableFollowUps.find(item => item.id === draggableId);
-            if (foundFollowUp) itemToAdd = { ...foundFollowUp };
-            break;
-          }
-          default:
-            console.warn('Unknown category:', category);
-        }
-        
-        // Add the item with a new ID to ensure uniqueness
-        if (itemToAdd) {
-          dispatch(addTreatmentItem({
-            phaseId,
-            item: {
-              ...itemToAdd,
-              id: uuidv4() // Generate a new ID for the added item
-            },
-            index: destination.index
-          }));
-        }
-      } catch (error) {
-        console.error('Error adding treatment item:', error);
-      }
-    }
-    
-    // Handle moving items between phases
-    if (source.droppableId.startsWith('phase-') && destination.droppableId.startsWith('phase-') && 
-        source.droppableId !== destination.droppableId) {
-      
-      const sourcePhaseId = source.droppableId.replace('phase-', '');
-      const destPhaseId = destination.droppableId.replace('phase-', '');
-      
-      const sourcePhase = currentPlan?.phases.find(phase => phase.id === sourcePhaseId);
-      if (!sourcePhase) return;
-      
-      // Get the item being moved
-      const itemToMove = sourcePhase.items[source.index];
-      
-      // Remove from source phase
-      dispatch(removeTreatmentItem({
-        phaseId: sourcePhaseId,
-        itemId: itemToMove.id
-      }));
-      
-      // Add to destination phase with the same ID
-      dispatch(addTreatmentItem({
-        phaseId: destPhaseId,
-        item: {
-          ...itemToMove
-        },
-        index: destination.index
-      }));
-    }
-    
-    // Handle reordering within the same phase
-    if (source.droppableId.startsWith('phase-') && 
-        source.droppableId === destination.droppableId && 
-        source.index !== destination.index) {
-      
-      const phaseId = source.droppableId.replace('phase-', '');
-      const phase = currentPlan?.phases.find(phase => phase.id === phaseId);
-      
-      if (phase) {
-        const newItems = Array.from(phase.items);
-        const [movedItem] = newItems.splice(source.index, 1);
-        newItems.splice(destination.index, 0, movedItem);
-        
-        dispatch(updatePhase({
-          phaseId,
-          updates: {
-            items: newItems
-          }
-        }));
-      }
-    }
-  };
-
-  // Toggle plan editing mode
-  const _toggleEditMode = () => {
-    setIsEditingPlan(!isEditingPlan);
-  };
-
-  return (
-    <Box sx={{ p: 3 }}>
-      {/* Header section */}
-      <Box sx={{ 
-        mb: 3, 
-        display: 'flex', 
-        flexDirection: { xs: 'column', md: 'row' },
-        justifyContent: 'space-between',
-        alignItems: { xs: 'flex-start', md: 'center' }
-      }}>
-        <Typography variant="h4" component="h1" color="primary">
-          {IPages.TREATMENT_PLANNING}
+  // Render available items sidebar
+  const renderSidebar = () => (
+    <Box 
+      sx={{ 
+        width: 450, 
+        height: '100%', 
+        bgcolor: theme.palette.mode === 'dark' ? 'grey.900' : 'grey.50',
+        borderRight: `1px solid ${theme.palette.divider}`,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {/* Sidebar Header */}
+      <Box 
+        sx={{ 
+          p: 3, 
+          bgcolor: theme.palette.mode === 'dark' 
+            ? 'primary.dark' 
+            : 'primary.main',
+          color: 'primary.contrastText',
+          textAlign: 'center',
+          boxShadow: theme.palette.mode === 'dark' ? 4 : 2,
+          background: theme.palette.mode === 'dark' 
+            ? `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`
+            : `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
+        }}
+      >
+        <MedicalServicesIcon sx={{ fontSize: 40, mb: 1 }} />
+        <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+          Medical Library
         </Typography>
-        
-        <Box sx={{ display: 'flex', gap: 2, mt: { xs: 2, md: 0 } }}>
-          <Button 
-            variant="outlined" 
-            startIcon={<AddIcon />}
-            onClick={handleCreateNewPlan}
-          >
-            New Plan
-          </Button>
-          
-          <Button 
-            variant="contained"
-            startIcon={saveConfirmation ? <CheckIcon /> : <SaveIcon />}
-            onClick={handleSavePlan}
-            color={saveConfirmation ? "success" : "primary"}
-          >
-            {saveConfirmation ? "Saved!" : "Save Plan"}
-          </Button>
-        </Box>
+        <Typography variant="body2" sx={{ opacity: 0.9 }}>
+          Click items below to add them to your treatment plan
+        </Typography>
       </Box>
 
-      {/* Plan details section */}
-      <Card sx={{ mb: 4 }}>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Plan Title"
-                fullWidth
-                value={planTitle}
-                onChange={(e) => setPlanTitle(e.target.value)}
-                margin="normal"
-                variant="outlined"
+      {/* Scrollable Content */}
+      <Box sx={{ flex: 1, overflowY: 'auto', p: 3 }}>
+      
+      {/* Procedures */}
+      <Card sx={{ 
+        mb: 4, 
+        elevation: theme.palette.mode === 'dark' ? 6 : 3, 
+        borderRadius: 3, 
+        overflow: 'hidden',
+        bgcolor: theme.palette.mode === 'dark' ? 'grey.800' : 'background.paper',
+        border: theme.palette.mode === 'dark' ? `1px solid ${theme.palette.grey[700]}` : 'none',
+      }}>
+        <CardHeader
+          title={
+            <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '1.2rem' }}>
+              🏥 Medical Procedures
+            </Typography>
+          }
+          subheader={
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Evidence-based therapeutic interventions
+            </Typography>
+          }
+          action={
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Chip
+                label={`${availableProcedures.length} available`}
+                color="primary"
+                variant="filled"
+                size="small"
+                sx={{ fontWeight: 600 }}
               />
-              
-              <TextField
-                label="Description"
-                fullWidth
-                multiline
-                rows={2}
-                value={planDescription}
-                onChange={(e) => setPlanDescription(e.target.value)}
-                margin="normal"
-                variant="outlined"
-              />
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    label="Patient"
-                    fullWidth
-                    value={selectedPatient}
-                    onChange={(e) => setSelectedPatient(e.target.value)}
-                    margin="normal"
-                    variant="outlined"
+            </Box>
+          }
+          sx={{ 
+            pb: 1, 
+            bgcolor: theme.palette.mode === 'dark' 
+              ? `${theme.palette.primary.dark}20` 
+              : 'primary.light',
+            '& .MuiCardHeader-content': { flex: 1 }
+          }}
+        />
+        <CardContent sx={{ maxHeight: 400, overflowY: 'auto', p: 0 }}>
+          <List sx={{ py: 0 }}>
+            {availableProcedures.map((procedure, index) => (
+              <ListItem
+                key={procedure.id}
+                button
+                onClick={() => handleAddProcedure(procedure)}
+                sx={{
+                  py: 2,
+                  px: 3,
+                  borderBottom: index < availableProcedures.length - 1 ? `1px solid ${theme.palette.divider}` : 'none',
+                  transition: 'all 0.3s ease-in-out',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: theme.palette.mode === 'dark' 
+                      ? `${theme.palette.primary.dark}30` 
+                      : 'primary.light',
+                    transform: 'translateX(8px)',
+                    boxShadow: `inset 4px 0 0 ${theme.palette.primary.main}`,
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 48 }}>
+                  <Box
+                    sx={{
+                      bgcolor: theme.palette.mode === 'dark' 
+                        ? 'primary.dark' 
+                        : 'primary.main',
+                      color: 'primary.contrastText',
+                      borderRadius: 2,
+                      width: 36,
+                      height: 36,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
                   >
-                    {samplePatients.map((patient) => (
-                      <MenuItem key={patient.id} value={patient.id}>
-                        {patient.name} - {patient.condition}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    label="Doctor"
-                    fullWidth
-                    value={selectedDoctor}
-                    onChange={(e) => setSelectedDoctor(e.target.value)}
-                    margin="normal"
-                    variant="outlined"
-                  >
-                    {sampleDoctors.map((doctor) => (
-                      <MenuItem key={doctor.id} value={doctor.id}>
-                        {doctor.name} - {doctor.specialty}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                
-                <Grid item xs={12}>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    bgcolor: alpha(theme.palette.primary.main, 0.1),
-                    p: 2,
-                    borderRadius: 1
-                  }}>
-                    {currentPlan && (
-                      <>
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
-                            Created: {new Date(currentPlan.createdAt).toLocaleString()}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Updated: {new Date(currentPlan.updatedAt).toLocaleString()}
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography variant="body1" fontWeight="bold">
-                            Phases: {currentPlan.phases.length}
-                          </Typography>
-                        </Box>
-                      </>
-                    )}
+                    <LocalHospitalIcon fontSize="small" />
                   </Box>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-      {/* Main plan builder section */}
-      <DragDropContext 
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}>
-        <Box sx={{ 
-          display: 'flex', 
-          gap: 3, 
-          flexDirection: { xs: 'column', lg: 'row' },
-          // Smooth global transitions during drag
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-          opacity: isDragging ? 0.98 : 1,
-          // Performance optimizations
-          backfaceVisibility: 'hidden',
-          perspective: 1000,
-          willChange: isDragging ? 'transform' : 'auto',
-        }}>
-          {/* Treatment items panel */}
-          <Box sx={{ 
-            width: { xs: '100%', lg: '300px' },
-            flexShrink: 0,
-            position: 'sticky',
-            top: 16,
-            alignSelf: 'flex-start',
-            // Smooth transitions for the panel
-            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-            transform: isDragging ? 'scale(0.995)' : 'scale(1)',
-          }}>
-            <TreatmentItemPanel 
-              procedures={availableProcedures}
-              medications={availableMedications}
-              followUps={availableFollowUps}
-            />
-          </Box>
-          
-          {/* Treatment phases area */}
-          <Box sx={{ 
-            flexGrow: 1, 
-            display: 'flex',
-            flexDirection: 'column',
-            pb: 2,
-            // Performance optimization
-            contain: 'layout style paint',
-          }}>
-            {/* Phases container - PRIMARY scroll container */}
-            <Box sx={{ 
-              display: 'flex', 
-              gap: 3, 
-              overflowX: 'auto',
-              overflowY: 'hidden', // Prevent vertical scroll here
-              pb: 3,
-              pt: 1,
-              px: 1,
-              height: 'calc(100vh - 320px)', // Fixed height to prevent nesting
-              // Enhanced scrollbar with smooth appearance
-              '&::-webkit-scrollbar': {
-                height: 12,
-              },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: alpha(theme.palette.primary.main, 0.3),
-                borderRadius: 6,
-                border: `2px solid transparent`,
-                backgroundClip: 'padding-box',
-                transition: 'background-color 0.2s ease',
-                '&:hover': {
-                  backgroundColor: alpha(theme.palette.primary.main, 0.5),
-                }
-              },
-              '&::-webkit-scrollbar-track': {
-                backgroundColor: alpha(theme.palette.divider, 0.05),
-                borderRadius: 6,
-                margin: '0 10px'
-              },
-              // Smooth scroll behavior
-              scrollBehavior: 'smooth',
-              // Performance optimizations
-              backfaceVisibility: 'hidden',
-              transform: 'translateZ(0)',
-            }}>
-              {currentPlan?.phases.map((phase, index) => (
-                <Box
-                  key={phase.id}
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Typography variant="body1" sx={{ fontWeight: 600, mb: 0.5 }}>
+                      {procedure.name}
+                    </Typography>
+                  }
+                  secondary={
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                        {procedure.description}
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                        <Chip
+                          label={procedure.complexity}
+                          size="small"
+                          variant="outlined"
+                          color="primary"
+                          sx={{ fontSize: '0.7rem', height: 22 }}
+                        />
+                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+                          ⏱️ {procedure.duration} mins
+                        </Typography>
+                        {procedure.equipment && (
+                          <Typography variant="caption" color="text.secondary">
+                            🔧 {procedure.equipment.join(', ')}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+                  }
+                />
+                <IconButton
+                  size="medium"
                   sx={{
-                    // Smooth entrance animation for phases
-                    animation: `fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s both`,
-                    '@keyframes fadeInUp': {
-                      '0%': {
-                        opacity: 0,
-                        transform: 'translateY(20px)',
-                      },
-                      '100%': {
-                        opacity: 1,
-                        transform: 'translateY(0)',
-                      },
+                    bgcolor: 'success.main',
+                    color: 'success.contrastText',
+                    ml: 2,
+                    '&:hover': {
+                      bgcolor: 'success.dark',
+                      transform: 'scale(1.1)',
                     },
                   }}
                 >
-                  <PhaseColumn 
-                    phase={phase}
-                    onRemove={() => dispatch(removePhase(phase.id))}
-                    onUpdate={(updates) => dispatch(updatePhase({ phaseId: phase.id, updates }))}
-                    onRemoveItem={(itemId) => dispatch(removeTreatmentItem({ phaseId: phase.id, itemId }))}
-                  />
-                </Box>
-              ))}
-              
-              {/* Add phase button */}
-              <Box sx={{ 
-                minWidth: '450px', 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center',
-                border: `2px dashed ${theme.palette.divider}`,
-                borderRadius: 2,
-                p: 2,
-                height: 'fit-content',
-                // Smooth hover effect
-                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&:hover': {
-                  borderColor: theme.palette.primary.main,
-                  backgroundColor: alpha(theme.palette.primary.main, 0.02),
-                  transform: 'translateY(-2px)',
-                  boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.1)}`,
-                }
-              }}>
-                <Tooltip title="Add a new treatment phase" arrow>
-                  <Button
-                    variant="outlined"
-                    startIcon={<AddIcon />}
-                    onClick={handleAddPhase}
-                    sx={{
-                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                      '&:hover': {
-                        transform: 'scale(1.02)',
-                      }
-                    }}
-                  >
-                    Add Phase
-                  </Button>
-                </Tooltip>
-              </Box>
+                  <AddIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+        </CardContent>
+      </Card>
+
+      {/* Medications */}
+      <Card sx={{ 
+        mb: 4, 
+        elevation: theme.palette.mode === 'dark' ? 6 : 3, 
+        borderRadius: 3, 
+        overflow: 'hidden',
+        bgcolor: theme.palette.mode === 'dark' ? 'grey.800' : 'background.paper',
+        border: theme.palette.mode === 'dark' ? `1px solid ${theme.palette.grey[700]}` : 'none',
+      }}>
+        <CardHeader
+          title={
+            <Typography variant="h6" sx={{ fontWeight: 700, color: 'secondary.main', fontSize: '1.2rem' }}>
+              💊 Medications & Prescriptions
+            </Typography>
+          }
+          subheader={
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              FDA-approved pharmaceutical treatments
+            </Typography>
+          }
+          action={
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Chip
+                label={`${availableMedications.length} available`}
+                color="secondary"
+                variant="filled"
+                size="small"
+                sx={{ fontWeight: 600 }}
+              />
             </Box>
-            
-            {/* Summary and statistics */}
-            {currentPlan && currentPlan.phases.length > 0 && (
-              <Paper 
-                elevation={0} 
-                sx={{ 
-                  mt: 3, 
-                  p: 2, 
-                  bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-                  borderRadius: 2
+          }
+          sx={{ 
+            pb: 1, 
+            bgcolor: theme.palette.mode === 'dark' 
+              ? `${theme.palette.secondary.dark}20` 
+              : 'secondary.light',
+            '& .MuiCardHeader-content': { flex: 1 }
+          }}
+        />
+        <CardContent sx={{ maxHeight: 400, overflowY: 'auto', p: 0 }}>
+          <List sx={{ py: 0 }}>
+            {availableMedications.map((medication, index) => (
+              <ListItem
+                key={medication.id}
+                button
+                onClick={() => handleAddMedication(medication)}
+                sx={{
+                  py: 2,
+                  px: 3,
+                  borderBottom: index < availableMedications.length - 1 ? `1px solid ${theme.palette.divider}` : 'none',
+                  transition: 'all 0.3s ease-in-out',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: theme.palette.mode === 'dark' 
+                      ? `${theme.palette.secondary.dark}30` 
+                      : 'secondary.light',
+                    transform: 'translateX(8px)',
+                    boxShadow: `inset 4px 0 0 ${theme.palette.secondary.main}`,
+                  },
                 }}
               >
-                <Typography variant="h6">Treatment Summary</Typography>
-                <Grid container spacing={2} sx={{ mt: 1 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 1
-                    }}>
-                      <MedicalServicesIcon color="primary" />
-                      <Typography>
-                        {currentPlan.phases.reduce((sum, phase) => 
-                          sum + phase.items.filter(item => item.category === 'procedure').length, 0)} Procedures
+                <ListItemIcon sx={{ minWidth: 48 }}>
+                  <Box
+                    sx={{
+                      bgcolor: theme.palette.mode === 'dark' 
+                        ? 'secondary.dark' 
+                        : 'secondary.main',
+                      color: 'secondary.contrastText',
+                      borderRadius: 2,
+                      width: 36,
+                      height: 36,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <MedicationIcon fontSize="small" />
+                  </Box>
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Typography variant="body1" sx={{ fontWeight: 600, mb: 0.5 }}>
+                      {medication.name}
+                    </Typography>
+                  }
+                  secondary={
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                        {medication.instructions}
                       </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                        <Chip
+                          label={medication.type}
+                          size="small"
+                          variant="outlined"
+                          color="secondary"
+                          sx={{ fontSize: '0.7rem', height: 22 }}
+                        />
+                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+                          💊 {medication.dosage}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+                          📅 {medication.frequency}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          ⏳ {medication.duration}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 1
-                    }}>
-                      <MedicationIcon color="primary" />
-                      <Typography>
-                        {currentPlan.phases.reduce((sum, phase) => 
-                          sum + phase.items.filter(item => item.category === 'medication').length, 0)} Medications
+                  }
+                />
+                <IconButton
+                  size="medium"
+                  sx={{
+                    bgcolor: 'success.main',
+                    color: 'success.contrastText',
+                    ml: 2,
+                    '&:hover': {
+                      bgcolor: 'success.dark',
+                      transform: 'scale(1.1)',
+                    },
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+        </CardContent>
+      </Card>
+
+      {/* Appointments */}
+      <Card sx={{ 
+        elevation: theme.palette.mode === 'dark' ? 6 : 3, 
+        borderRadius: 3, 
+        overflow: 'hidden',
+        bgcolor: theme.palette.mode === 'dark' ? 'grey.800' : 'background.paper',
+        border: theme.palette.mode === 'dark' ? `1px solid ${theme.palette.grey[700]}` : 'none',
+      }}>
+        <CardHeader
+          title={
+            <Typography variant="h6" sx={{ fontWeight: 700, color: 'success.main', fontSize: '1.2rem' }}>
+              📅 Follow-up Appointments
+            </Typography>
+          }
+          subheader={
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Scheduled care coordination sessions
+            </Typography>
+          }
+          action={
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Chip
+                label={`${availableAppointments.length} available`}
+                color="success"
+                variant="filled"
+                size="small"
+                sx={{ fontWeight: 600 }}
+              />
+            </Box>
+          }
+          sx={{ 
+            pb: 1, 
+            bgcolor: theme.palette.mode === 'dark' 
+              ? `${theme.palette.success.dark}20` 
+              : 'success.light',
+            '& .MuiCardHeader-content': { flex: 1 }
+          }}
+        />
+        <CardContent sx={{ maxHeight: 400, overflowY: 'auto', p: 0 }}>
+          <List sx={{ py: 0 }}>
+            {availableAppointments.map((appointment, index) => (
+              <ListItem
+                key={appointment.id}
+                button
+                onClick={() => handleAddAppointment(appointment)}
+                sx={{
+                  py: 2,
+                  px: 3,
+                  borderBottom: index < availableAppointments.length - 1 ? `1px solid ${theme.palette.divider}` : 'none',
+                  transition: 'all 0.3s ease-in-out',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: theme.palette.mode === 'dark' 
+                      ? `${theme.palette.success.dark}30` 
+                      : 'success.light',
+                    transform: 'translateX(8px)',
+                    boxShadow: `inset 4px 0 0 ${theme.palette.success.main}`,
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 48 }}>
+                  <Box
+                    sx={{
+                      bgcolor: theme.palette.mode === 'dark' 
+                        ? 'success.dark' 
+                        : 'success.main',
+                      color: 'success.contrastText',
+                      borderRadius: 2,
+                      width: 36,
+                      height: 36,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <EventIcon fontSize="small" />
+                  </Box>
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <Typography variant="body1" sx={{ fontWeight: 600, mb: 0.5 }}>
+                      {appointment.type}
+                    </Typography>
+                  }
+                  secondary={
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
+                        {appointment.purpose}
                       </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                        <Chip
+                          label={appointment.priority}
+                          size="small"
+                          variant="outlined"
+                          color="success"
+                          sx={{ fontSize: '0.7rem', height: 22 }}
+                        />
+                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+                          👨‍⚕️ {appointment.provider}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 500 }}>
+                          ⏱️ {appointment.duration} mins
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          🏥 {appointment.department}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 1
-                    }}>
-                      <EventNoteIcon color="primary" />
-                      <Typography>
-                        {currentPlan.phases.reduce((sum, phase) => 
-                          sum + phase.items.filter(item => item.category === 'followUp').length, 0)} Follow-ups
-                      </Typography>
-                    </Box>
-                  </Grid>
-                </Grid>
-                
-                <Divider sx={{ my: 2 }} />
-                
-                <Box sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  gap: 2
-                }}>
-                  <Typography variant="h6">
-                    Estimated Total Cost: ${currentPlan.phases.reduce((sum, phase) => 
-                      sum + phase.items.reduce((phaseSum, item) => phaseSum + item.cost, 0), 0).toFixed(2)}
-                  </Typography>
-                </Box>
+                  }
+                />
+                <IconButton
+                  size="medium"
+                  sx={{
+                    bgcolor: 'success.main',
+                    color: 'success.contrastText',
+                    ml: 2,
+                    '&:hover': {
+                      bgcolor: 'success.dark',
+                      transform: 'scale(1.1)',
+                    },
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+        </CardContent>
+      </Card>
+      
+      </Box>
+    </Box>
+  );
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+          {/* Header */}
+          <AppBar
+            position="fixed"
+            elevation={0}
+            sx={{
+              zIndex: theme.zIndex.drawer + 1,
+              bgcolor: 'background.paper',
+              borderBottom: `1px solid ${theme.palette.divider}`,
+              color: 'text.primary',
+            }}
+          >
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={() => navigate(-1)}
+                aria-label="back"
+              >
+                <ArrowBackIcon />
+              </IconButton>
+              <IconButton
+                color="inherit"
+                aria-label="toggle sidebar"
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                sx={{ ml: 1 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+                <MedicalServicesIcon sx={{ color: theme.palette.primary.main, mr: 1 }} />
+                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  Treatment Planning
+                </Typography>
+                {selectedPatient && (
+                  <Chip
+                    icon={<PersonIcon />}
+                    label={selectedPatient.name}
+                    sx={{ ml: 2 }}
+                    onClick={() => setPatientSelectorOpen(true)}
+                  />
+                )}
+              </Box>
+              <Box sx={{ flexGrow: 1 }} />
+              <Button
+                variant="outlined"
+                startIcon={<PersonIcon />}
+                onClick={() => setPatientSelectorOpen(true)}
+                sx={{ mr: 1 }}
+              >
+                {selectedPatient ? 'Change Patient' : 'Select Patient'}
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={() => setNewPlanDialogOpen(true)}
+                sx={{ mr: 1 }}
+              >
+                New Plan
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<SaveIcon />}
+                onClick={handleSavePlan}
+                disabled={!currentPlan}
+              >
+                Save Plan
+              </Button>
+            </Toolbar>
+          </AppBar>
+
+          {/* Sidebar */}
+          <Drawer
+            variant={isMobile ? 'temporary' : 'persistent'}
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            sx={{
+              width: sidebarOpen ? 450 : 0,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: 450,
+                boxSizing: 'border-box',
+                mt: 8,
+                height: 'calc(100vh - 64px)',
+                border: 'none',
+                boxShadow: theme.palette.mode === 'dark' ? 6 : 3,
+                bgcolor: theme.palette.mode === 'dark' ? 'grey.900' : 'background.paper',
+              },
+            }}
+          >
+            {renderSidebar()}
+          </Drawer>
+
+          {/* Main Content */}
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              p: 3,
+              mt: 8,
+              transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+              }),
+              ml: sidebarOpen && !isMobile ? 0 : 0,
+            }}
+          >
+            {/* Treatment Documentation Connection */}
+            <Box sx={{ mb: 3 }}>
+              <TreatmentDocConnection
+                onPatientFromDocumentation={(patient) => {
+                  console.log('Patient data received from documentation:', patient);
+                }}
+              />
+            </Box>
+
+            {currentPlan ? (
+              <TreatmentPlanCard
+                plan={currentPlan}
+                onEdit={() => setEditPlanDialogOpen(true)}
+              />
+            ) : (
+              <Paper
+                sx={{
+                  p: 6,
+                  textAlign: 'center',
+                  bgcolor: theme.palette.mode === 'dark' ? 'grey.800' : 'background.paper',
+                  borderRadius: 3,
+                  border: `2px dashed ${theme.palette.divider}`,
+                  boxShadow: theme.palette.mode === 'dark' ? 4 : 'none',
+                }}
+              >
+                <MedicalServicesIcon
+                  sx={{
+                    fontSize: 80,
+                    color: theme.palette.mode === 'dark' ? 'primary.main' : 'primary.light',
+                    mb: 2,
+                  }}
+                />
+                <Typography variant="h4" color="text.primary" gutterBottom sx={{ fontWeight: 600 }}>
+                  No Treatment Plan Selected
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 400, mx: 'auto' }}>
+                  Create a new treatment plan to get started with building comprehensive care plans for your patients.
+                </Typography>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={() => setNewPlanDialogOpen(true)}
+                  size="large"
+                  sx={{
+                    py: 1.5,
+                    px: 4,
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontSize: '1.1rem',
+                  }}
+                >
+                  Create New Treatment Plan
+                </Button>
               </Paper>
             )}
           </Box>
+
+
         </Box>
-      </DragDropContext>
-    </Box>
+
+        {/* New Plan Dialog */}
+        <Dialog
+          open={newPlanDialogOpen}
+          onClose={() => setNewPlanDialogOpen(false)}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>Create New Treatment Plan</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Plan Title"
+                  value={newPlanForm.title}
+                  onChange={(e) => setNewPlanForm({ ...newPlanForm, title: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Description"
+                  multiline
+                  rows={3}
+                  value={newPlanForm.description}
+                  onChange={(e) => setNewPlanForm({ ...newPlanForm, description: e.target.value })}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <DatePicker
+                  label="Start Date"
+                  value={newPlanForm.startDate}
+                  onChange={(date) => setNewPlanForm({ ...newPlanForm, startDate: date || dayjs() })}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <DatePicker
+                  label="End Date"
+                  value={newPlanForm.endDate}
+                  onChange={(date) => setNewPlanForm({ ...newPlanForm, endDate: date || dayjs() })}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Treatment Goals"
+                  multiline
+                  rows={2}
+                  value={newPlanForm.goals}
+                  onChange={(e) => setNewPlanForm({ ...newPlanForm, goals: e.target.value })}
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setNewPlanDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleCreateNewPlan} variant="contained">
+              Create Plan
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Patient Selector Dialog */}
+        <PatientSelector
+          open={patientSelectorOpen}
+          onClose={() => setPatientSelectorOpen(false)}
+          onSelectPatient={(patient) => {
+            dispatch(setSelectedPatient(patient));
+            setPatientSelectorOpen(false);
+          }}
+        />
+            </LocalizationProvider>
   );
-}
+};
+
+export default TreatmentPlanningPage; 

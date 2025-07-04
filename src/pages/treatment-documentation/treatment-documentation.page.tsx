@@ -21,12 +21,14 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks';
+import { paths } from '../../routes/paths';
 import { useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 // Components
 import GeneralInformation from './components/general-information.component';
@@ -146,6 +148,15 @@ export default function TreatmentDocumentation() {
                      </Typography>
                   )}
                </Box>
+               <Box sx={{ flexGrow: 1 }} />
+               <Button
+                  variant="outlined"
+                  startIcon={<AssignmentIcon />}
+                  onClick={() => navigate(paths.treatmentPlanning)}
+                  sx={{ mr: 1 }}
+               >
+                  Create Treatment Plan
+               </Button>
             </Toolbar>
 
             {/* Navigation Tabs for Mobile */}

@@ -34,6 +34,7 @@ import MedicalStatsPage from '../pages/medical-stats/medical-stats.page';
 import VitalMonitoring from '../pages/vital-monitoring/vital-monitoring.page';
 import ClinicalAlertsPage from '../pages/clinical-alerts/clinical-alerts.page';
 import TelemedicinePage from '../pages/telemedicine/telemedicine.page';
+import TreatmentPlanningPage from '../pages/treatment-planning/treatment-planning.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -205,6 +206,11 @@ export const routesData: RouteObject[] = [
             id: '40-telemedicine',
             path: paths.telemedicine,
             element: <TelemedicinePage />,
+         },
+         {
+            id: '41-treatmentPlanning',
+            path: paths.treatmentPlanning,
+            element: <TreatmentPlanningPage />,
          },
       ],
    },

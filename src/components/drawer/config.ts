@@ -133,4 +133,9 @@ export const config = [
       path: paths.telemedicine,
       name: IPages.TELEMEDICINE,
    },
+   {
+      id: 27,
+      path: paths.treatmentPlanning,
+      name: IPages.TREATMENT_PLANNING,
+   },
 ];
