@@ -5,6 +5,7 @@ import treatmentDocumentationReducer from './slices/treatmentDocumentationSlice'
 import treatmentPlanningReducer from './slices/treatmentPlanningSlice';
 import personnelReducer from './slices/personnelSlice';
 import patientReducer from './slices/patientSlice';
+import caseManagementReducer from './slices/caseManagementSlice';
 
 const rootReducer = combineReducers({
    appbar: appbarSlice.reducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
    treatmentPlanning: treatmentPlanningReducer,
    personnel: personnelReducer,
    patients: patientReducer,
+   caseManagement: caseManagementReducer,
 });
 
 const store = configureStore({
@@ -23,8 +25,13 @@ const store = configureStore({
       }),
 });
 
-export default store;
-
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
+export type AppThunk<ReturnType = void> = ThunkAction<
+   ReturnType,
+   RootState,
+   unknown,
+   Action<string>
+>;
+
+export default store;

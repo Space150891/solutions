@@ -144,4 +144,9 @@ export const config = [
       name: IPages.ROOT_DATA_MANAGEMENT,
       category: 'Data Management',
    },
+   {
+      id: 29,
+      path: paths.caseManagement,
+      name: IPages.CASE_MANAGEMENT,
+   },
 ];

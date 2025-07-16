@@ -34,4 +34,5 @@ export const paths = Object.freeze({
    telemedicine: '/cubex/telemedicine',
    treatmentPlanning: '/cubex/treatment-planning',
    rootDataManagement: '/cubex/root-data-management',
+   caseManagement: '/cubex/case-management',
 });

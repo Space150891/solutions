@@ -36,6 +36,7 @@ import ClinicalAlertsPage from '../pages/clinical-alerts/clinical-alerts.page';
 import TelemedicinePage from '../pages/telemedicine/telemedicine.page';
 import TreatmentPlanningPage from '../pages/treatment-planning/treatment-planning.page';
 import RootDataManagementPage from '../pages/root-data-management/root-data-management.page';
+import CaseManagementPage from '../pages/case-management/case-management.page';
 
 export const routesData: RouteObject[] = [
    {
@@ -217,6 +218,11 @@ export const routesData: RouteObject[] = [
             id: '42-rootDataManagement',
             path: paths.rootDataManagement,
             element: <RootDataManagementPage />,
+         },
+         {
+            id: '43-caseManagement',
+            path: paths.caseManagement,
+            element: <CaseManagementPage />,
          },
       ],
    },
