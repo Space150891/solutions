@@ -31,6 +31,7 @@ export const paths = Object.freeze({
    medicalStats: '/cubex/medical-stats',
    vitalMonitoring: '/cubex/vital-monitoring',
    clinicalAlerts: '/cubex/clinical-alerts',
-  telemedicine: '/cubex/telemedicine',
-  treatmentPlanning: '/cubex/treatment-planning',
+   telemedicine: '/cubex/telemedicine',
+   treatmentPlanning: '/cubex/treatment-planning',
+   rootDataManagement: '/cubex/root-data-management',
 });

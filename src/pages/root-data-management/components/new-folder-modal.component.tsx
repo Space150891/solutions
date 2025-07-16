@@ -1,0 +1,134 @@
+import { FC, useState } from 'react';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from '@mui/material';
+import { Folder, mockFolders } from '../mock';
+
+interface NewFolderModalProps {
+  open: boolean;
+  onClose: () => void;
+  onCreateFolder: (folder: Folder) => void;
+  currentFolderId: string | null;
+}
+
+const NewFolderModal: FC<NewFolderModalProps> = ({
+  open,
+  onClose,
+  onCreateFolder,
+  currentFolderId,
+}) => {
+  const [folderName, setFolderName] = useState('');
+  const [parentFolderId, setParentFolderId] = useState<string | null>(currentFolderId);
+  const [error, setError] = useState('');
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFolderName(event.target.value);
+    if (event.target.value.trim()) {
+      setError('');
+    }
+  };
+
+  const handleParentFolderChange = (event: SelectChangeEvent) => {
+    const value = event.target.value;
+    setParentFolderId(value === 'null' ? null : value);
+  };
+
+  const handleSubmit = () => {
+    if (!folderName.trim()) {
+      setError('Folder name is required');
+      return;
+    }
+
+    const newFolder: Folder = {
+      id: `folder-${Date.now()}`,
+      name: folderName.trim(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      parentId: parentFolderId,
+      type: 'folder',
+    };
+
+    onCreateFolder(newFolder);
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setFolderName('');
+    setError('');
+    onClose();
+  };
+
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      <DialogTitle>
+        <Typography variant="h6" fontWeight={600}>
+          Create New Folder
+        </Typography>
+      </DialogTitle>
+      <DialogContent>
+        <TextField
+          autoFocus
+          margin="dense"
+          label="Folder Name"
+          fullWidth
+          value={folderName}
+          onChange={handleNameChange}
+          error={!!error}
+          helperText={error}
+          sx={{ mb: 3 }}
+        />
+
+        <FormControl fullWidth>
+          <InputLabel>Parent Folder</InputLabel>
+          <Select
+            value={parentFolderId || 'null'}
+            label="Parent Folder"
+            onChange={handleParentFolderChange}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 300
+                }
+              }
+            }}
+            sx={{
+              '& .MuiSelect-select': {
+                paddingRight: '32px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }
+            }}
+          >
+            <MenuItem value="null">Root (No Parent)</MenuItem>
+            {mockFolders.map(folder => (
+              <MenuItem key={folder.id} value={folder.id}>
+                {folder.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </DialogContent>
+      <DialogActions sx={{ p: 3 }}>
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button variant="contained" onClick={handleSubmit}>
+          Create Folder
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+export default NewFolderModal;
+export { NewFolderModal }; 

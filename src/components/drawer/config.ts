@@ -138,4 +138,10 @@ export const config = [
       path: paths.treatmentPlanning,
       name: IPages.TREATMENT_PLANNING,
    },
+   {
+      id: 28,
+      path: paths.rootDataManagement,
+      name: IPages.ROOT_DATA_MANAGEMENT,
+      category: 'Data Management',
+   },
 ];
