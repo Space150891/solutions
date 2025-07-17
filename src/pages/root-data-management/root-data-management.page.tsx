@@ -1,4 +1,5 @@
 import { useState, useEffect, MouseEvent } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -37,6 +38,7 @@ import BreadcrumbNavigation from './components/breadcrumb-navigation.component';
 
 export default function RootDataManagementPage() {
   const theme = useTheme();
+  const location = useLocation();
   const [items, setItems] = useState<DataItem[]>([]);
   const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,6 +49,13 @@ export default function RootDataManagementPage() {
   // Delete confirmation states
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{ id: string, type: 'folder' | 'document', name: string } | null>(null);
+
+  // Check for openFolder parameter in location state
+  useEffect(() => {
+    if (location.state && location.state.openFolder) {
+      setCurrentFolderId(location.state.openFolder);
+    }
+  }, [location.state]);
 
   // Load items based on current folder
   useEffect(() => {

@@ -17,8 +17,6 @@ import {
 import { useState } from 'react';
 import { specializations } from '../mock';
 import { FilterList } from '@mui/icons-material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { DATE_TIME_FORMAT } from '../../../utils/date.util';
@@ -294,26 +292,36 @@ export default function Filter({ setFilters }: FilterProps) {
                   </Grid>
                   <Grid item xs={2}>
                      <Item>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                           <DatePicker
-                              value={filter.dateOfBirth?.from ? dayjs(filter.dateOfBirth.from) : null}
-                              label='Born from'
-                              slotProps={{ textField: { fullWidth: true } }}
-                              onChange={handleDateFromChange}
-                           />
-                        </LocalizationProvider>
+                        <TextField
+                           label="Born from"
+                           type="date"
+                           value={filter.dateOfBirth?.from ? dayjs(filter.dateOfBirth.from).format('YYYY-MM-DD') : ''}
+                           onChange={(e) => {
+                              const value = e.target.value ? dayjs(e.target.value).startOf('day') : null;
+                              handleDateFromChange(value);
+                           }}
+                           fullWidth
+                           InputLabelProps={{
+                              shrink: true,
+                           }}
+                        />
                      </Item>
                   </Grid>
                   <Grid item xs={2}>
                      <Item>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                           <DatePicker
-                              value={filter.dateOfBirth?.to ? dayjs(filter.dateOfBirth.to) : null}
-                              label='Born until'
-                              slotProps={{ textField: { fullWidth: true } }}
-                              onChange={handleDateToChange}
-                           />
-                        </LocalizationProvider>
+                        <TextField
+                           label="Born until"
+                           type="date"
+                           value={filter.dateOfBirth?.to ? dayjs(filter.dateOfBirth.to).format('YYYY-MM-DD') : ''}
+                           onChange={(e) => {
+                              const value = e.target.value ? dayjs(e.target.value).endOf('day') : null;
+                              handleDateToChange(value);
+                           }}
+                           fullWidth
+                           InputLabelProps={{
+                              shrink: true,
+                           }}
+                        />
                      </Item>
                   </Grid>
                </Grid>
