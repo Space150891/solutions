@@ -32,12 +32,21 @@ import {
   Description as DocIcon,
   TableChart as SpreadsheetIcon,
 } from '@mui/icons-material';
-import { Document, Folder, formatFileSize, mockFolders } from '../mock';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { uploadDocument, Document, Folder } from '../../../store/slices/rootDataManagementSlice';
+
+// Helper function to format file size
+const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
 
 interface FileUploadModalProps {
   open: boolean;
   onClose: () => void;
-  onFilesUpload: (files: Document[]) => void;
   currentFolderId: string | null;
   maxFileSize?: number;
 }
@@ -54,16 +63,20 @@ interface UploadFile {
 const FileUploadModal: FC<FileUploadModalProps> = ({
   open,
   onClose,
-  onFilesUpload,
   currentFolderId,
   maxFileSize = 10, // 10MB default
 }) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const allItems = useAppSelector(state => state.rootDataManagement.items);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(currentFolderId);
   const [fileSource, setFileSource] = useState<'internal' | 'external'>('internal');
+
+  // Get all folders for destination selection
+  const folders = Object.values(allItems).filter(item => item.type === 'folder') as Folder[];
 
   const getFileIcon = (type: string) => {
     if (type.includes('pdf')) {
@@ -150,8 +163,6 @@ const FileUploadModal: FC<FileUploadModalProps> = ({
       setTimeout(() => {
         clearInterval(interval);
         
-        const mockUrl = URL.createObjectURL(uploadFile.file);
-        
         const document: Document = {
           id: uploadFile.id,
           name: uploadFile.file.name,
@@ -162,9 +173,13 @@ const FileUploadModal: FC<FileUploadModalProps> = ({
           source: uploadFile.source,
           fileType: uploadFile.file.type,
           size: uploadFile.file.size,
-          url: mockUrl,
+          url: URL.createObjectURL(uploadFile.file), // Mock URL for now
+          accessLevel: 'local',
+          createdBy: 'current-user',
+          version: 1,
         };
 
+        dispatch(uploadDocument(document));
         resolve(document);
       }, 2000);
     });
@@ -181,8 +196,6 @@ const FileUploadModal: FC<FileUploadModalProps> = ({
         validFiles.map(file => simulateUpload(file))
       );
 
-      onFilesUpload(documents);
-      setUploadFiles([]);
       onClose();
     } catch (error) {
       console.error('Upload failed:', error);
@@ -224,12 +237,14 @@ const FileUploadModal: FC<FileUploadModalProps> = ({
         }}
       >
         <DialogTitle>
-          <Typography variant="h6" fontWeight={600}>
-            Upload Files
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Select files to add to the system
-          </Typography>
+          <Box>
+            <Typography variant="h6" fontWeight={600}>
+              Upload Files
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Select files to add to the system
+            </Typography>
+          </Box>
         </DialogTitle>
 
         <DialogContent>
@@ -258,7 +273,7 @@ const FileUploadModal: FC<FileUploadModalProps> = ({
                 }}
               >
                 <MenuItem value="null">Root (No Folder)</MenuItem>
-                {mockFolders.map(folder => (
+                {folders.map(folder => (
                   <MenuItem key={folder.id} value={folder.id}>
                     {folder.name}
                   </MenuItem>

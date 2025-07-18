@@ -1,15 +1,16 @@
 import { FC, MouseEvent } from 'react';
 import { Folder as FolderIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { Box, Typography, Paper, useTheme, IconButton, Tooltip } from '@mui/material';
-import { Folder } from '../mock';
+import { Box, Typography, Paper, useTheme, IconButton, Tooltip, Grid } from '@mui/material';
+import { Folder } from '../../../store/slices/rootDataManagementSlice';
 
 interface FolderItemProps {
   folder: Folder;
   onClick: (folderId: string) => void;
   onDelete: (folderId: string, e: MouseEvent<HTMLButtonElement>) => void;
+  viewMode?: 'grid' | 'list';
 }
 
-const FolderItem: FC<FolderItemProps> = ({ folder, onClick, onDelete }) => {
+const FolderItem: FC<FolderItemProps> = ({ folder, onClick, onDelete, viewMode = 'grid' }) => {
   const theme = useTheme();
 
   const handleDelete = (e: MouseEvent<HTMLButtonElement>) => {
@@ -22,9 +23,9 @@ const FolderItem: FC<FolderItemProps> = ({ folder, onClick, onDelete }) => {
       elevation={1}
       sx={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: viewMode === 'list' ? 'row' : 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: viewMode === 'list' ? 'flex-start' : 'center',
         padding: 2,
         cursor: 'pointer',
         height: '100%',
@@ -67,12 +68,13 @@ const FolderItem: FC<FolderItemProps> = ({ folder, onClick, onDelete }) => {
 
       <FolderIcon 
         sx={{ 
-          fontSize: 48, 
+          fontSize: viewMode === 'list' ? 32 : 48, 
           color: theme.palette.primary.main,
-          mb: 1
+          mb: viewMode === 'list' ? 0 : 1,
+          mr: viewMode === 'list' ? 2 : 0
         }} 
       />
-      <Box sx={{ textAlign: 'center' }}>
+      <Box sx={{ textAlign: viewMode === 'list' ? 'left' : 'center', flexGrow: viewMode === 'list' ? 1 : 0 }}>
         <Typography 
           variant="subtitle1" 
           noWrap 
@@ -97,4 +99,5 @@ const FolderItem: FC<FolderItemProps> = ({ folder, onClick, onDelete }) => {
 };
 
 export default FolderItem;
+export type { FolderItemProps };
 export { FolderItem }; 

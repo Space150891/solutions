@@ -8,15 +8,25 @@ import {
   Delete as DeleteIcon
 } from '@mui/icons-material';
 import { Box, Typography, Paper, useTheme, Chip, IconButton, Tooltip } from '@mui/material';
-import { Document, formatFileSize } from '../mock';
+import { Document } from '../../../store/slices/rootDataManagementSlice';
+
+// Helper function to format file size
+const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
 
 interface DocumentItemProps {
   document: Document;
   onClick: (documentId: string) => void;
   onDelete: (documentId: string, e: MouseEvent<HTMLButtonElement>) => void;
+  viewMode?: 'grid' | 'list';
 }
 
-const DocumentItem: FC<DocumentItemProps> = ({ document, onClick, onDelete }) => {
+const DocumentItem: FC<DocumentItemProps> = ({ document, onClick, onDelete, viewMode = 'grid' }) => {
   const theme = useTheme();
 
   const handleDelete = (e: MouseEvent<HTMLButtonElement>) => {
@@ -26,7 +36,11 @@ const DocumentItem: FC<DocumentItemProps> = ({ document, onClick, onDelete }) =>
 
   const getFileIcon = () => {
     const { fileType } = document;
-    const iconStyle = { fontSize: 48, mb: 1 };
+    const iconStyle = { 
+      fontSize: viewMode === 'list' ? 32 : 48, 
+      mb: viewMode === 'list' ? 0 : 1,
+      mr: viewMode === 'list' ? 2 : 0
+    };
     
     if (fileType.includes('pdf')) {
       return <PdfIcon sx={iconStyle} color="error" />;
@@ -49,9 +63,9 @@ const DocumentItem: FC<DocumentItemProps> = ({ document, onClick, onDelete }) =>
       elevation={1}
       sx={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: viewMode === 'list' ? 'row' : 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: viewMode === 'list' ? 'flex-start' : 'center',
         padding: 2,
         cursor: 'pointer',
         height: '100%',
@@ -93,7 +107,11 @@ const DocumentItem: FC<DocumentItemProps> = ({ document, onClick, onDelete }) =>
       </Tooltip>
 
       {getFileIcon()}
-      <Box sx={{ textAlign: 'center', width: '100%' }}>
+      <Box sx={{ 
+        textAlign: viewMode === 'list' ? 'left' : 'center', 
+        width: viewMode === 'list' ? 'auto' : '100%',
+        flexGrow: viewMode === 'list' ? 1 : 0
+      }}>
         <Typography 
           variant="subtitle1" 
           noWrap 
@@ -106,7 +124,13 @@ const DocumentItem: FC<DocumentItemProps> = ({ document, onClick, onDelete }) =>
         >
           {document.name}
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1, mt: 0.5 }}>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: viewMode === 'list' ? 'flex-start' : 'center', 
+          alignItems: 'center', 
+          gap: 1, 
+          mt: 0.5 
+        }}>
           <Typography variant="caption" color="text.secondary">
             {formatFileSize(document.size)}
           </Typography>
@@ -123,4 +147,5 @@ const DocumentItem: FC<DocumentItemProps> = ({ document, onClick, onDelete }) =>
 };
 
 export default DocumentItem;
+export type { DocumentItemProps };
 export { DocumentItem }; 

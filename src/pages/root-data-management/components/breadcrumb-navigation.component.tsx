@@ -1,31 +1,24 @@
 import { FC } from 'react';
 import { Breadcrumbs, Link, Typography, Box, useTheme } from '@mui/material';
 import { Home as HomeIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
-import { Folder, mockFolders } from '../mock';
+import { Folder } from '../../../store/slices/rootDataManagementSlice';
 
 interface BreadcrumbNavigationProps {
   currentFolderId: string | null;
   onNavigate: (folderId: string | null) => void;
+  breadcrumbPath?: Folder[]; // Optional prop for Redux implementation
 }
 
 const BreadcrumbNavigation: FC<BreadcrumbNavigationProps> = ({
   currentFolderId,
   onNavigate,
+  breadcrumbPath,
 }) => {
   const theme = useTheme();
 
-  // Build breadcrumb path by traversing up the folder hierarchy
-  const buildBreadcrumbPath = (folderId: string | null): Folder[] => {
-    if (!folderId) return [];
-
-    const folder = mockFolders.find(f => f.id === folderId);
-    if (!folder) return [];
-
-    const parentPath = buildBreadcrumbPath(folder.parentId);
-    return [...parentPath, folder];
-  };
-
-  const breadcrumbPath = buildBreadcrumbPath(currentFolderId);
+  // If breadcrumbPath is provided, use it directly (Redux implementation)
+  // Otherwise, build it from mockFolders (original implementation)
+  const path = breadcrumbPath || [];
 
   return (
     <Box sx={{ mb: 2 }}>
@@ -42,6 +35,7 @@ const BreadcrumbNavigation: FC<BreadcrumbNavigationProps> = ({
             '&:hover': {
               textDecoration: 'underline',
             },
+            cursor: 'pointer',
           }}
           color="inherit"
           onClick={() => onNavigate(null)}
@@ -50,8 +44,8 @@ const BreadcrumbNavigation: FC<BreadcrumbNavigationProps> = ({
           Root
         </Link>
 
-        {breadcrumbPath.map((folder, index) => {
-          const isLast = index === breadcrumbPath.length - 1;
+        {path.map((folder, index) => {
+          const isLast = index === path.length - 1;
           
           return isLast ? (
             <Typography
@@ -76,6 +70,7 @@ const BreadcrumbNavigation: FC<BreadcrumbNavigationProps> = ({
                 '&:hover': {
                   textDecoration: 'underline',
                 },
+                cursor: 'pointer',
               }}
               color="inherit"
               onClick={() => onNavigate(folder.id)}

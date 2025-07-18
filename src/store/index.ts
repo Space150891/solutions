@@ -6,6 +6,7 @@ import treatmentPlanningReducer from './slices/treatmentPlanningSlice';
 import personnelReducer from './slices/personnelSlice';
 import patientReducer from './slices/patientSlice';
 import caseManagementReducer from './slices/caseManagementSlice';
+import rootDataManagementReducer from './slices/rootDataManagementSlice';
 
 const rootReducer = combineReducers({
    appbar: appbarSlice.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
    personnel: personnelReducer,
    patients: patientReducer,
    caseManagement: caseManagementReducer,
+   rootDataManagement: rootDataManagementReducer,
 });
 
 const store = configureStore({

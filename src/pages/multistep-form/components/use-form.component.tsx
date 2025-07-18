@@ -7,6 +7,7 @@ import {
    Slider,
    Typography,
    Paper,
+   useTheme,
 } from '@mui/material';
 import { 
    Person as PersonIcon, 
@@ -26,6 +27,7 @@ type UserFormProps = UserData & {
 };
 
 export const UserForm = ({ firstName, lastName, age, updateFields, errors = {} }: UserFormProps) => {
+   const theme = useTheme();
    const ageValue = parseInt(age) || 18;
 
    const handleAgeSliderChange = (_: Event, newValue: number | number[]) => {
@@ -91,7 +93,15 @@ export const UserForm = ({ firstName, lastName, age, updateFields, errors = {} }
 
             {/* Age */}
             <Grid item xs={12}>
-               <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50', borderRadius: 2 }}>
+               <Paper 
+                  elevation={0} 
+                  sx={{ 
+                     p: 3, 
+                     bgcolor: theme.palette.mode === 'dark' ? 'background.paper' : 'grey.50', 
+                     borderRadius: 2,
+                     border: theme.palette.mode === 'dark' ? `1px solid ${theme.palette.divider}` : 'none'
+                  }}
+               >
                   <Box display="flex" alignItems="center" gap={1} mb={2}>
                      <CakeIcon color="primary" />
                      <Typography variant="h6" fontWeight="medium">
@@ -127,6 +137,21 @@ export const UserForm = ({ firstName, lastName, age, updateFields, errors = {} }
                                  height: 6,
                                  opacity: 0.3,
                               },
+                              '& .MuiSlider-valueLabel': {
+                                 backgroundColor: theme.palette.primary.main,
+                              },
+                              '& .MuiSlider-markLabel': {
+                                 color: theme.palette.text.secondary,
+                              },
+                              '& .MuiSlider-mark': {
+                                 backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[500] : theme.palette.grey[400],
+                                 width: 4,
+                                 height: 4,
+                                 borderRadius: '50%',
+                              },
+                              '& .MuiSlider-markActive': {
+                                 backgroundColor: theme.palette.primary.main,
+                              }
                            }}
                         />
                      </Grid>
@@ -141,6 +166,14 @@ export const UserForm = ({ firstName, lastName, age, updateFields, errors = {} }
                            inputProps={{ min: 1, max: 120 }}
                            variant="outlined"
                            size="small"
+                           sx={{
+                              '& .MuiOutlinedInput-root': {
+                                 bgcolor: theme.palette.mode === 'dark' ? 'background.default' : 'white',
+                                 '&:hover fieldset': {
+                                    borderColor: 'primary.main',
+                                 },
+                              },
+                           }}
                         />
                         {errors.age && (
                            <FormHelperText error sx={{ mt: 1 }}>

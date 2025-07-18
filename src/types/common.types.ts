@@ -29,6 +29,7 @@ export enum IPages {
    TELEMEDICINE = 'Telemedicine',
    TREATMENT_PLANNING = 'Treatment Planning',
    ROOT_DATA_MANAGEMENT = 'Root Data Management',
+   ENHANCED_ROOT_DATA_MANAGEMENT = 'Enhanced Root Data Management',
    CASE_MANAGEMENT = 'Case Management',
 }
 

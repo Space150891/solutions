@@ -13,24 +13,28 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from '@mui/material';
-import { Folder, mockFolders } from '../mock';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { createFolder, Folder } from '../../../store/slices/rootDataManagementSlice';
 
 interface NewFolderModalProps {
   open: boolean;
   onClose: () => void;
-  onCreateFolder: (folder: Folder) => void;
   currentFolderId: string | null;
 }
 
 const NewFolderModal: FC<NewFolderModalProps> = ({
   open,
   onClose,
-  onCreateFolder,
   currentFolderId,
 }) => {
+  const dispatch = useAppDispatch();
+  const allItems = useAppSelector(state => state.rootDataManagement.items);
   const [folderName, setFolderName] = useState('');
   const [parentFolderId, setParentFolderId] = useState<string | null>(currentFolderId);
   const [error, setError] = useState('');
+
+  // Get all folders for parent selection
+  const folders = Object.values(allItems).filter(item => item.type === 'folder') as Folder[];
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFolderName(event.target.value);
@@ -44,23 +48,25 @@ const NewFolderModal: FC<NewFolderModalProps> = ({
     setParentFolderId(value === 'null' ? null : value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!folderName.trim()) {
       setError('Folder name is required');
       return;
     }
 
-    const newFolder: Folder = {
-      id: `folder-${Date.now()}`,
+    const folderData: Partial<Folder> = {
       name: folderName.trim(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       parentId: parentFolderId,
-      type: 'folder',
+      accessLevel: 'local',
+      createdBy: 'current-user',
     };
 
-    onCreateFolder(newFolder);
-    handleClose();
+    try {
+      await dispatch(createFolder(folderData)).unwrap();
+      handleClose();
+    } catch (error) {
+      setError('Failed to create folder');
+    }
   };
 
   const handleClose = () => {
@@ -112,7 +118,7 @@ const NewFolderModal: FC<NewFolderModalProps> = ({
             }}
           >
             <MenuItem value="null">Root (No Parent)</MenuItem>
-            {mockFolders.map(folder => (
+            {folders.map(folder => (
               <MenuItem key={folder.id} value={folder.id}>
                 {folder.name}
               </MenuItem>
